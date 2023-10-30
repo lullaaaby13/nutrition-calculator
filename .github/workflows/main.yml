@@ -45,5 +45,7 @@ jobs:
             pwd
             git checkout main
             git pull
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             npm install
             nohup npm run dev &
