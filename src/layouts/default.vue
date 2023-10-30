@@ -18,10 +18,16 @@
           </q-item-section>
         </q-item>
 
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-item-label>영양성분 관리</q-item-label>
+          </q-item-section>
+        </q-item>
+
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container style="max-width: 1080px;">
       <router-view />
     </q-page-container>
 
