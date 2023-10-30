@@ -48,4 +48,4 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             npm install
-            nohup npm run dev &
+            nohup npm run dev 1>/dev/null 2>&1 &
