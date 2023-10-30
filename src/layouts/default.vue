@@ -8,17 +8,20 @@
             <div class="text-h6 text-center">영양성분 계산기</div>
           </q-item-section>
         </q-item>
-        <q-item clickable v-ripple>
-          <q-item-label>영양성분 계산하기</q-item-label>
+        <q-item clickable v-ripple to="/">
+          <q-item-label>메인 화면</q-item-label>
+        </q-item>
+        <q-item clickable v-ripple to="/nutritions-calculate">
+          <q-item-label>영양성분 계산</q-item-label>
         </q-item>
 
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple to="/ingredients">
           <q-item-section>
-            <q-item-label>식재료 등록하기</q-item-label>
+            <q-item-label>식재료 등록</q-item-label>
           </q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple to="/nutritions-management">
           <q-item-section>
             <q-item-label>영양성분 관리</q-item-label>
           </q-item-section>
