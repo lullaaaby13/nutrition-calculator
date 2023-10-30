@@ -42,7 +42,8 @@ jobs:
           command_timeout: 30m
           script: |
             cd /app/nutrition-calculator
+            pwd
             git checkout main
             git pull
-            yarn install
-            nohup yarn dev &
+            npm install
+            nohup npm run dev &
