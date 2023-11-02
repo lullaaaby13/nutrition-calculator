@@ -30,7 +30,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container style="max-width: 1080px;">
+    <q-page-container style="min-width: 80vw;">
       <router-view />
     </q-page-container>
 
