@@ -11,22 +11,15 @@
         <q-item clickable v-ripple to="/">
           <q-item-label>메인 화면</q-item-label>
         </q-item>
-        <q-item clickable v-ripple to="/nutritions-calculate">
-          <q-item-label>영양성분 계산</q-item-label>
-        </q-item>
-
         <q-item clickable v-ripple to="/ingredients">
-          <q-item-section>
-            <q-item-label>식재료 등록</q-item-label>
-          </q-item-section>
+          <q-item-label>1차 원재료 영양성분 & 단가</q-item-label>
         </q-item>
-
-        <q-item clickable v-ripple to="/nutritions-management">
-          <q-item-section>
-            <q-item-label>영양성분 관리</q-item-label>
-          </q-item-section>
+        <q-item clickable v-ripple to="/nutritions-calculate">
+          <q-item-label>2차 시크릿 베이스 레시피</q-item-label>
         </q-item>
-
+        <q-item clickable v-ripple to="/nutritions-calculate">
+          <q-item-label>3차 판매용 음료 & 디저트 레시피</q-item-label>
+        </q-item>
       </q-list>
     </q-drawer>
 
