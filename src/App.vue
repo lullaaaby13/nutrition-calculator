@@ -2,10 +2,12 @@
   <router-view />
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
 
-export default defineComponent({
-  name: 'App'
+import {onErrorCaptured} from "vue";
+
+onErrorCaptured(err => {
+  console.log('onErrorCaptured : ', err)
 })
+
 </script>

@@ -33,11 +33,10 @@
         </div>
         <div class="col-3 q-px-md">
           <q-btn
-            rounded
             outline
             color="primary"
             label="원재료 등록하기"
-            @click="registerDialog = true"
+            @click="registerIngredientDialog = true"
           />
         </div>
       </q-card-section>
@@ -72,7 +71,9 @@
                 dense
                 outline
                 color="secondary"
-                label="수정하기"/>
+                label="수정하기"
+                @click="onIngredientUpdateButtonClick(ingredient)"
+              />
               <q-btn
                 dense
                 outline
@@ -99,19 +100,19 @@
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.carbohydrates }}</q-item-label>
-                    <q-item-label caption lines="1">탄수화물</q-item-label>
+                    <q-item-label caption lines="1">탄수화물(g)</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.protein }}</q-item-label>
-                    <q-item-label caption lines="1">단백질</q-item-label>
+                    <q-item-label caption lines="1">단백질(g)</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.fat }}</q-item-label>
-                    <q-item-label caption lines="1">지방</q-item-label>
+                    <q-item-label caption lines="1">지방(g)</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -127,19 +128,19 @@
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.sugars }}</q-item-label>
-                    <q-item-label caption lines="1">당류</q-item-label>
+                    <q-item-label caption lines="1">당류(g)</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.caffeine }}</q-item-label>
-                    <q-item-label caption lines="1">카페인</q-item-label>
+                    <q-item-label caption lines="1">카페인(mg)</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item class="q-my-sm" clickable v-ripple>
                   <q-item-section>
                     <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
-                    <q-item-label caption lines="1">포화지방</q-item-label>
+                    <q-item-label caption lines="1">포화지방(g)</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -147,13 +148,8 @@
           </q-card-section>
 
           <q-card-section>
-            <q-input
-              v-model="ingredient.memo"
-              filled
-              disable
-              label="메모"
-              type="textarea"
-            />
+            <div class="text-caption">메모</div>
+            <div style="min-height: 60px;">{{ ingredient.memo }}</div>
           </q-card-section>
 
           <q-separator/>
@@ -167,105 +163,14 @@
       </q-card-section>
 
     </q-card>
-    <q-dialog v-model="registerDialog">
-      <q-card class="q-pa-md" style="width: 600px;">
-        <q-card-section>
-          <div class="text-h6">원재료 등록</div>
-          <div class="text-caption">100g당</div>
-        </q-card-section>
 
-        <q-separator/>
+    <RegisterIngredientDialog v-model="registerIngredientDialog"/>
+    <UpdateIngredientDialog
+        v-model="updateIngredientDialog"
+        :ingredient="selectedIngredient"
+        @update:ingredient="updateSelectedIngredient"
+    />
 
-        <q-card-section class="row">
-          <div class="col-6 q-px-sm">
-            <q-select v-model="model" :options="IngredientCategory" label="카테고리" />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogName"
-                     type="text"
-                     label="이름"
-                     :rule="[nameRules]"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogCalories"
-                     type="text"
-                     label="칼로리(Kcal)"
-                     :rule="[val => val < 0 || '0보다 커야 합니다.']"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogUnitPrice"
-                     type="text"
-                     label="단가(원)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogCarbohydrates"
-                     type="text"
-                     label="탄수화물(g)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogSugars"
-                     type="text"
-                     label="당류(g)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogProtein"
-                     type="text"
-                     label="단백질(g)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogCaffeine"
-                     type="text"
-                     label="카페인(mg)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogFat"
-                     type="text"
-                     label="지방(g)"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-input v-model="dialogSaturatedFat"
-                     type="text"
-                     label="포화지방(g)"
-            />
-          </div>
-
-        </q-card-section>
-
-<!--        <q-separator/>-->
-
-        <q-card-section>
-          <q-input type="textarea" label="메모"/>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="등록" color="primary" @click="onRegisterConfirmButtonClick"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <q-dialog v-model="failRegisterIngredientDialog" persistent>
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Alert</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          같은 이름dd
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
 
     <q-dialog v-model="configDelete" persistent>
       <q-card>
@@ -287,6 +192,8 @@
 import {computed, ref} from "vue";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import {useIngredientStore} from "stores/ingredients";
+import RegisterIngredientDialog from "components/ingredients/RegisterIngredientDialog.vue";
+import UpdateIngredientDialog from "components/ingredients/UpdateIngredientDialog.vue";
 
 /**
  * 필터링
@@ -296,7 +203,9 @@ const searchText = ref('');
 
 const toggle = ref(false);
 const configDelete = ref(false);
-const registerDialog = ref(true);
+
+const registerIngredientDialog = ref(false);
+const updateIngredientDialog = ref(false);
 
 const ingredientStore = useIngredientStore();
 const ingredients = ingredientStore.ingredients;
@@ -321,7 +230,6 @@ const filteredIngredients = computed(() => {
   return filtered;
 })
 
-
 const resetCheckbox = () => {
   selectedCategories.value = [];
 }
@@ -330,46 +238,15 @@ const onDeleteButtonClick = ingredient => {
   ingredientStore.delete(ingredient);
 }
 
-const dialogName = ref('');
-const dialogCalories = ref(0);
-const dialogUnitPrice = ref(0);
-const dialogCarbohydrates = ref(0);
-const dialogSugars = ref(0);
-const dialogProtein = ref(0);
-const dialogCaffeine = ref(0);
-const dialogFat = ref(0);
-const dialogSaturatedFat = ref(0);
-const failRegisterIngredientDialog = ref(false);
-const onRegisterConfirmButtonClick = () => {
-  const ingredient = {
-    name: dialogName.value,
-    calories: dialogCalories.value,
-    unitPrice: dialogUnitPrice.value,
-    carbohydrates: dialogCarbohydrates.value,
-    sugars: dialogSugars.value,
-    protein: dialogProtein.value,
-    caffeine: dialogCaffeine.value,
-    fat: dialogFat.value,
-    saturatedFat: dialogSaturatedFat.value,
-  }
-
-  const isExists = ingredientStore.exists(ingredient);
-
-  if (isExists) {
-    failRegisterIngredientDialog.value = true;
-  } else {
-    ingredientStore.save(ingredient);
-    registerDialog.value = false;
-    failRegisterIngredientDialog.value = false;
-  }
-
+const selectedIngredient = ref(null);
+const updateSelectedIngredient = ({ field, value }) => {
+  selectedIngredient.value[field] = value;
+}
+const onIngredientUpdateButtonClick = ingredient => {
+  updateIngredientDialog.value = true;
+  selectedIngredient.value = ingredient;
 }
 
-const nameRules = value => {
-  if (!value) {
-    return '이름을 입력해 주세요.';
-  }
-}
 
 
 </script>

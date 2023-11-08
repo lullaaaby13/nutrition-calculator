@@ -28,3 +28,4 @@ export const IngredientCategory = {
     label: '포장 용품',
   },
 }
+
