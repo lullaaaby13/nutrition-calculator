@@ -14,7 +14,7 @@
         <q-item clickable v-ripple to="/ingredients">
           <q-item-label>1차 원재료 영양 성분 & 단가</q-item-label>
         </q-item>
-        <q-item clickable v-ripple to="/nutritions-calculate">
+        <q-item clickable v-ripple to="/secret-base">
           <q-item-label>2차 시크릿 베이스 레시피</q-item-label>
         </q-item>
         <q-item clickable v-ripple to="/nutritions-calculate">

@@ -10,6 +10,7 @@
 
 
 const { configure } = require('quasar/wrappers');
+const path = require('path')
 
 
 module.exports = configure(function (/* ctx */) {
@@ -60,6 +61,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16'
       },
 
+
       vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
@@ -76,7 +78,12 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        Object.assign(viteConf.resolve.alias, {
+          "@": path.join(__dirname, './src')
+        })
+      },
+
       // viteVuePluginOptions: {},
 
 
