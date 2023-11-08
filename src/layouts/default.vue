@@ -5,14 +5,14 @@
       <q-list bordered separator>
         <q-item>
           <q-item-section>
-            <div class="text-h6 text-center">영양성분 계산기</div>
+            <div class="text-h6 text-center">영양 성분 계산기</div>
           </q-item-section>
         </q-item>
         <q-item clickable v-ripple to="/">
           <q-item-label>메인 화면</q-item-label>
         </q-item>
         <q-item clickable v-ripple to="/ingredients">
-          <q-item-label>1차 원재료 영양성분 & 단가</q-item-label>
+          <q-item-label>1차 원재료 영양 성분 & 단가</q-item-label>
         </q-item>
         <q-item clickable v-ripple to="/nutritions-calculate">
           <q-item-label>2차 시크릿 베이스 레시피</q-item-label>

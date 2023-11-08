@@ -3,30 +3,74 @@
     <q-card class="q-pa-md" style="width: 80vw;">
 
       <q-card-section class="flex justify-center items-center full-height">
-        <q-card class="q-pa-md q-ma-md" v-for="index in 3" :key="index">
+        <q-card class="q-pa-md q-ma-md" style="width: 300px;">
           <q-card-section>
-            <div class="text-h5">원재료 영양성분 & 단가</div>
+            <div class="text-h5">등록된 아이템 수</div>
           </q-card-section>
           <q-list bordered>
+            <q-item class="q-my-sm" clickable v-ripple>
+              <q-item-section>
+                <q-item-label>23</q-item-label>
+                <q-item-label caption lines="1">신선 식품</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">과일 & 채소</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item class="q-my-sm" clickable v-ripple>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">가루류 & 곡류</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">커피 원두 & 차</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item class="q-my-sm" clickable v-ripple>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">토핑 재료</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">식품 첨가물</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item class="q-my-sm" clickable v-ripple>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">포장 용품</q-item-label>
+              </q-item-section>
+            </q-item>
 
-            <q-item-label header>원재료 영양성분 & 단가</q-item-label>
-            <q-separator spaced />
-            <q-item v-for="contact in contacts" :key="contact.id" class="q-my-sm" clickable v-ripple>
+            <q-separator/>
+            <q-item class="q-my-sm" clickable v-ripple>
               <q-item-section>
-                <q-item-label>256g</q-item-label>
-                <q-item-label caption lines="1">탄수화물</q-item-label>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">시크릿 베이스</q-item-label>
               </q-item-section>
             </q-item>
-          </q-list>
-          <q-list bordered>
-            <q-item v-for="contact in contacts" :key="contact.id" class="q-my-sm" clickable v-ripple>
+            <q-item class="q-my-sm" clickable v-ripple>
               <q-item-section>
-                <q-item-label>256g</q-item-label>
-                <q-item-label caption lines="1">탄수화물</q-item-label>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">판매 음료</q-item-label>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>0</q-item-label>
+                <q-item-label caption lines="1">디저트</q-item-label>
               </q-item-section>
             </q-item>
+
           </q-list>
         </q-card>
+
+
+<!--        <q-card class="q-pa-md q-ma-md" style="width: 300px;">-->
+<!--          -->
+<!--        </q-card>-->
+
       </q-card-section>
 
     </q-card>
