@@ -17,27 +17,32 @@
           <q-checkbox size="md" v-model="selectedCategories" :val="IngredientCategory.ADDITIVES.name" :label="IngredientCategory.ADDITIVES.label"/>
           <q-checkbox size="md" v-model="selectedCategories" :val="IngredientCategory.PACKAGING.name" :label="IngredientCategory.PACKAGING.label"/>
           <q-btn
-            rounded
+            dense
             outline
             color="grey"
             label="선택 초기화"
             @click="resetCheckbox"
+            icon="refresh"
+            padding="8px 12px 8px 12px"
           />
         </div>
-        <div class="col-3 q-px-md" style="border-right: 0.5px solid lightgrey;">
-          <q-toggle
-            v-model="toggle"
-            color="green"
-          />
-          <span class="text-caption">1g 당</span>
-        </div>
+<!--        <div class="col-3 q-px-md" style="border-right: 0.5px solid lightgrey;">-->
+<!--          <q-toggle-->
+<!--            v-model="toggle"-->
+<!--            color="green"-->
+<!--          />-->
+<!--          <span class="text-caption">1g 당</span>-->
+<!--        </div>-->
         <div class="col-3 q-px-md">
           <q-btn
-            outline
+            padding="8px 12px 8px 12px"
             color="primary"
-            label="원재료 등록하기"
+            text-color="white"
             @click="registerIngredientDialog = true"
-          />
+          >
+            <q-icon name="create" class="q-mr-xs"/>
+           <span>원재료 등록하기</span>
+          </q-btn>
         </div>
       </q-card-section>
 
@@ -49,117 +54,19 @@
           type="text"
           label="재료 찾기(재료명)"
           style="width: 300px"
-        />
+          stack-label
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
-
-        <q-card
-          class="q-pa-md q-ma-md"
-          bordered
-          style="width: 400px;"
-          v-for="ingredient in filteredIngredients" :key="ingredient.name"
-        >
-          <q-card-section class="flex">
-            <div>
-              <div class="text-h5">{{ ingredient.name }}</div>
-              <div class="text-caption">{{ ingredient.category.label }}</div>
-            </div>
-
-            <q-space/>
-            <div class="q-gutter-md">
-              <q-btn
-                dense
-                outline
-                color="secondary"
-                label="수정하기"
-                @click="onIngredientUpdateButtonClick(ingredient)"
-              />
-              <q-btn
-                dense
-                outline
-                color="red"
-                label="삭제하기"
-                @click="onDeleteButtonClick(ingredient)"
-              />
-            </div>
-          </q-card-section>
-
-
-
-          <q-separator/>
-
-          <q-card-section class="row">
-            <div class="col-6">
-              <q-list bordered>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.calories }}</q-item-label>
-                    <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.carbohydrates }}</q-item-label>
-                    <q-item-label caption lines="1">탄수화물(g)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.protein }}</q-item-label>
-                    <q-item-label caption lines="1">단백질(g)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.fat }}</q-item-label>
-                    <q-item-label caption lines="1">지방(g)</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-            <div class="col-6">
-              <q-list bordered>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.unitPrice }}</q-item-label>
-                    <q-item-label caption lines="1">단가(원)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.sugars }}</q-item-label>
-                    <q-item-label caption lines="1">당류(g)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.caffeine }}</q-item-label>
-                    <q-item-label caption lines="1">카페인(mg)</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-my-sm" clickable v-ripple>
-                  <q-item-section>
-                    <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
-                    <q-item-label caption lines="1">포화지방(g)</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-          </q-card-section>
-
-          <q-card-section>
-            <div class="text-caption">메모</div>
-            <div style="min-height: 60px;">{{ ingredient.memo }}</div>
-          </q-card-section>
-
-          <q-separator/>
-
-          <q-card-section>
-            <div class="text-caption text-bold">등록한 날짜: {{ ingredient.createdAt.toISOString() }}</div>
-            <div class="text-caption text-bold">마지막 수정한 날짜: {{ ingredient.updatedAt.toISOString() }}</div>
-          </q-card-section>
-
-        </q-card>
+        <IngredientCard v-for="ingredient in filteredIngredients" :key="ingredient.name"
+                        :ingredient="ingredient"
+                        @on-update-button-click="onIngredientUpdateButtonClick"
+                        @on-delete-button-click="onIngredientDeleteButtonClick"
+        />
       </q-card-section>
 
     </q-card>
@@ -170,20 +77,6 @@
         :ingredient="selectedIngredient"
         @update:ingredient="updateSelectedIngredient"
     />
-
-
-    <q-dialog v-model="configDelete" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <p>정말로 삭제 하시겠어요?</p>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup />
-          <q-btn flat label="Turn on Wifi" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
@@ -194,6 +87,7 @@ import {IngredientCategory} from "@/enum/ingredientCategory";
 import {useIngredientStore} from "stores/ingredients";
 import RegisterIngredientDialog from "components/ingredients/RegisterIngredientDialog.vue";
 import UpdateIngredientDialog from "components/ingredients/UpdateIngredientDialog.vue";
+import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
 
 /**
  * 필터링
@@ -234,19 +128,22 @@ const resetCheckbox = () => {
   selectedCategories.value = [];
 }
 
-const onDeleteButtonClick = ingredient => {
-  ingredientStore.delete(ingredient);
-}
+
 
 const selectedIngredient = ref(null);
 const updateSelectedIngredient = ({ field, value }) => {
   selectedIngredient.value[field] = value;
+  selectedIngredient.value.updatedAt = new Date();
 }
 const onIngredientUpdateButtonClick = ingredient => {
   updateIngredientDialog.value = true;
   selectedIngredient.value = ingredient;
 }
-
+const onIngredientDeleteButtonClick = ingredient => {
+  if (confirm(`정말 ${ingredient.name}를 삭제 하시겠어요?`)) {
+    ingredientStore.delete(ingredient);
+  }
+}
 
 
 </script>

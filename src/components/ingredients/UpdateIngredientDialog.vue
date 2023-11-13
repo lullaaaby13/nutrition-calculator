@@ -13,69 +13,21 @@
           <q-select v-model="category" :options="Object.values(IngredientCategory)" label="카테고리"/>
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="name"
+          <q-input :model-value="ingredient.name"
+                   @update:model-value="value => $emit('update:ingredient', { field: 'name', value })"
                    type="text"
                    label="이름"
+                   stack-label
           />
         </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.calories"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'calories', value })"
+        <div class="col-6 q-px-sm" v-for="field in fields" :key="field.value">
+          <q-input :model-value="ingredient[field.value]"
+                   @update:model-value="value => $emit('update:ingredient', { field: field.value, value })"
                    type="text"
-                   label="칼로리(Kcal)"
-                   :rule="[val => val < 0 || '0보다 커야 합니다.']"
+                   :label="field.label"
+                   stack-label
           />
         </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.unitPrice"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'unitPrice', value })"
-                   type="text"
-                   label="단가(원)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.carbohydrates"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'carbohydrates', value })"
-                   type="text"
-                   label="탄수화물(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.sugars"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'sugars', value })"
-                   type="text"
-                   label="당류(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.protein"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'protein', value })"
-                   type="text"
-                   label="단백질(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.caffeine"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'caffeine', value })"
-                   type="text"
-                   label="카페인(mg)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.fat"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'fat', value })"
-                   type="text"
-                   label="지방(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input :model-value="ingredient.saturatedFat"
-                   @update:model-value="value => $emit('update:ingredient', { field: 'saturatedFat', value })"
-                   type="text"
-                   label="포화지방(g)"
-          />
-        </div>
-
       </q-card-section>
 
       <!--        <q-separator/>-->
@@ -102,6 +54,8 @@ import {ref} from "vue";
 import {useIngredientStore} from "stores/ingredients";
 import {Notify} from "quasar";
 
+const ingredientStore = useIngredientStore();
+
 defineProps({
   modelValue: {
     type: Boolean
@@ -112,14 +66,28 @@ defineProps({
 })
 
 defineEmits([
-    'update:modelValue',
-    'update:ingredient',
+  'update:modelValue',
+  'update:ingredient',
 ]);
 
+const fields = [
+  {value: 'calories', label: '칼로리(Kcal)',},
+  {value: 'unitPrice', label: '단가(원)',},
+  {value: 'carbohydrates', label: '탄수화물(g)',},
+  {value: 'sugars', label: '당류(g)',},
+  {value: 'protein', label: '단백질(g)',},
+  {value: 'caffeine', label: '카페인(mg)',},
+  {value: 'fat', label: '지방(g)',},
+  {value: 'saturatedFat', label: '포화지방(g)',},
+];
 
 const onRegisterConfirmButtonClick = () => {
   throw new Error('test error')
 }
 
+// const onNameChange = val => {
+//   console.log(val)
+//   ingredientStore.existsByName(val);
+// }
 
 </script>
