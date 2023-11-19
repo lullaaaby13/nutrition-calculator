@@ -17,32 +17,27 @@
           <q-checkbox size="md" v-model="selectedCategories" :val="IngredientCategory.ADDITIVES.name" :label="IngredientCategory.ADDITIVES.label"/>
           <q-checkbox size="md" v-model="selectedCategories" :val="IngredientCategory.PACKAGING.name" :label="IngredientCategory.PACKAGING.label"/>
           <q-btn
-            dense
+            rounded
             outline
             color="grey"
             label="선택 초기화"
             @click="resetCheckbox"
-            icon="refresh"
-            padding="8px 12px 8px 12px"
           />
         </div>
-<!--        <div class="col-3 q-px-md" style="border-right: 0.5px solid lightgrey;">-->
-<!--          <q-toggle-->
-<!--            v-model="toggle"-->
-<!--            color="green"-->
-<!--          />-->
-<!--          <span class="text-caption">1g 당</span>-->
-<!--        </div>-->
+        <div class="col-3 q-px-md" style="border-right: 0.5px solid lightgrey;">
+          <q-toggle
+            v-model="toggle"
+            color="green"
+          />
+          <span class="text-caption">1g 당</span>
+        </div>
         <div class="col-3 q-px-md">
           <q-btn
-            padding="8px 12px 8px 12px"
+            outline
             color="primary"
-            text-color="white"
-            @click="registerIngredientDialog = true"
-          >
-            <q-icon name="create" class="q-mr-xs"/>
-           <span>원재료 등록하기</span>
-          </q-btn>
+            label="원재료 등록하기"
+            @click="onRegisterButtonClick"
+          />
         </div>
       </q-card-section>
 
@@ -54,29 +49,28 @@
           type="text"
           label="재료 찾기(재료명)"
           style="width: 300px"
-          stack-label
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
+        />
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
-        <IngredientCard v-for="ingredient in filteredIngredients" :key="ingredient.name"
-                        :ingredient="ingredient"
-                        @on-update-button-click="onIngredientUpdateButtonClick"
-                        @on-delete-button-click="onIngredientDeleteButtonClick"
+        <IngredientCard
+          v-for="ingredient in filteredIngredients" :key="ingredient.name"
+          :ingredient="ingredient"
+          @openUpdateIngredientDialog="openUpdateIngredientDialog"
         />
       </q-card-section>
 
     </q-card>
 
-    <RegisterIngredientDialog v-model="registerIngredientDialog"/>
-    <UpdateIngredientDialog
-        v-model="updateIngredientDialog"
-        :ingredient="selectedIngredient"
-        @update:ingredient="updateSelectedIngredient"
+
+    <RegisterIngredientDialog
+      v-model="showRegisterIngredientDialog"
     />
+    <UpdateIngredientDialog
+      v-model="showUpdateIngredientDialog"
+      :ingredient="selectedIngredient"
+      @update:ingredient="updateSelectedIngredient"
+    />
+
   </q-page>
 </template>
 
@@ -85,9 +79,9 @@
 import {computed, ref} from "vue";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import {useIngredientStore} from "stores/ingredients";
+import IngredientCard from "components/ingredients/IngredientCard.vue";
 import RegisterIngredientDialog from "components/ingredients/RegisterIngredientDialog.vue";
 import UpdateIngredientDialog from "components/ingredients/UpdateIngredientDialog.vue";
-import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
 
 /**
  * 필터링
@@ -95,14 +89,12 @@ import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
 const selectedCategories = ref([]);
 const searchText = ref('');
 
-const registerIngredientDialog = ref(false);
-const updateIngredientDialog = ref(false);
+const toggle = ref(false);
+
+
 
 const ingredientStore = useIngredientStore();
 const ingredients = ingredientStore.ingredients;
-
-
-
 
 const filteredIngredients = computed(() => {
   let filtered = ingredients;
@@ -128,23 +120,23 @@ const resetCheckbox = () => {
   selectedCategories.value = [];
 }
 
-
-
 const selectedIngredient = ref(null);
+const setSelectedIngredient = val => {
+  selectedIngredient.value = val;
+}
 const updateSelectedIngredient = ({ field, value }) => {
   selectedIngredient.value[field] = value;
-  selectedIngredient.value.updatedAt = new Date();
-}
-const onIngredientUpdateButtonClick = ingredient => {
-  updateIngredientDialog.value = true;
-  selectedIngredient.value = ingredient;
-}
-const onIngredientDeleteButtonClick = ingredient => {
-  if (confirm(`정말 ${ingredient.name}를 삭제 하시겠어요?`)) {
-    ingredientStore.delete(ingredient);
-  }
 }
 
+const showRegisterIngredientDialog = ref(false);
+const showUpdateIngredientDialog = ref(false);
+const onRegisterButtonClick = () => {
+  showRegisterIngredientDialog.value = true;
+}
+const openUpdateIngredientDialog = ingredient => {
+  showUpdateIngredientDialog.value = true;
+  selectedIngredient.value = ingredient;
+}
 
 </script>
 
@@ -152,4 +144,3 @@ const onIngredientDeleteButtonClick = ingredient => {
 meta:
   layout: default
 </route>
-
