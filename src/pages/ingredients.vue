@@ -95,14 +95,14 @@ import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
 const selectedCategories = ref([]);
 const searchText = ref('');
 
-const toggle = ref(false);
-const configDelete = ref(false);
-
 const registerIngredientDialog = ref(false);
 const updateIngredientDialog = ref(false);
 
 const ingredientStore = useIngredientStore();
 const ingredients = ingredientStore.ingredients;
+
+
+
 
 const filteredIngredients = computed(() => {
   let filtered = ingredients;
