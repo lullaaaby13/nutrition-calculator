@@ -68,8 +68,8 @@
               />
             </div>
             <div class="q-gutter-x-md">
-              <span class="text-caption">중량: {{ totalIngredients.amount }}g</span>
-              <span class="text-caption">단가: {{ totalIngredients.unitPrice }}원</span>
+              <span class="text-caption">중량: {{ totalIngredients.amount.toFixed(1) }}g</span>
+              <span class="text-caption">단가: {{ totalIngredients.unitPrice.toFixed(1) }}원</span>
             </div>
 
             <q-card-section v-if="selectedIngredients.length > 0">
@@ -79,7 +79,7 @@
               <q-list bordered>
                 <q-item v-for="ingredient in selectedIngredients" :key="ingredient.name">
                   <q-item-section>
-                    <q-input type="text"
+                    <q-input type="number"
                              :label="ingredient.ingredient.name"
                              stack-label
                              v-model="ingredient.amount"
@@ -280,7 +280,7 @@ const onRegisterButtonClick = () => {
     components: selectedIngredients.value.map(selectedIngredient => {
       return {
         ingredient: selectedIngredient.ingredient,
-        amount: selectedIngredient.amount,
+        amount: Number(selectedIngredient.amount),
       };
     }),
     memo: memo.value,

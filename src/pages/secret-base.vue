@@ -7,13 +7,7 @@
         <q-separator/>
       </q-card-section>
 
-      <q-card-section class="row">
-        컨트롤 패널
-      </q-card-section>
-
-      <q-separator/>
-
-      <q-card-section class="flex justify-end q-px-lg">
+      <q-card-section class="flex justify-end q-px-lg q-gutter-lg">
         <q-input
           v-model="searchText"
           type="text"
@@ -25,6 +19,10 @@
             <q-icon name="search"/>
           </template>
         </q-input>
+        <q-btn
+          color="primary"
+          label="재료 등록"
+          @click="showSecretBaseRegisterDialog = true"/>
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
 
@@ -50,9 +48,6 @@ import RegisterSecretBaseCard from "components/apps/secret-base/RegisterSecretBa
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();
 
-
-
-
 const filteredSecretBases = computed(() => {
   return secretBaseStore.secretBases.filter(secretBase => {
     return secretBase.name.includes(searchText.value);
@@ -60,9 +55,6 @@ const filteredSecretBases = computed(() => {
 });
 
 const showSecretBaseRegisterDialog = ref(false);
-
-
-
 
 
 </script>

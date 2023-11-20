@@ -8,7 +8,7 @@
         <div class="text-h5">{{ secretBase.name }}</div>
         <div class="q-gutter-x-md">
           <span class="text-caption">중량: {{ secretBaseView.amount }}g</span>
-          <span class="text-caption">단가: {{ secretBase.unitPrice }}원</span>
+          <span class="text-caption">단가: {{ secretBaseView.unitPrice || '-' }}원</span>
         </div>
       </div>
 
@@ -36,10 +36,10 @@
     <q-card-section>
       <div class="text-subtitle2 q-mb-sm">원재료</div>
       <q-list bordered>
-        <q-item class="q-my-sm" v-for="index in 4" :key="index">
+        <q-item class="q-my-sm" v-for="(component, index) in props.secretBase.components" :key="index">
           <q-item-section>
-            <q-item-label>100</q-item-label>
-            <q-item-label caption lines="1">우유(ml)</q-item-label>
+            <q-item-label>{{component.amount}}</q-item-label>
+            <q-item-label caption lines="1">{{component.ingredient.name}}(g)</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -49,10 +49,50 @@
       <div class="row">
         <div class="col-6">
           <q-list bordered>
-            <q-item class="q-my-sm" v-for="index in 4" :key="index">
+            <q-item>
               <q-item-section>
-                <q-item-label>100</q-item-label>
-                <q-item-label caption lines="1">우유(ml)</q-item-label>
+                <q-item-label>{{secretBaseView.calories}}</q-item-label>
+                <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.protein}}</q-item-label>
+                <q-item-label caption lines="1">단백질(g)</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.sugars}}</q-item-label>
+                <q-item-label caption lines="1">당류(g)</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.caffeine}}</q-item-label>
+                <q-item-label caption lines="1">카페인(mg)</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+        <div class="col-6">
+          <q-list bordered>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.carbohydrates}}</q-item-label>
+                <q-item-label caption lines="1">탄수화물(g)</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.fa}}</q-item-label>
+                <q-item-label caption lines="1">지방(g)</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>{{secretBaseView.saturatedFat}}</q-item-label>
+                <q-item-label caption lines="1">포화지방(Kcal)</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -83,26 +123,43 @@ defineEmits([
   'onUpdateButtonClick',
   'onDeleteButtonClick',
 ]);
-let secretBaseStore = useSecretBaseStore();
+const secretBaseStore = useSecretBaseStore();
 
-const calcTotal = (components, property) => {
-  console.log(components)
+const calcAmount = (components) => {
   return components
-    .map(component => component[property])
+    .map(component => component.amount)
+    .reduce((acc, cur) => acc + cur, 0)
+}
+const calcTotal = (components, property) => {
+  return components
+    .map(component => component.ingredient[property])
     .reduce((acc, cur) => acc + cur, 0)
 }
 
 const secretBaseView = computed(() => {
-  console.log(props.secretBase);
+
 
   let components = props.secretBase.components;
-  let amount = calcTotal(components, 'amount');
+  let amount = calcAmount(components);
   let unitPrice = calcTotal(components, 'unitPrice');
-  console.log(unitPrice)
+  let calories = calcTotal(components, 'calories');
+  let carbohydrates = calcTotal(components, 'carbohydrates');
+  let sugars = calcTotal(components, 'sugars');
+  let protein = calcTotal(components, 'protein');
+  let caffeine = calcTotal(components, 'caffeine');
+  let fat = calcTotal(components, 'fat');
+  let saturatedFat = calcTotal(components, 'saturatedFat');
 
   return {
     amount: amount,
     unitPrice,
+    carbohydrates,
+    calories,
+    sugars,
+    protein,
+    caffeine,
+    fat,
+    saturatedFat,
   }
 });
 
