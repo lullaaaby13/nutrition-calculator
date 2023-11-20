@@ -13,23 +13,19 @@
       <q-space/>
       <div class="q-gutter-md">
         <q-btn
-          dense
-          outline
+          dense outline flat
           color="secondary"
-          label="수정하기"
+          icon="edit"
           @click="$emit('openUpdateIngredientDialog', ingredient)"
         />
         <q-btn
-          dense
-          outline
+          dense outline flat
           color="red"
-          label="삭제하기"
+          icon="delete"
           @click="onDeleteButtonClick(ingredient)"
         />
       </div>
     </q-card-section>
-
-
 
     <q-separator/>
 

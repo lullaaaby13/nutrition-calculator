@@ -1,7 +1,6 @@
 <template>
-  <!--  <q-page class="flex justify-center" padding style="width: 1080px;">-->
   <q-page class="full-width flex justify-center">
-    <q-card class="q-pa-md" style="width: 80vw;">
+    <BaseCard>
       <q-card-section>
         <div class="text-h4 text-bold q-my-sm">시크릿 베이스</div>
         <q-separator/>
@@ -31,7 +30,7 @@
         />
       </q-card-section>
 
-    </q-card>
+    </BaseCard>
 
     <RegisterSecretBaseCard v-model="showSecretBaseRegisterDialog"/>
   </q-page>
@@ -44,6 +43,7 @@ import {useSecretBaseStore} from "stores/secret-base";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import SecretBaseCard from "components/apps/secret-base/SecretBaseCard.vue";
 import RegisterSecretBaseCard from "components/apps/secret-base/RegisterSecretBaseCard.vue";
+import BaseCard from "components/BaseCard.vue";
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();

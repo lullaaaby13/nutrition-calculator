@@ -1,7 +1,6 @@
 <template>
-  <!--  <q-page class="flex justify-center" padding style="width: 1080px;">-->
   <q-page class="full-width flex justify-center">
-    <q-card class="q-pa-md" style="width: 80vw;">
+    <BaseCard>
       <q-card-section>
         <div class="text-h4 text-bold q-my-sm">원재료 영양성분 & 단가</div>
         <q-separator/>
@@ -24,18 +23,13 @@
             @click="resetCheckbox"
           />
         </div>
-        <div class="col-3 q-px-md" style="border-right: 0.5px solid lightgrey;">
-          <q-toggle
-            v-model="toggle"
-            color="green"
-          />
-          <span class="text-caption">1g 당</span>
-        </div>
+
         <div class="col-3 q-px-md">
           <q-btn
-            outline
             color="primary"
             label="원재료 등록하기"
+            icon="create"
+            padding="10px 15px 10px 10px"
             @click="onRegisterButtonClick"
           />
         </div>
@@ -48,8 +42,13 @@
           v-model="searchText"
           type="text"
           label="재료 찾기(재료명)"
+          stack-label
           style="width: 300px"
-        />
+        >
+          <template>
+
+          </template>
+        </q-input>
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
         <IngredientCard
@@ -59,7 +58,7 @@
         />
       </q-card-section>
 
-    </q-card>
+    </BaseCard>
 
 
     <RegisterIngredientDialog
@@ -82,6 +81,7 @@ import {useIngredientStore} from "stores/ingredients";
 import IngredientCard from "components/ingredients/IngredientCard.vue";
 import RegisterIngredientDialog from "components/ingredients/RegisterIngredientDialog.vue";
 import UpdateIngredientDialog from "components/ingredients/UpdateIngredientDialog.vue";
+import BaseCard from "components/BaseCard.vue";
 
 /**
  * 필터링

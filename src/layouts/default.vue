@@ -2,22 +2,23 @@
   <q-layout view="hHh lpR fFf">
 
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <q-list bordered separator>
+      <q-list bordered>
         <q-item>
           <q-item-section>
             <div class="text-h6 text-center">영양 성분 계산기</div>
           </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/">
+        <q-separator/>
+        <q-item clickable to="/">
           <q-item-label>메인 화면</q-item-label>
         </q-item>
-        <q-item clickable v-ripple to="/ingredients">
+        <q-item clickable to="/ingredients">
           <q-item-label>1차 원재료 영양 성분 & 단가</q-item-label>
         </q-item>
-        <q-item clickable v-ripple to="/secret-base">
+        <q-item clickable to="/secret-bases">
           <q-item-label>2차 시크릿 베이스 레시피</q-item-label>
         </q-item>
-        <q-item clickable v-ripple to="/nutritions-calculate">
+        <q-item clickable to="/receipts">
           <q-item-label>3차 판매용 음료 & 디저트 레시피</q-item-label>
         </q-item>
       </q-list>
