@@ -1,8 +1,5 @@
 <template>
-  <q-card class="q-pa-md q-ma-md"
-          bordered
-          style="width: 400px;"
-  >
+  <BaseCard style="width: 400px;">
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ secretBase.name }}</div>
@@ -45,72 +42,22 @@
       </q-list>
     </q-card-section>
     <q-card-section>
-      <div class="text-subtitle2 q-mb-sm">영양성분</div>
-      <div class="row">
-        <div class="col-6">
-          <q-list bordered>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.calories}}</q-item-label>
-                <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.protein}}</q-item-label>
-                <q-item-label caption lines="1">단백질(g)</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.sugars}}</q-item-label>
-                <q-item-label caption lines="1">당류(g)</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.caffeine}}</q-item-label>
-                <q-item-label caption lines="1">카페인(mg)</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-        <div class="col-6">
-          <q-list bordered>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.carbohydrates}}</q-item-label>
-                <q-item-label caption lines="1">탄수화물(g)</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.fa}}</q-item-label>
-                <q-item-label caption lines="1">지방(g)</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>{{secretBaseView.saturatedFat}}</q-item-label>
-                <q-item-label caption lines="1">포화지방(Kcal)</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-      </div>
+      <NutritionPannel v-bind="secretBaseView"/>
     </q-card-section>
     <q-card-section>
       <div class="text-caption">메모</div>
       <div> {{ secretBase.memo }} </div>
     </q-card-section>
 
-  </q-card>
+  </BaseCard>
 </template>
 
 <script setup>
 
 import {computed} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
+import NutritionPannel from "components/NutritionPannel.vue";
+import BaseCard from "components/BaseCard.vue";
 
 const props = defineProps({
   secretBase: {

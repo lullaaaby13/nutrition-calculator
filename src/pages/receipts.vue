@@ -1,6 +1,5 @@
 <template>
-  <!--  <q-page class="flex justify-center" padding style="width: 1080px;">-->
-  <q-page class="full-width flex justify-center">
+    <q-page class="full-width flex justify-center" padding>
     <BaseCard flat bordered>
       <q-card-section>
         <div class="text-h4 text-bold q-my-sm">판매용 음료 & 디저트 레시피</div>
@@ -26,13 +25,72 @@
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
 
-        <SecretBaseCard v-for="secretBase in filteredSecretBases" :key="secretBase.name"
-                        :secret-base="secretBase"
-        />
+        <BaseCard style="width: 400px;">
+          <q-card-section class="flex">
+            <div>
+              <div class="text-h5">캬라멜 마끼아또</div>
+              <div class="q-gutter-x-md">
+                <span class="text-caption">음료</span>
+              </div>
+            </div>
+            <q-space/>
+            <div class="q-gutter-md">
+              <q-btn
+                dense
+                outline
+                color="secondary"
+                @click="$emit('onUpdateButtonClick', secretBase)"
+                icon="edit"
+                flat
+              />
+              <q-btn
+                dense
+                outline
+                color="red"
+                @click="$emit('onDeleteButtonClick', secretBase)"
+                icon="delete"
+                flat
+              />
+            </div>
+          </q-card-section>
+
+          <q-card-section>
+            <div class="row">
+              <div class="col-6">
+                <div class="text-subtitle2 q-mb-sm">베이스</div>
+                <q-list bordered>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label>{{ calories }}</q-item-label>
+                      <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+              <div class="col-6">
+                <div class="text-subtitle2 q-mb-sm">원재료</div>
+                <q-list bordered>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label>{{ carbohydrates }}</q-item-label>
+                      <q-item-label caption lines="1">탄수화물(g)</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+            </div>
+          </q-card-section>
+
+          <q-card-section>
+            <NutritionPannel/>
+          </q-card-section>
+
+        </BaseCard>
+
       </q-card-section>
 
     </BaseCard>
-    <RegisterSecretBaseCard v-model="showSecretBaseRegisterDialog"/>
+
   </q-page>
 </template>
 
@@ -40,10 +98,8 @@
 
 import {computed, ref} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
-import {IngredientCategory} from "@/enum/ingredientCategory";
-import SecretBaseCard from "components/apps/secret-base/SecretBaseCard.vue";
-import RegisterSecretBaseCard from "components/apps/secret-base/RegisterSecretBaseCard.vue";
 import BaseCard from "components/BaseCard.vue";
+import NutritionPannel from "components/NutritionPannel.vue";
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();

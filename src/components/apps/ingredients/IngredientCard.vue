@@ -1,9 +1,5 @@
 <template>
-  <q-card
-    class="q-pa-md q-ma-md"
-    bordered
-    style="width: 400px;"
-  >
+  <BaseCard style="width: 400px;">
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ ingredient.name }}</div>
@@ -12,95 +8,25 @@
 
       <q-space/>
       <div class="q-gutter-md">
-<!--        <q-btn-->
-<!--          dense-->
-<!--          outline-->
-<!--          color="secondary"-->
-<!--          @click="$emit('onUpdateButtonClick', ingredient)"-->
-<!--        >-->
-<!--          <q-icon name="edit" size="12px" class="q-mx-xs"/>-->
-<!--          <span class="q-mr-xs">수정</span>-->
-<!--        </q-btn>-->
         <q-btn
-          dense
-          outline
+          dense outline flat
           color="secondary"
-          @click="$emit('onUpdateButtonClick', ingredient)"
           icon="edit"
-          flat
+          @click="$emit('openUpdateIngredientDialog', ingredient)"
         />
         <q-btn
-          dense
-          outline
+          dense outline flat
           color="red"
-          @click="$emit('onDeleteButtonClick', ingredient)"
           icon="delete"
-          flat
+          @click="onDeleteButtonClick(ingredient)"
         />
       </div>
     </q-card-section>
 
-
-
     <q-separator/>
 
-    <q-card-section class="row">
-      <div class="col-6">
-        <q-list bordered>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.calories }}</q-item-label>
-              <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.carbohydrates }}</q-item-label>
-              <q-item-label caption lines="1">탄수화물(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.protein }}</q-item-label>
-              <q-item-label caption lines="1">단백질(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.fat }}</q-item-label>
-              <q-item-label caption lines="1">지방(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
-      <div class="col-6">
-        <q-list bordered>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.unitPrice }}</q-item-label>
-              <q-item-label caption lines="1">단가(원)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.sugars }}</q-item-label>
-              <q-item-label caption lines="1">당류(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.caffeine }}</q-item-label>
-              <q-item-label caption lines="1">카페인(mg)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item class="q-my-sm">
-            <q-item-section>
-              <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
-              <q-item-label caption lines="1">포화지방(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
+    <q-card-section>
+      <NutritionPannel v-bind="ingredient"/>
     </q-card-section>
 
     <q-card-section>
@@ -115,19 +41,31 @@
       <div class="text-caption text-bold">마지막 수정한 날짜: {{ ingredient.updatedAt.toISOString() }}</div>
     </q-card-section>
 
-  </q-card>
+  </BaseCard>
 </template>
 
 <script setup>
+
+import {useIngredientStore} from "stores/ingredients";
+import {ref} from "vue";
+import NutritionPannel from "components/NutritionPannel.vue";
+import BaseCard from "components/BaseCard.vue";
+
+defineEmits(['openUpdateIngredientDialog']);
 defineProps({
   ingredient: {
     type: Object,
-  },
+  }
 });
-defineEmits([
-  'onUpdateButtonClick',
-  'onDeleteButtonClick',
-]);
+
+const ingredientStore = useIngredientStore();
+
+const onDeleteButtonClick = ingredient => {
+  if (confirm('정말로 삭제 하시겠어요?')) {
+    ingredientStore.delete(ingredient);
+  }
+}
+
 
 
 </script>

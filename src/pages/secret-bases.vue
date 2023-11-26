@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex justify-center">
+  <q-page class="full-width flex justify-center" padding>
     <BaseCard>
       <q-card-section>
         <div class="text-h4 text-bold q-my-sm">시크릿 베이스</div>

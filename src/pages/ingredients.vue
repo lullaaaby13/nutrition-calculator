@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex justify-center">
+  <q-page class="full-width flex justify-center" padding>
     <BaseCard>
       <q-card-section>
         <div class="text-h4 text-bold q-my-sm">원재료 영양성분 & 단가</div>
@@ -78,9 +78,9 @@
 import {computed, ref} from "vue";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import {useIngredientStore} from "stores/ingredients";
-import IngredientCard from "components/ingredients/IngredientCard.vue";
-import RegisterIngredientDialog from "components/ingredients/RegisterIngredientDialog.vue";
-import UpdateIngredientDialog from "components/ingredients/UpdateIngredientDialog.vue";
+import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
+import RegisterIngredientDialog from "components/apps/ingredients/RegisterIngredientDialog.vue";
+import UpdateIngredientDialog from "components/apps/ingredients/UpdateIngredientDialog.vue";
 import BaseCard from "components/BaseCard.vue";
 
 /**
