@@ -15,7 +15,7 @@
           dense
           outline
           color="secondary"
-          @click="$emit('onUpdateButtonClick', secretBase)"
+          @click="onUpdateButtonClick(secretBase)"
           icon="edit"
           flat
         />
@@ -23,7 +23,7 @@
           dense
           outline
           color="red"
-          @click="$emit('onDeleteButtonClick', secretBase)"
+          @click="onDeleteButtonClick(secretBase)"
           icon="delete"
           flat
         />
@@ -85,7 +85,6 @@ const calcTotal = (components, property) => {
 
 const secretBaseView = computed(() => {
 
-
   let components = props.secretBase.components;
   let amount = calcAmount(components);
   let unitPrice = calcTotal(components, 'unitPrice');
@@ -109,5 +108,14 @@ const secretBaseView = computed(() => {
     saturatedFat,
   }
 });
+
+const onUpdateButtonClick = (secretBase) => {
+  console.log(secretBase);
+  alert('수정되었습니다.');
+}
+const onDeleteButtonClick = (secretBase) => {
+  secretBaseStore.delete(secretBase);
+  alert('삭제되었습니다.')
+}
 
 </script>
