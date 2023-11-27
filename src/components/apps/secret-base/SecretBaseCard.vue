@@ -42,7 +42,7 @@
       </q-list>
     </q-card-section>
     <q-card-section>
-      <NutritionPannel v-bind="secretBaseView"/>
+      <NutritionPanel v-bind="secretBaseView"/>
     </q-card-section>
     <q-card-section>
       <div class="text-caption">메모</div>
@@ -56,7 +56,7 @@
 
 import {computed} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
-import NutritionPannel from "components/NutritionPannel.vue";
+import NutritionPanel from "components/NutritionPanel.vue";
 import BaseCard from "components/BaseCard.vue";
 
 const props = defineProps({
@@ -77,27 +77,27 @@ const calcAmount = (components) => {
     .map(component => component.amount)
     .reduce((acc, cur) => acc + cur, 0)
 }
+
 const calcTotal = (components, property) => {
   return components
-    .map(component => component.ingredient[property])
-    .reduce((acc, cur) => acc + cur, 0)
+    .map(component => component.ingredient[property] * (component.amount / 100))
+    .reduce((acc, cur) => Number(acc) + Number(cur), 0)
 }
 
 const secretBaseView = computed(() => {
-
-  let components = props.secretBase.components;
-  let amount = calcAmount(components);
-  let unitPrice = calcTotal(components, 'unitPrice');
-  let calories = calcTotal(components, 'calories');
-  let carbohydrates = calcTotal(components, 'carbohydrates');
-  let sugars = calcTotal(components, 'sugars');
-  let protein = calcTotal(components, 'protein');
-  let caffeine = calcTotal(components, 'caffeine');
-  let fat = calcTotal(components, 'fat');
-  let saturatedFat = calcTotal(components, 'saturatedFat');
+  const components = props.secretBase.components;
+  const amount = calcAmount(components);
+  const unitPrice = calcTotal(components, 'unitPrice');
+  const calories = calcTotal(components, 'calories');
+  const carbohydrates = calcTotal(components, 'carbohydrates');
+  const sugars = calcTotal(components, 'sugars');
+  const protein = calcTotal(components, 'protein');
+  const caffeine = calcTotal(components, 'caffeine');
+  const fat = calcTotal(components, 'fat');
+  const saturatedFat = calcTotal(components, 'saturatedFat');
 
   return {
-    amount: amount,
+    amount,
     unitPrice,
     carbohydrates,
     calories,

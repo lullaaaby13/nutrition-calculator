@@ -59,6 +59,12 @@ export const useSecretBaseStore = defineStore({
   actions: {
     save(secretBase) {
       console.log(secretBase)
+      if (secretBase.components.length < 2) {
+        throw new Error('최소 2개 이상의 원재료가 필요 합니다.');
+      }
+      if (secretBase.components.some(it => it.amount < 1)) {
+        throw new Error('원재료의 양은 1 이상이어야 합니다.');
+      }
       if (this.exists(secretBase)) {
         throw new Error('같은 이름의 비법소스가 이미 존재 합니다.');
       }

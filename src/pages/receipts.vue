@@ -99,7 +99,7 @@
 import {computed, ref} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
 import BaseCard from "components/BaseCard.vue";
-import NutritionPannel from "components/NutritionPannel.vue";
+import NutritionPannel from "components/NutritionPanel.vue";
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();

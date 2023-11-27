@@ -21,7 +21,7 @@
         <q-btn
           color="primary"
           label="재료 등록"
-          @click="showSecretBaseRegisterDialog = true"/>
+          @click="showSecretBaseCreateDialog = true"/>
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
 
@@ -32,7 +32,8 @@
 
     </BaseCard>
 
-    <RegisterSecretBaseCard v-model="showSecretBaseRegisterDialog"/>
+    <RegisterSecretBaseCard v-model="showSecretBaseCreateDialog"/>
+    <SecretBaseCardForm v-model="showSecretBaseUpdateDialog"/>
   </q-page>
 </template>
 
@@ -42,8 +43,9 @@ import {computed, ref} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import SecretBaseCard from "components/apps/secret-base/SecretBaseCard.vue";
-import RegisterSecretBaseCard from "components/apps/secret-base/RegisterSecretBaseCard.vue";
+import RegisterSecretBaseCard from "components/apps/secret-base/CreateSecretBaseCard.vue";
 import BaseCard from "components/BaseCard.vue";
+import SecretBaseCardForm from "components/apps/secret-base/SecretBaseCardForm.vue";
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();
@@ -54,7 +56,10 @@ const filteredSecretBases = computed(() => {
   });
 });
 
-const showSecretBaseRegisterDialog = ref(false);
+const showSecretBaseCreateDialog = ref(false);
+const showSecretBaseUpdateDialog = ref(false);
+
+const showSecretBaseUpdate = () => showSecretBaseUpdateDialog.value = true;
 
 
 </script>

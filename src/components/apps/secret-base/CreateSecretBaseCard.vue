@@ -113,7 +113,7 @@ import {computed, ref} from "vue";
 import {IngredientCategory} from "@/enum/ingredientCategory";
 import {useIngredientStore} from "stores/ingredients";
 import {useSecretBaseStore} from "stores/secret-base";
-import NutritionPannel from "components/NutritionPannel.vue";
+import NutritionPannel from "components/NutritionPanel.vue";
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();
@@ -203,6 +203,7 @@ const totalIngredients = computed(() => {
     acc.saturatedFat += calcAmount(cur, 'saturatedFat');
     acc.caffeine += calcAmount(cur, 'caffeine');
     acc.unitPrice += calcAmount(cur, 'unitPrice');
+
     acc.amount += Number(cur.amount);
     return acc;
   }, {
@@ -230,7 +231,7 @@ const onRegisterButtonClick = () => {
     }),
     memo: memo.value,
   };
-
+  
   try {
     secretBaseStore.save(secretBase);
     emit('update:modelValue', false);

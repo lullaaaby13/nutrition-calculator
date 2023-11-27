@@ -48,7 +48,7 @@
 
 import {useIngredientStore} from "stores/ingredients";
 import {ref} from "vue";
-import NutritionPannel from "components/NutritionPannel.vue";
+import NutritionPannel from "components/NutritionPanel.vue";
 import BaseCard from "components/BaseCard.vue";
 
 defineEmits(['openUpdateIngredientDialog']);

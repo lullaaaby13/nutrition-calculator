@@ -2,9 +2,10 @@
   <q-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue')" full-width full-height>
     <q-card class="q-pa-sm">
       <q-card-section class="flex justify-between">
-        <div class="text-h6">{{ title }}</div>
+        <div class="text-h6">시크릿 베이스 등록</div>
         <div class="q-gutter-x-md">
-          <slot name="buttons"/>
+          <q-btn label="등록" color="primary" @click="onRegisterButtonClick"/>
+          <q-btn label="닫기" v-close-popup/>
         </div>
       </q-card-section>
 
@@ -122,10 +123,6 @@ defineProps({
     type: Boolean,
     default: false,
   },
-  title: {
-    type: String,
-    default: '',
-  },
 });
 
 const emit = defineEmits([
@@ -135,7 +132,45 @@ const emit = defineEmits([
 const name = ref('');
 const memo = ref('');
 
-const selectedIngredients = ref([]);
+const selectedIngredients = ref([
+  // {
+  //   amount: 80,
+  //   ingredient: {
+  //     name: '우유',
+  //     category: IngredientCategory.FRESH,
+  //     calories: 43,
+  //     unitPrice: 260,
+  //     carbohydrates: 100,
+  //     sugars: 100,
+  //     protein: 8,
+  //     caffeine: 0,
+  //     fat: 14,
+  //     saturatedFat: 10,
+  //     memo: '우유라떼 맛이쪙',
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   }
+  // },
+  // {
+  //   amount: 20,
+  //   ingredient: {
+  //     name: '연유',
+  //     category: IngredientCategory.FRESH,
+  //     calories: 54,
+  //     unitPrice: 575,
+  //     carbohydrates: 10,
+  //     sugars: 6,
+  //     protein: 15,
+  //     caffeine: 3,
+  //     fat: 15,
+  //     saturatedFat: 10,
+  //     memo: '연유라떼 맛이쪙',
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   }
+  // },
+
+]);
 
 const onIngredientClick = (ingredient) => {
   const exists = selectedIngredients.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
@@ -195,8 +230,6 @@ const onRegisterButtonClick = () => {
     }),
     memo: memo.value,
   };
-
-  console.log(secretBase);
 
   try {
     secretBaseStore.save(secretBase);
