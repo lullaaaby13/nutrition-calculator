@@ -231,7 +231,7 @@ const onRegisterButtonClick = () => {
     }),
     memo: memo.value,
   };
-  
+
   try {
     secretBaseStore.save(secretBase);
     emit('update:modelValue', false);

@@ -15,7 +15,7 @@
           dense
           outline
           color="secondary"
-          @click="onUpdateButtonClick(secretBase)"
+          @click="pageStore.showUpdateDialog(secretBase)"
           icon="edit"
           flat
         />
@@ -23,7 +23,7 @@
           dense
           outline
           color="red"
-          @click="onDeleteButtonClick(secretBase)"
+          @click="$emit('onDeleteButtonClick', secretBase)"
           icon="delete"
           flat
         />
@@ -54,15 +54,15 @@
 
 <script setup>
 
-import {computed} from "vue";
-import {useSecretBaseStore} from "stores/secret-base";
-import NutritionPanel from "components/NutritionPanel.vue";
-import BaseCard from "components/BaseCard.vue";
+import {computed} from 'vue';
+import {useSecretBaseStore} from 'stores/secret-base';
+import NutritionPanel from 'components/NutritionPanel.vue';
+import BaseCard from 'components/BaseCard.vue';
+import {useSecretBasePageStore} from 'stores/pages/secret-base';
 
 const props = defineProps({
   secretBase: {
     type: Object,
-    default: () => {},
   }
 });
 
@@ -70,6 +70,7 @@ defineEmits([
   'onUpdateButtonClick',
   'onDeleteButtonClick',
 ]);
+const pageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
 const calcAmount = (components) => {
@@ -85,6 +86,7 @@ const calcTotal = (components, property) => {
 }
 
 const secretBaseView = computed(() => {
+
   const components = props.secretBase.components;
   const amount = calcAmount(components);
   const unitPrice = calcTotal(components, 'unitPrice');
@@ -113,9 +115,9 @@ const onUpdateButtonClick = (secretBase) => {
   console.log(secretBase);
   alert('수정되었습니다.');
 }
-const onDeleteButtonClick = (secretBase) => {
-  secretBaseStore.delete(secretBase);
-  alert('삭제되었습니다.')
-}
+// const onDeleteButtonClick = (secretBase) => {
+//   secretBaseStore.delete(secretBase);
+//   alert('삭제되었습니다.')
+// }
 
 </script>

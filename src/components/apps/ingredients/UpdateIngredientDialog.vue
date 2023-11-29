@@ -100,9 +100,9 @@
 
 <script setup>
 
-import {useIngredientStore} from "stores/ingredients";
-import {IngredientCategory} from "@/enum/ingredientCategory";
-import {ref} from "vue";
+import {useIngredientStore} from 'stores/ingredients';
+import {IngredientCategory} from 'src/types/ingredient';
+import {ref} from 'vue';
 const emit = defineEmits([
   'update:modelValue',
   'update:ingredient',

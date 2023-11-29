@@ -27,25 +27,30 @@
 
         <SecretBaseCard v-for="secretBase in filteredSecretBases" :key="secretBase.name"
                         :secret-base="secretBase"
+                        @onUpdateButtonClick="onUpdateButtonClick"
+                        @onDeleteButtonClick="onDeleteButtonClick"
         />
       </q-card-section>
 
     </BaseCard>
 
-    <RegisterSecretBaseCard v-model="showSecretBaseCreateDialog"/>
-    <SecretBaseCardForm v-model="showSecretBaseUpdateDialog"/>
+    <CreateSecretBaseCard v-model="pageStore.showSecretBaseCreateDialog"/>
+    <UpdateSecretBaseCard v-model="pageStore.showSecretBaseUpdateDialog" :secret-base="updateSecretBase"/>
   </q-page>
 </template>
+
+
+
 
 <script setup>
 
 import {computed, ref} from "vue";
 import {useSecretBaseStore} from "stores/secret-base";
-import {IngredientCategory} from "@/enum/ingredientCategory";
 import SecretBaseCard from "components/apps/secret-base/SecretBaseCard.vue";
-import RegisterSecretBaseCard from "components/apps/secret-base/CreateSecretBaseCard.vue";
+import CreateSecretBaseCard from "components/apps/secret-base/CreateSecretBaseCard.vue";
 import BaseCard from "components/BaseCard.vue";
-import SecretBaseCardForm from "components/apps/secret-base/SecretBaseCardForm.vue";
+import UpdateSecretBaseCard from "components/apps/secret-base/UpdateSecretBaseCard.vue";
+import {useSecretBasePageStore} from "stores/pages/secret-base";
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();
@@ -56,11 +61,20 @@ const filteredSecretBases = computed(() => {
   });
 });
 
-const showSecretBaseCreateDialog = ref(false);
-const showSecretBaseUpdateDialog = ref(false);
+const pageStore = useSecretBasePageStore();
+// const showSecretBaseCreateDialog = ref(false);
+// const showSecretBaseUpdateDialog = ref(false);
+// const updateSecretBase = ref(null);
 
 const showSecretBaseUpdate = () => showSecretBaseUpdateDialog.value = true;
-
+const onUpdateButtonClick = secretBase => {
+  pageStore.updateSecretBase.value = secretBase;
+  showSecretBaseUpdate();
+}
+const onDeleteButtonClick = secretBase => {
+  secretBaseStore.delete(secretBase);
+  alert('삭제되었습니다.');
+}
 
 </script>
 

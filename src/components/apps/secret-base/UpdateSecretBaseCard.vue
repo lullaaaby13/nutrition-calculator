@@ -1,10 +1,10 @@
 <template>
-  <q-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue')" full-width full-height>
+  <q-dialog full-width full-height>
     <q-card class="q-pa-sm">
       <q-card-section class="flex justify-between">
-        <div class="text-h6">시크릿 베이스 등록</div>
+        <div class="text-h6">시크릿 베이스 수정</div>
         <div class="q-gutter-x-md">
-          <q-btn label="등록" color="primary" @click="onRegisterButtonClick"/>
+          <q-btn label="수정" color="primary" @click="onUpdateButtonClick"/>
           <q-btn label="닫기" v-close-popup/>
         </div>
       </q-card-section>
@@ -60,7 +60,7 @@
         <div class="col-4 q-px-md">
           <q-card class="q-pa-md q-gutter-y-sm">
             <div class="text-subtitle1">
-              <q-input v-model="name"
+              <q-input v-model="pageStore.updateSecretBase.name"
                        type="text"
                        dense
                        label="이름"
@@ -72,20 +72,19 @@
               <span class="text-caption">단가: {{ totalIngredients.unitPrice.toFixed(1) }}원</span>
             </div>
 
-            <q-card-section v-if="selectedIngredients.length > 0">
+            <q-card-section v-if="pageStore.updateSecretBase.components.length > 0">
               <div class="text-subtitle2 q-mb-sm">
                 원재료
               </div>
               <q-list bordered>
-                <q-item v-for="ingredient in selectedIngredients" :key="ingredient.name">
+                <q-item v-for="component in pageStore.updateSecretBase.components" :key="component.name">
                   <q-item-section>
                     <q-input type="number"
-                             :label="ingredient.ingredient.name"
+                             :label="component.ingredient.name"
                              stack-label
-                             v-model="ingredient.amount"
-
+                             v-model="component.amount"
                     >
-                      <q-icon name="close" size="12px" @click="onRemoveSelectedIngredientClick(ingredient)"/>
+                      <q-icon name="close" size="12px" @click="onRemoveSelectedIngredientClick(component)"/>
                     </q-input>
                   </q-item-section>
                 </q-item>
@@ -93,7 +92,7 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPannel :nutrition="totalIngredients"/>
+              <NutritionPanel v-bind="totalIngredients"/>
             </q-card-section>
 
             <q-card-section>
@@ -108,93 +107,54 @@
   </q-dialog>
 </template>
 
-<script setup>
-import {computed, ref} from "vue";
-import {IngredientCategory} from "@/enum/ingredientCategory";
-import {useIngredientStore} from "stores/ingredients";
-import {useSecretBaseStore} from "stores/secret-base";
-import NutritionPannel from "components/NutritionPanel.vue";
+<script setup lang="ts">
+import {computed, onMounted, ref} from 'vue';
+import {useIngredientStore} from 'stores/ingredients';
+import NutritionPanel from 'components/NutritionPanel.vue';
+import {useSecretBasePageStore} from 'stores/pages/secret-base';
 
+const pageStore = useSecretBasePageStore();
 const ingredientStore = useIngredientStore();
-const secretBaseStore = useSecretBaseStore();
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+const memo = ref('')
+
+defineProps({});
+
+const selectedIngredients = ref([]);
+
+onMounted(() => {
+  pageStore.updateSecretBase.components.forEach(component => {
+    selectedIngredients.value.push(component.ingredient);
+  });
 });
 
-const emit = defineEmits([
-  'update:modelValue',
-]);
-
-const name = ref('');
-const memo = ref('');
-
-const selectedIngredients = ref([
-  // {
-  //   amount: 80,
-  //   ingredient: {
-  //     name: '우유',
-  //     category: IngredientCategory.FRESH,
-  //     calories: 43,
-  //     unitPrice: 260,
-  //     carbohydrates: 100,
-  //     sugars: 100,
-  //     protein: 8,
-  //     caffeine: 0,
-  //     fat: 14,
-  //     saturatedFat: 10,
-  //     memo: '우유라떼 맛이쪙',
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //   }
-  // },
-  // {
-  //   amount: 20,
-  //   ingredient: {
-  //     name: '연유',
-  //     category: IngredientCategory.FRESH,
-  //     calories: 54,
-  //     unitPrice: 575,
-  //     carbohydrates: 10,
-  //     sugars: 6,
-  //     protein: 15,
-  //     caffeine: 3,
-  //     fat: 15,
-  //     saturatedFat: 10,
-  //     memo: '연유라떼 맛이쪙',
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //   }
-  // },
-
-]);
-
 const onIngredientClick = (ingredient) => {
-  const exists = selectedIngredients.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
+  console.log(ingredient);
+  console.log(pageStore.updateSecretBase);
+  const exists = pageStore.updateSecretBase.components.some(component => component.ingredient.name === ingredient.name);
   if (!exists) {
-    selectedIngredients.value.push({
-      amount: 0,
+    pageStore.updateSecretBase.components.push({
+      amount: 100,
       ingredient: ingredient,
     });
   }
 };
 
 const onRemoveSelectedIngredientClick = (ingredient) => {
-  const index = selectedIngredients.value.findIndex(selectedIngredient => selectedIngredient.ingredient.name === ingredient.ingredient.name);
+  console.log(ingredient)
+  const index = pageStore.updateSecretBase.components.findIndex(component => component.ingredient.name === ingredient.ingredient.name);
   if (index !== -1) {
-    selectedIngredients.value.splice(index, 1);
+    pageStore.updateSecretBase.components.splice(index, 1);
   }
 };
 
-const calcAmount = (selectedIngredient, property) => {
-  return selectedIngredient.ingredient[property] * (selectedIngredient.amount / 100)
+const calcAmount = (component, property) => {
+  return component.ingredient[property] * (component.amount / 100)
 };
 
 const totalIngredients = computed(() => {
-  return selectedIngredients.value.reduce((acc, cur) => {
+
+  return pageStore.updateSecretBase.components.reduce((acc, cur) => {
     acc.calories += calcAmount(cur, 'calories');
     acc.carbohydrates += calcAmount(cur, 'carbohydrates');
     acc.protein += calcAmount(cur, 'protein');
@@ -204,6 +164,7 @@ const totalIngredients = computed(() => {
     acc.caffeine += calcAmount(cur, 'caffeine');
     acc.unitPrice += calcAmount(cur, 'unitPrice');
     acc.amount += Number(cur.amount);
+
     return acc;
   }, {
     calories: 0,
@@ -218,28 +179,6 @@ const totalIngredients = computed(() => {
   });
 });
 
-const onRegisterButtonClick = () => {
-
-  const secretBase = {
-    name: name.value,
-    components: selectedIngredients.value.map(selectedIngredient => {
-      return {
-        ingredient: selectedIngredient.ingredient,
-        amount: Number(selectedIngredient.amount),
-      };
-    }),
-    memo: memo.value,
-  };
-
-  try {
-    secretBaseStore.save(secretBase);
-    emit('update:modelValue', false);
-    while(selectedIngredients.value.pop()) {}
-  } catch (e) {
-    alert(e.message);
-  }
-
-};
 
 </script>
 

@@ -12,7 +12,7 @@
           dense outline flat
           color="secondary"
           icon="edit"
-          @click="$emit('openUpdateIngredientDialog', ingredient)"
+          @click="showUpdateIngredientDialog(ingredient)"
         />
         <q-btn
           dense outline flat
@@ -26,7 +26,7 @@
     <q-separator/>
 
     <q-card-section>
-      <NutritionPannel v-bind="ingredient"/>
+      <NutritionPanel v-bind="ingredient"/>
     </q-card-section>
 
     <q-card-section>
@@ -46,26 +46,29 @@
 
 <script setup>
 
-import {useIngredientStore} from "stores/ingredients";
-import {ref} from "vue";
-import NutritionPannel from "components/NutritionPanel.vue";
-import BaseCard from "components/BaseCard.vue";
+import {useIngredientStore} from 'stores/ingredients';
+import NutritionPanel from 'components/NutritionPanel.vue';
+import BaseCard from 'components/BaseCard.vue';
+import Ingredient from 'src/types/ingredient';
+import {useIngredientPageStore} from 'stores/pages/ingredient';
 
 defineEmits(['openUpdateIngredientDialog']);
 defineProps({
   ingredient: {
-    type: Object,
+    type: Ingredient,
   }
 });
 
 const ingredientStore = useIngredientStore();
+const ingredientPageStore = useIngredientPageStore();
+
+const { showUpdateIngredientDialog } = ingredientPageStore;
 
 const onDeleteButtonClick = ingredient => {
   if (confirm('정말로 삭제 하시겠어요?')) {
     ingredientStore.delete(ingredient);
   }
 }
-
 
 
 </script>

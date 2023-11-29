@@ -30,7 +30,7 @@
             label="원재료 등록하기"
             icon="create"
             padding="10px 15px 10px 10px"
-            @click="onRegisterButtonClick"
+            @click="showCreateIngredientDialog"
           />
         </div>
       </q-card-section>
@@ -54,34 +54,32 @@
         <IngredientCard
           v-for="ingredient in filteredIngredients" :key="ingredient.name"
           :ingredient="ingredient"
-          @openUpdateIngredientDialog="openUpdateIngredientDialog"
         />
       </q-card-section>
 
     </BaseCard>
 
-
-    <RegisterIngredientDialog
-      v-model="showRegisterIngredientDialog"
-    />
-    <UpdateIngredientDialog
-      v-model="showUpdateIngredientDialog"
-      :ingredient="selectedIngredient"
-      @update:ingredient="updateSelectedIngredient"
-    />
+    <CreateIngredientDialog v-model="createIngredientDialog2"/>
+<!--    <UpdateIngredientDialog-->
+<!--      v-model="showUpdateIngredientDialog"-->
+<!--      :ingredient="selectedIngredient"-->
+<!--      @update:ingredient="updateSelectedIngredient"-->
+<!--    />-->
 
   </q-page>
 </template>
 
 <script setup>
 
-import {computed, ref} from "vue";
-import {IngredientCategory} from "@/enum/ingredientCategory";
-import {useIngredientStore} from "stores/ingredients";
-import IngredientCard from "components/apps/ingredients/IngredientCard.vue";
-import RegisterIngredientDialog from "components/apps/ingredients/RegisterIngredientDialog.vue";
-import UpdateIngredientDialog from "components/apps/ingredients/UpdateIngredientDialog.vue";
-import BaseCard from "components/BaseCard.vue";
+import {computed, ref} from 'vue';
+
+import {useIngredientStore} from 'stores/ingredients';
+import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
+import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
+import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
+import BaseCard from 'components/BaseCard.vue';
+import {IngredientCategory} from 'src/types/ingredient';
+import {useIngredientPageStore} from 'stores/pages/ingredient';
 
 /**
  * 필터링
@@ -89,15 +87,14 @@ import BaseCard from "components/BaseCard.vue";
 const selectedCategories = ref([]);
 const searchText = ref('');
 
-const toggle = ref(false);
-
-
-
+const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
-const ingredients = ingredientStore.ingredients;
+const { createIngredientDialog2, showCreateIngredientDialog } = ingredientPageStore;
+
+
 
 const filteredIngredients = computed(() => {
-  let filtered = ingredients;
+  let filtered = ingredientStore.ingredients;
 
   if (selectedCategories.value.length > 0) {
     filtered = filtered
@@ -121,21 +118,14 @@ const resetCheckbox = () => {
 }
 
 const selectedIngredient = ref(null);
-const setSelectedIngredient = val => {
-  selectedIngredient.value = val;
-}
+
 const updateSelectedIngredient = ({ field, value }) => {
   selectedIngredient.value[field] = value;
 }
 
-const showRegisterIngredientDialog = ref(false);
-const showUpdateIngredientDialog = ref(false);
+
 const onRegisterButtonClick = () => {
   showRegisterIngredientDialog.value = true;
-}
-const openUpdateIngredientDialog = ingredient => {
-  showUpdateIngredientDialog.value = true;
-  selectedIngredient.value = ingredient;
 }
 
 </script>
