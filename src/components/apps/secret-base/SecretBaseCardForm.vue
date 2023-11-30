@@ -92,7 +92,7 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPannel :nutrition="totalIngredients"/>
+              <NutritionPanel :nutrition="totalIngredients"/>
             </q-card-section>
 
             <q-card-section>
@@ -108,11 +108,11 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
-import {IngredientCategory} from "@/enum/ingredientCategory";
-import {useIngredientStore} from "stores/ingredients";
-import {useSecretBaseStore} from "stores/secret-base";
-import NutritionPannel from "components/NutritionPanel.vue";
+import {computed, ref} from 'vue';
+
+import {useIngredientStore} from 'stores/ingredients';
+import {useSecretBaseStore} from 'stores/secret-base';
+import NutritionPanel from 'components/NutritionPanel.vue';
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();

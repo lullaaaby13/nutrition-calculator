@@ -191,14 +191,14 @@ milk.caffeine = 0;
 milk.fat = 3.39;
 milk.saturatedFat = 2.06;
 const condensedMilk = new Ingredient('연유', IngredientCategory.FRESH);
-milk.calories = 360;
-milk.unitPrice = 1076;
-milk.carbohydrates = 57;
-milk.sugars = 49;
-milk.protein = 8;
-milk.caffeine = 0;
-milk.fat = 11;
-milk.saturatedFat = 7;
+condensedMilk.calories = 360;
+condensedMilk.unitPrice = 1076;
+condensedMilk.carbohydrates = 57;
+condensedMilk.sugars = 49;
+condensedMilk.protein = 8;
+condensedMilk.caffeine = 0;
+condensedMilk.fat = 11;
+condensedMilk.saturatedFat = 7;
 export const IngredientMock = {
   MILK: milk,
   CONDENSED_MILK: condensedMilk,

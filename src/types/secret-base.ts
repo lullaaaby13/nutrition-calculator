@@ -6,12 +6,13 @@ export class SecretBase {
   private _components: { amount: number, ingredient: Ingredient }[];
   private _createdAt: Date;
   private _updatedAt: Date;
-  constructor(name: string) {
-    this._name = name;
+  private _memo?: string;
+  constructor(name: string, memo?: string) {
+    this.name = name;
     this._components = [];
     this._createdAt = new Date();
     this._updatedAt = new Date();
-
+    this.memo = memo;
   }
 
 
@@ -38,7 +39,7 @@ export class SecretBase {
   }
 
   set name(value: string) {
-    if (!this._name) {
+    if (!value) {
       throw new Error('이름을 입력해 주세요.');
     }
     this._name = value;
@@ -54,5 +55,13 @@ export class SecretBase {
 
   get updatedAt(): Date {
     return this._updatedAt;
+  }
+
+  get memo(): string | undefined {
+    return this._memo;
+  }
+
+  set memo(value: string) {
+    this._memo = value;
   }
 }

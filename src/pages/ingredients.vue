@@ -76,7 +76,7 @@ import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
 import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {IngredientCategory} from 'src/types/ingredient';
-import {useIngredientPageStore} from 'stores/ingredient-page';
+import {useIngredientPageStore} from 'stores/pages/ingredients';
 import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
 
 /**

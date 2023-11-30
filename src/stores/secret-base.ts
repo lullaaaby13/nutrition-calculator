@@ -10,7 +10,7 @@ export const useSecretBaseStore = defineStore({
   actions: {
     save(secretBase: SecretBase) {
 
-      if (secretBase.hasMinimumComponents()) {
+      if (!secretBase.hasMinimumComponents()) {
         throw new Error('최소 2개 이상의 원재료가 필요 합니다.');
       }
 

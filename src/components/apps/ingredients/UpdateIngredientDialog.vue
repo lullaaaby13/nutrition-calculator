@@ -10,7 +10,6 @@
           <q-btn label="수정" color="primary" @click="onUpdateButtonClick"/>
           <q-btn label="취소" v-close-popup/>
         </div>
-
       </q-card-section>
 
       <q-separator/>
@@ -98,7 +97,7 @@
 import {useIngredientStore} from 'stores/ingredients';
 import {IngredientCategory} from 'src/types/ingredient';
 import {ref} from 'vue';
-import {useIngredientPageStore} from 'stores/ingredient-page';
+import {useIngredientPageStore} from 'stores/pages/ingredients';
 
 // 외부에서 주입한 이벤트 핸들러
 const ingredientStore = useIngredientStore();

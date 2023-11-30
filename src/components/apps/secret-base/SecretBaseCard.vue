@@ -4,8 +4,8 @@
       <div>
         <div class="text-h5">{{ secretBase.name }}</div>
         <div class="q-gutter-x-md">
-          <span class="text-caption">중량: {{ secretBaseView.amount }}g</span>
-          <span class="text-caption">단가: {{ secretBaseView.unitPrice || '-' }}원</span>
+          <span class="text-caption">중량: {{ secretBaseView.amount.toFixed(2) }}g</span>
+          <span class="text-caption">단가: {{ secretBaseView.unitPrice.toFixed(0) || '-' }}원</span>
         </div>
       </div>
 
@@ -58,7 +58,7 @@ import {computed} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {useSecretBasePageStore} from 'stores/pages/secret-base';
+import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 
 const props = defineProps({
   secretBase: {

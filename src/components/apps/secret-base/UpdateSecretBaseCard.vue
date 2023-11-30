@@ -111,7 +111,7 @@
 import {computed, onMounted, ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
-import {useSecretBasePageStore} from 'stores/pages/secret-base';
+import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 
 const pageStore = useSecretBasePageStore();
 const ingredientStore = useIngredientStore();

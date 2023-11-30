@@ -1,9 +1,15 @@
 <template>
   <q-dialog>
     <BaseCard class="q-pa-md" style="width: 600px;">
-      <q-card-section>
-        <div class="text-h6">원재료 등록</div>
-        <div class="text-caption">100g당</div>
+      <q-card-section class="flex justify-between">
+        <div>
+          <div class="text-h6">원재료 등록</div>
+          <div class="text-caption">100g당</div>
+        </div>
+        <div class="q-gutter-md">
+          <q-btn label="등록" color="primary" @click="onRegisterConfirmButtonClick"/>
+          <q-btn label="취소" v-close-popup/>
+        </div>
       </q-card-section>
 
       <q-separator/>
@@ -71,14 +77,10 @@
 
       </q-card-section>
 
-
       <q-card-section>
-        <q-input v-model="memo" type="textarea" label="메모"/>
+        <q-input v-model="form.memo" type="textarea" label="메모"/>
       </q-card-section>
 
-      <q-card-actions align="right">
-        <q-btn flat label="등록" color="primary" @click="onRegisterConfirmButtonClick"/>
-      </q-card-actions>
     </BaseCard>
   </q-dialog>
 </template>
@@ -88,7 +90,7 @@
 import {ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
 import Ingredient, {IngredientCategory} from 'src/types/ingredient';
-import {useIngredientPageStore} from 'stores/ingredient-page';
+import {useIngredientPageStore} from 'stores/pages/ingredients';
 import BaseCard from 'components/BaseCard.vue';
 
 const ingredientPageStore = useIngredientPageStore();
@@ -122,9 +124,9 @@ const form = ref(createEmptyForm());
 const onRegisterConfirmButtonClick = () => {
   try {
     const ingredient = new Ingredient(form.value.name, form.value.category);
-    console.log(ingredient);
     ingredientStore.save(ingredient);
     form.value = createEmptyForm();
+    ingredientPageStore.closeCreateIngredientDialog()
   } catch(e) {
     alert(e.message);
   }

@@ -4,6 +4,7 @@
       <div>
         <div class="text-h5">{{ ingredient.name }}</div>
         <div class="text-caption">{{ ingredient.category.label }}</div>
+        <span class="text-caption">단가: {{ ingredient.unitPrice.toFixed(0) || '-' }}원</span>
       </div>
 
       <q-space/>
@@ -59,7 +60,7 @@ import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import Ingredient from 'src/types/ingredient';
-import {useIngredientPageStore} from 'stores/ingredient-page';
+import {useIngredientPageStore} from 'stores/pages/ingredients';
 
 defineProps({
   ingredient: {

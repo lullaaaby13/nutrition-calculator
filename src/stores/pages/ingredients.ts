@@ -8,6 +8,9 @@ export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
   const showCreateIngredientDialog = () => {
     createIngredientDialog.value = true;
   }
+  const closeCreateIngredientDialog = () => {
+    createIngredientDialog.value = false;
+  }
 
   const updateIngredient = ref<Ingredient | any>({});
   const updateIngredientDialog = ref(false);
@@ -20,11 +23,12 @@ export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
   }
 
   return {
+    createIngredientDialog,
+    showCreateIngredientDialog,
+    closeCreateIngredientDialog,
     updateIngredient,
     updateIngredientDialog,
     showUpdateIngredientDialog,
-    createIngredientDialog,
-    showCreateIngredientDialog,
     closeUpdateIngredientDialog,
   };
 });

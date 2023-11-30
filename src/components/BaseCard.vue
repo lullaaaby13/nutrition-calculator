@@ -1,5 +1,9 @@
 <template>
-  <q-card class="q-pa-md" style="width: 80vw;" :flat="flat" :bordered="bordered" v-bind="$attrs">
+  <q-card class="q-pa-md"
+          :style="{ width }"
+          :flat="flat"
+          :bordered="bordered"
+          v-bind="$attrs">
     <template v-for="(_, name) in $slots" :key="name">
       <slot :name="name"/>
     </template>
@@ -15,6 +19,10 @@ defineProps({
   bordered: {
     type: Boolean,
     default: true,
+  },
+  width: {
+    type: String,
+    default: '80vw',
   },
 })
 </script>
