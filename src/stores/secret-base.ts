@@ -1,10 +1,12 @@
 import {defineStore} from 'pinia';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase, SecretBaseMock} from 'src/types/secret-base';
 
 export const useSecretBaseStore = defineStore({
   id: 'secret-base',
   state: (): { secretBases: SecretBase[] } => ({
-    secretBases: []
+    secretBases: [
+      SecretBaseMock.ULTRA_MILK
+    ]
   }),
 
   actions: {

@@ -1,4 +1,4 @@
-import Ingredient from 'src/types/ingredient';
+import Ingredient, {IngredientCategory, IngredientMock} from 'src/types/ingredient';
 
 
 export class SecretBase {
@@ -64,4 +64,45 @@ export class SecretBase {
   set memo(value: string) {
     this._memo = value;
   }
+
+  public ingredient(): SecretBaseIngredient {
+    return this.components.reduce((acc, cur) => {
+      acc.calories += cur.ingredient.calories * cur.amount;
+      acc.carbohydrates += cur.ingredient.carbohydrates * cur.amount;
+      acc.sugars += cur.ingredient.sugars * cur.amount;
+      acc.protein += cur.ingredient.protein * cur.amount;
+      acc.caffeine += cur.ingredient.caffeine * cur.amount;
+      acc.fat += cur.ingredient.fat * cur.amount;
+      acc.saturatedFat += cur.ingredient.saturatedFat * cur.amount;
+      return acc;
+    }, {
+      caffeine: 0,
+      calories: 0,
+      carbohydrates: 0,
+      fat: 0,
+      protein: 0,
+      saturatedFat: 0,
+      sugars: 0
+    });
+  }
+
+}
+
+export interface SecretBaseIngredient {
+  calories: number;
+  carbohydrates: number;
+  sugars: number;
+  protein: number;
+  caffeine: number;
+  fat: number;
+  saturatedFat: number;
+}
+
+
+const ultraMilk = new SecretBase('울트라 밀크', '고농축 최강 우유');
+ultraMilk.addComponent(10, IngredientMock.MILK);
+ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);
+
+export const SecretBaseMock = {
+  ULTRA_MILK: ultraMilk
 }

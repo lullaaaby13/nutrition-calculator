@@ -29,6 +29,7 @@ export default class Ingredient {
     this._createdAt = new Date();
     this._updatedAt = new Date();
   }
+
   get name(): string {
     return this._name;
   }
@@ -203,3 +204,4 @@ export const IngredientMock = {
   MILK: milk,
   CONDENSED_MILK: condensedMilk,
 }
+

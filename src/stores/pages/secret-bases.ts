@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
+import {SecretBase} from 'src/types/secret-base';
 
 export const useSecretBasePageStore = defineStore('secretBasePageStore', () => {
 
@@ -12,13 +13,24 @@ export const useSecretBasePageStore = defineStore('secretBasePageStore', () => {
     createSecretBaseDialog.value = false;
   }
 
+  const updateSecretBase = ref<SecretBase | any>({});
   const updateSecretBaseDialog = ref(false);
-
+  const showUpdateSecretBaseDialog = (secretBase: SecretBase) => {
+    updateSecretBase.value = secretBase;
+    updateSecretBaseDialog.value = true;
+  }
+  const closeUpdateSecretBaseDialog = () => {
+    updateSecretBaseDialog.value = false;
+  }
 
   return {
     createSecretBaseDialog,
     showCreateSecretBaseDialog,
     closeCreateSecretBaseDialog,
+    updateSecretBase,
     updateSecretBaseDialog,
+    showUpdateSecretBaseDialog,
+    closeUpdateSecretBaseDialog
   }
 });
+

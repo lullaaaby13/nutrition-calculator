@@ -15,7 +15,7 @@
           dense
           outline
           color="secondary"
-          @click="pageStore.showUpdateDialog(secretBase)"
+          @click="secretBasePageStore.showUpdateSecretBaseDialog(secretBase)"
           icon="edit"
           flat
         />
@@ -59,10 +59,11 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
+import {SecretBase} from 'src/types/secret-base';
 
 const props = defineProps({
   secretBase: {
-    type: Object,
+    type: SecretBase,
   }
 });
 
@@ -70,7 +71,7 @@ defineEmits([
   'onUpdateButtonClick',
   'onDeleteButtonClick',
 ]);
-const pageStore = useSecretBasePageStore();
+const secretBasePageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
 const calcAmount = (components) => {
