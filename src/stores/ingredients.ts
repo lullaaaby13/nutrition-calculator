@@ -30,6 +30,10 @@ export const useIngredientStore = defineStore('ingredient', {
       return this.ingredients.some(it => it.name === name);
     },
 
+    findByName(name: string) {
+        return this.ingredients.find(it => it.name === name);
+    },
+
     emptyIngredient() {
       return {
         category: null,

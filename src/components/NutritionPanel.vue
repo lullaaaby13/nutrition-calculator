@@ -6,25 +6,25 @@
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ calories.toFixed(0) }}</q-item-label>
+              <q-item-label>{{ calories.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ protein.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ protein.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">단백질(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ sugars.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ sugars.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">당류(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ caffeine.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ caffeine.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">카페인(mg)</q-item-label>
             </q-item-section>
           </q-item>
@@ -34,19 +34,19 @@
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ carbohydrates.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ carbohydrates.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">탄수화물(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ fat.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ fat.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">지방(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ saturatedFat.toFixed(1) }}</q-item-label>
+              <q-item-label>{{ saturatedFat.toFixed(digits) }}</q-item-label>
               <q-item-label caption lines="1">포화지방(Kcal)</q-item-label>
             </q-item-section>
           </q-item>
@@ -58,6 +58,7 @@
 </template>
 
 <script setup>
+const digits = 2;
 
 defineProps({
   calories: {

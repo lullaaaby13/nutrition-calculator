@@ -1,28 +1,30 @@
 import {defineStore} from 'pinia';
-import {reactive, ref} from 'vue';
+import {ref} from 'vue';
 import Ingredient from 'src/types/ingredient';
 
 export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
 
-  const createIngredientDialog2 = ref(false);
+  const createIngredientDialog = ref(false);
   const showCreateIngredientDialog = () => {
-    console.log('check')
-    createIngredientDialog2.value = true;
-    console.log(createIngredientDialog2.value);
+    createIngredientDialog.value = true;
   }
 
-  const updateIngredient = ref<Ingredient | null>(null);
+  const updateIngredient = ref<Ingredient | any>({});
   const updateIngredientDialog = ref(false);
   const showUpdateIngredientDialog = (ingredient: Ingredient) => {
     updateIngredient.value = ingredient;
     updateIngredientDialog.value = true;
+  }
+  const closeUpdateIngredientDialog = () => {
+    updateIngredientDialog.value = false;
   }
 
   return {
     updateIngredient,
     updateIngredientDialog,
     showUpdateIngredientDialog,
-    createIngredientDialog2,
+    createIngredientDialog,
     showCreateIngredientDialog,
+    closeUpdateIngredientDialog,
   };
 });

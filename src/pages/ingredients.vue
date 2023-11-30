@@ -30,7 +30,7 @@
             label="원재료 등록하기"
             icon="create"
             padding="10px 15px 10px 10px"
-            @click="showCreateIngredientDialog"
+            @click="ingredientPageStore.showCreateIngredientDialog"
           />
         </div>
       </q-card-section>
@@ -59,12 +59,10 @@
 
     </BaseCard>
 
-    <CreateIngredientDialog v-model="createIngredientDialog2"/>
-<!--    <UpdateIngredientDialog-->
-<!--      v-model="showUpdateIngredientDialog"-->
-<!--      :ingredient="selectedIngredient"-->
-<!--      @update:ingredient="updateSelectedIngredient"-->
-<!--    />-->
+    <CreateIngredientDialog v-model="ingredientPageStore.createIngredientDialog"/>
+    <UpdateIngredientDialog
+      v-model="ingredientPageStore.updateIngredientDialog"
+    />
 
   </q-page>
 </template>
@@ -76,10 +74,10 @@ import {computed, ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
 import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
 import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
-import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {IngredientCategory} from 'src/types/ingredient';
-import {useIngredientPageStore} from 'stores/pages/ingredient';
+import {useIngredientPageStore} from 'stores/ingredient-page';
+import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
 
 /**
  * 필터링
@@ -89,9 +87,6 @@ const searchText = ref('');
 
 const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
-const { createIngredientDialog2, showCreateIngredientDialog } = ingredientPageStore;
-
-
 
 const filteredIngredients = computed(() => {
   let filtered = ingredientStore.ingredients;
@@ -110,22 +105,12 @@ const filteredIngredients = computed(() => {
       );
   }
 
+  console.log(filtered);
   return filtered;
 })
 
 const resetCheckbox = () => {
   selectedCategories.value = [];
-}
-
-const selectedIngredient = ref(null);
-
-const updateSelectedIngredient = ({ field, value }) => {
-  selectedIngredient.value[field] = value;
-}
-
-
-const onRegisterButtonClick = () => {
-  showRegisterIngredientDialog.value = true;
 }
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)">
+  <q-dialog>
     <BaseCard class="q-pa-md" style="width: 600px;">
       <q-card-section>
         <div class="text-h6">원재료 등록</div>
@@ -88,20 +88,19 @@
 import {ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
 import Ingredient, {IngredientCategory} from 'src/types/ingredient';
-import {useIngredientPageStore} from 'stores/pages/ingredient';
+import {useIngredientPageStore} from 'stores/ingredient-page';
 import BaseCard from 'components/BaseCard.vue';
 
 const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
-//const { createIngredientDialog } = ingredientPageStore;
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  }
-});
-defineEmits([ 'update:modelValue' ]);
+// defineProps({
+//   modelValue: {
+//     type: Boolean,
+//     default: false,
+//   }
+// });
+// defineEmits([ 'update:modelValue' ]);
 
 const createEmptyForm = () => ({
   category: null,

@@ -57,7 +57,7 @@ export default class Ingredient {
 
   set calories(value: number) {
     this.validateGreaterThanZero(value, '칼로리');
-    this._calories = value;
+    this._calories = Number(value);
   }
 
   get unitPrice(): number {
@@ -66,7 +66,7 @@ export default class Ingredient {
 
   set unitPrice(value: number) {
     this.validateGreaterThanZero(value, '단위 가격');
-    this._unitPrice = value;
+    this._unitPrice = Number(value);
   }
 
   get carbohydrates(): number {
@@ -75,7 +75,7 @@ export default class Ingredient {
 
   set carbohydrates(value: number) {
     this.validateGreaterThanZero(value, '탄수화물');
-    this._carbohydrates = value;
+    this._carbohydrates = Number(value);
   }
 
   get sugars(): number {
@@ -84,7 +84,7 @@ export default class Ingredient {
 
   set sugars(value: number) {
     this.validateGreaterThanZero(value, '당류');
-    this._sugars = value;
+    this._sugars = Number(value);
   }
 
   get protein(): number {
@@ -93,7 +93,7 @@ export default class Ingredient {
 
   set protein(value: number) {
     this.validateGreaterThanZero(value, '단백질');
-    this._protein = value;
+    this._protein = Number(value);
   }
 
   get caffeine(): number {
@@ -102,7 +102,7 @@ export default class Ingredient {
 
   set caffeine(value: number) {
     this.validateGreaterThanZero(value, '카페인');
-    this._caffeine = value;
+    this._caffeine = Number(value);
   }
 
   get fat(): number {
@@ -111,7 +111,7 @@ export default class Ingredient {
 
   set fat(value: number) {
     this.validateGreaterThanZero(value, '지방');
-    this._fat = value;
+    this._fat = Number(value);
   }
 
   get saturatedFat(): number {
@@ -120,7 +120,7 @@ export default class Ingredient {
 
   set saturatedFat(value: number) {
     this.validateGreaterThanZero(value, '포화지방산');
-    this._saturatedFat = value;
+    this._saturatedFat = Number(value);
   }
 
   get memo(): string {
