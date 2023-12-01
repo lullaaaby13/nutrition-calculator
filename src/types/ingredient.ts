@@ -1,51 +1,27 @@
+import {BaseType} from 'src/types/base-type';
 
-export default class Ingredient {
-  private _name: string;
-  private _category: IngredientCategoryType;
-  private _calories: number;
-  private _unitPrice: number;
-  private _carbohydrates: number;
-  private _sugars: number;
-  private _protein: number;
-  private _caffeine: number;
-  private _fat: number;
-  private _saturatedFat: number;
-  private _memo: string;
-  private _createdAt: Date;
-  private _updatedAt: Date;
+export default class Ingredient extends BaseType {
+  private _category: IngredientCategory = IngredientCategory.FRESH;
+  private _calories = 0;
+  private _unitPrice = 0;
+  private _carbohydrates = 0;
+  private _sugars = 0;
+  private _protein = 0;
+  private _caffeine = 0;
+  private _fat = 0;
+  private _saturatedFat = 0;
 
-  constructor(name: string, category: IngredientCategoryType) {
+  constructor(name: string, category: IngredientCategory) {
+    super();
     this.name = name;
     this.category = category;
-    this.calories = 0;
-    this.unitPrice = 0;
-    this.carbohydrates = 0;
-    this.sugars = 0;
-    this.protein = 0;
-    this.caffeine = 0;
-    this.fat = 0;
-    this.saturatedFat = 0;
-    this.memo = '';
-    this._createdAt = new Date();
-    this._updatedAt = new Date();
   }
 
-  get name(): string {
-    return this._name;
-  }
-
-  set name(value: string) {
-    if (!value) {
-      throw new Error('이름을 입력해 주세요.');
-    }
-    this._name = value;
-  }
-
-  get category(): IngredientCategoryType {
+  get category(): IngredientCategory {
     return this._category;
   }
 
-  set category(value: IngredientCategoryType) {
+  set category(value: IngredientCategory) {
     if (!value) {
       throw new Error('카테고리를 선택해 주세요.');
     }
@@ -124,22 +100,6 @@ export default class Ingredient {
     this._saturatedFat = Number(value);
   }
 
-  get memo(): string {
-    return this._memo;
-  }
-
-  set memo(value: string) {
-    this._memo = value;
-  }
-
-  get createdAt(): Date {
-    return this._createdAt;
-  }
-
-  get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
   private validateGreaterThanZero(value: number, name: string) {
     if (value < 0) {
       throw new Error(`${name}은 0보다 커야 합니다.`);
@@ -179,7 +139,7 @@ export const IngredientCategory = {
   },
 }
 
-export type IngredientCategoryType = typeof IngredientCategory[keyof typeof IngredientCategory];
+export type IngredientCategory = typeof IngredientCategory[keyof typeof IngredientCategory];
 
 
 const milk = new Ingredient('우유', IngredientCategory.FRESH);

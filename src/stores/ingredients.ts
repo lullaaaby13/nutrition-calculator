@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import Ingredient, {IngredientCategory, IngredientMock} from 'src/types/ingredient';
+import Ingredient, {IngredientMock} from 'src/types/ingredient';
 
 export const useIngredientStore = defineStore('ingredient', {
   state: (): { ingredients: Ingredient[] } => ({

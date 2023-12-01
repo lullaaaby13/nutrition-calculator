@@ -71,6 +71,7 @@ import {SecretBaseComponent} from 'src/types/secret-base';
 import Ingredient from 'src/types/ingredient';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
+import {ComponentSummary} from 'src/types/summary';
 
 const secretBasePageStore = useSecretBasePageStore();
 const ingredientStore = useIngredientStore();
@@ -107,7 +108,9 @@ const onRemoveSelectedComponentClick = (component: SecretBaseComponent) => {
 };
 
 const totalIngredients = computed(() => {
-  return SecretBaseComponent.summary(selectedComponents.value);
+  let componentSummary = new ComponentSummary();
+  componentSummary.addSecretBaseComponents(selectedComponents.value);
+  return componentSummary;
 });
 
 const onBeforeShow = () => {

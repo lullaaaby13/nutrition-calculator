@@ -82,7 +82,7 @@
           </q-card-section>
 
           <q-card-section>
-            <NutritionPannel/>
+            <NutritionPanel/>
           </q-card-section>
 
         </BaseCard>
@@ -96,22 +96,16 @@
 
 <script setup>
 
-import {computed, ref} from "vue";
-import {useSecretBaseStore} from "stores/secret-base";
-import BaseCard from "components/BaseCard.vue";
-import NutritionPannel from "components/NutritionPanel.vue";
+import {computed, ref} from 'vue';
+import {useSecretBaseStore} from 'stores/secret-base';
+import BaseCard from 'components/BaseCard.vue';
+import NutritionPanel from 'components/NutritionPanel.vue';
 
 const searchText = ref('');
 const secretBaseStore = useSecretBaseStore();
 
-const filteredSecretBases = computed(() => {
-  return secretBaseStore.secretBases.filter(secretBase => {
-    return secretBase.name.includes(searchText.value);
-  });
-});
 
 const showSecretBaseRegisterDialog = ref(false);
-
 
 </script>
 

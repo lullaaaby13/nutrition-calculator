@@ -19,9 +19,6 @@ export const useSecretBaseStore = defineStore({
       if (this.exists(secretBase)) {
         throw new Error('같은 이름의 비법소스가 이미 존재 합니다.');
       }
-      if (!secretBase?.components?.length) {
-        throw new Error('원재료를 선택해 주세요.');
-      }
 
       this.secretBases.push(secretBase);
     },

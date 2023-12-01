@@ -41,7 +41,16 @@
       </q-list>
     </q-card-section>
     <q-card-section>
-      <NutritionPanel v-bind="secretBaseView"/>
+      <NutritionPanel
+        :calories="secretBaseView.calories"
+        :unitPrice="secretBaseView.unitPrice"
+        :carbohydrates="secretBaseView.carbohydrates"
+        :sugars="secretBaseView.sugars"
+        :protein="secretBaseView.protein"
+        :caffeine="secretBaseView.caffeine"
+        :fat="secretBaseView.fat"
+        :saturatedFat="secretBaseView.saturatedFat"
+      />
     </q-card-section>
     <q-card-section>
       <div class="text-caption">메모</div>
@@ -58,8 +67,9 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
+import {SecretBase} from 'src/types/secret-base';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
+import {ComponentSummary} from 'src/types/summary';
 
 const props = defineProps({
   secretBase: {
@@ -71,7 +81,10 @@ const secretBasePageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
 const secretBaseView = computed(() => {
-  return SecretBaseComponent.summary(props.secretBase.components);
+  let componentSummary = new ComponentSummary();
+  componentSummary.addSecretBase(props.secretBase);
+  console.log(componentSummary);
+  return componentSummary;
 });
 
 const onDeleteButtonClick = (secretBase) => {
