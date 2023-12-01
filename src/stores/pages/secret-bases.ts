@@ -13,11 +13,12 @@ export const useSecretBasePageStore = defineStore('secretBasePageStore', () => {
     createSecretBaseDialog.value = false;
   }
 
-  const updateSecretBase = ref<SecretBase | any>({});
+  const updateSecretBase = ref<SecretBase>(SecretBase.empty());
   const updateSecretBaseDialog = ref(false);
   const showUpdateSecretBaseDialog = (secretBase: SecretBase) => {
     updateSecretBase.value = secretBase;
     updateSecretBaseDialog.value = true;
+
   }
   const closeUpdateSecretBaseDialog = () => {
     updateSecretBaseDialog.value = false;

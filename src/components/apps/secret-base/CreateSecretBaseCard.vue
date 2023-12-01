@@ -10,53 +10,9 @@
       </q-card-section>
 
       <q-card-section class="row">
-        <div class="col-8 q-px-md">
 
-          <div class="row justify-end q-mb-lg">
-            <div class="col-3">
-              <q-input type="text"
-                       label="원재료 찾기"
-                       stack-label
-              >
-                <q-icon name="search" color="secondary"/>
-              </q-input>
-            </div>
-          </div>
+        <IngredientSearchTable class="col-8" @onIngredientClick="onIngredientClick"/>
 
-          <q-markup-table>
-            <thead>
-            <tr>
-              <th class="text-center">원재료명</th>
-              <th class="text-center">카테고리</th>
-              <th class="text-center">칼로리(Kcal)</th>
-              <th class="text-center">탄수화물(g)</th>
-              <th class="text-center">단백질(g)</th>
-              <th class="text-center">지방(g)</th>
-              <th class="text-center">포화지방(g)</th>
-              <th class="text-center">당류(g)</th>
-              <th class="text-center">카페인(mg)</th>
-              <th class="text-center">단가(원)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="ingredient in ingredientStore.ingredients" :key="ingredient.name"
-                @click="onIngredientClick(ingredient)"
-            >
-              <td class="text-center">{{ ingredient.name }}</td>
-              <td class="text-center">{{ ingredient.category.label }}</td>
-              <td class="text-right">{{ ingredient.calories }}</td>
-              <td class="text-right">{{ ingredient.carbohydrates }}</td>
-              <td class="text-right">{{ ingredient.protein }}</td>
-              <td class="text-right">{{ ingredient.fat }}</td>
-              <td class="text-right">{{ ingredient.saturatedFat }}</td>
-              <td class="text-right">{{ ingredient.sugars }}</td>
-              <td class="text-right">{{ ingredient.caffeine }}</td>
-              <td class="text-right">{{ ingredient.unitPrice }}</td>
-            </tr>
-            </tbody>
-          </q-markup-table>
-
-        </div>
         <div class="col-4 q-px-md">
           <BaseCard class="q-gutter-y-sm" width="30vw">
             <div class="text-subtitle1">
@@ -67,17 +23,15 @@
                        stack-label
               />
             </div>
-            <div class="q-gutter-x-md">
-              <span class="text-caption">중량: {{ totalIngredients.amount.toFixed(1) }}g</span>
-              <span class="text-caption">단가: {{ totalIngredients.unitPrice.toFixed(1) }}원</span>
-            </div>
 
-            <q-card-section v-if="selectedIngredients.length > 0">
+            <AmountUnitPriceCaption :amount="totalIngredients.amount" :unit-price="totalIngredients.unitPrice"/>
+
+            <q-card-section v-if="selectedComponents.length > 0">
               <div class="text-subtitle2 q-mb-sm">
                 원재료
               </div>
               <q-list bordered>
-                <q-item v-for="ingredient in selectedIngredients" :key="ingredient.ingredient.name">
+                <q-item v-for="ingredient in selectedComponents" :key="ingredient.ingredient.name">
                   <q-item-section>
                     <q-input type="number"
                              :label="ingredient.ingredient.name"
@@ -123,9 +77,11 @@ import {useIngredientStore} from 'stores/ingredients';
 import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
 import Ingredient from 'src/types/ingredient';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
+import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
+import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();
@@ -134,54 +90,28 @@ const secretBasePageStore = useSecretBasePageStore();
 const name = ref('');
 const memo = ref('');
 
-const selectedIngredients = ref<{ amount: number, ingredient: Ingredient }[]>([]);
+const selectedComponents = ref<SecretBaseComponent[]>([]);
 
-const onIngredientClick = (ingredient) => {
-  const exists = selectedIngredients.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
+const onIngredientClick = (ingredient: Ingredient) => {
+  console.log(ingredient)
+  const exists = selectedComponents.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
   if (!exists) {
-    selectedIngredients.value.push({
+    selectedComponents.value.push({
       amount: 0,
       ingredient: ingredient,
     });
   }
 };
 
-const onRemoveSelectedIngredientClick = (ingredient) => {
-  const index = selectedIngredients.value.findIndex(selectedIngredient => selectedIngredient.ingredient.name === ingredient.ingredient.name);
+const onRemoveSelectedIngredientClick = (ingredient: Ingredient) => {
+  const index = selectedComponents.value.findIndex(selectedIngredient => selectedIngredient.ingredient.name === ingredient.ingredient.name);
   if (index !== -1) {
-    selectedIngredients.value.splice(index, 1);
+    selectedComponents.value.splice(index, 1);
   }
 };
 
-const calcAmount = (selectedIngredient, property) => {
-  console.log(selectedIngredient.ingredient[property], property);
-  return selectedIngredient.ingredient[property] * (selectedIngredient.amount / 100)
-};
-
 const totalIngredients = computed(() => {
-  return selectedIngredients.value.reduce((acc, cur) => {
-    acc.calories += calcAmount(cur, 'calories');
-    acc.carbohydrates += calcAmount(cur, 'carbohydrates');
-    acc.protein += calcAmount(cur, 'protein');
-    acc.fat += calcAmount(cur, 'fat');
-    acc.sugars += calcAmount(cur, 'sugars');
-    acc.saturatedFat += calcAmount(cur, 'saturatedFat');
-    acc.caffeine += calcAmount(cur, 'caffeine');
-    acc.unitPrice += calcAmount(cur, 'unitPrice');
-
-    acc.amount += Number(cur.amount);
-    return acc;
-  }, {
-    calories: 0,
-    carbohydrates: 0,
-    protein: 0,
-    fat: 0,
-    sugars: 0,
-    saturatedFat: 0,
-    caffeine: 0,
-    unitPrice: 0,
-    amount: 0,
-  });
+  return SecretBaseComponent.summary(selectedComponents.value);
 });
 
 const onCreateButtonClick = () => {
@@ -190,7 +120,7 @@ const onCreateButtonClick = () => {
 
     const secretBase = new SecretBase(name.value, memo.value);
 
-    selectedIngredients.value.forEach(selectedIngredient => {
+    selectedComponents.value.forEach(selectedIngredient => {
       const amount = Number(selectedIngredient.amount);
       const ingredient = selectedIngredient.ingredient;
       secretBase.addComponent(amount, ingredient);
@@ -198,7 +128,7 @@ const onCreateButtonClick = () => {
 
     secretBaseStore.save(secretBase);
 
-    while(selectedIngredients.value.pop()) {}
+    while(selectedComponents.value.pop()) {}
     secretBasePageStore.closeCreateSecretBaseDialog();
 
   } catch (e) {

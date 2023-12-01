@@ -4,10 +4,11 @@
 
 <script setup>
 
-import {onErrorCaptured} from "vue";
+import {onErrorCaptured} from 'vue';
 
 onErrorCaptured(err => {
-  console.log('onErrorCaptured : ', err)
+  console.error('onErrorCaptured : ', err.message, err)
+  alert(err.message);
 })
 
 </script>

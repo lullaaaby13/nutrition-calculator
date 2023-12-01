@@ -27,15 +27,13 @@
       <q-card-section class="q-gutter-md flex">
         <SecretBaseCard v-for="secretBase in filteredSecretBases" :key="secretBase.name"
                         :secret-base="secretBase"
-                        @onUpdateButtonClick="onUpdateButtonClick"
-                        @onDeleteButtonClick="onDeleteButtonClick"
         />
       </q-card-section>
 
     </BaseCard>
 
     <CreateSecretBaseCard v-model="secretBasePageStore.createSecretBaseDialog"/>
-<!--    <UpdateSecretBaseCard v-model="secretBasePageStore.updateSecretBaseDialog"/>-->
+    <UpdateSecretBaseCard v-model="secretBasePageStore.updateSecretBaseDialog"/>
   </q-page>
 </template>
 
@@ -47,6 +45,7 @@ import CreateSecretBaseCard from 'components/apps/secret-base/CreateSecretBaseCa
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import UpdateSecretBaseCard from 'components/apps/secret-base/UpdateSecretBaseCard.vue';
+import {SecretBase} from 'src/types/secret-base';
 
 const secretBaseStore = useSecretBaseStore();
 const secretBasePageStore = useSecretBasePageStore();
@@ -57,14 +56,6 @@ const filteredSecretBases = computed(() => {
     return secretBase.name.includes(searchText.value);
   });
 });
-
-
-
-const onDeleteButtonClick = secretBase => {
-  if (confirm('정말 삭제 하시겠어요?')) {
-    secretBaseStore.delete(secretBase);
-  }
-}
 
 </script>
 

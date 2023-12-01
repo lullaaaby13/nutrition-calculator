@@ -1,9 +1,9 @@
-import Ingredient, {IngredientCategory, IngredientMock} from 'src/types/ingredient';
+import Ingredient, {IngredientMock} from 'src/types/ingredient';
 
 
 export class SecretBase {
   private _name: string;
-  private _components: { amount: number, ingredient: Ingredient }[];
+  private _components: SecretBaseComponent[];
   private _createdAt: Date;
   private _updatedAt: Date;
   private _memo?: string;
@@ -15,6 +15,9 @@ export class SecretBase {
     this.memo = memo;
   }
 
+  public static empty(): SecretBase {
+    return new SecretBase('EMPTY');
+  }
 
   public addComponent(amount: number, ingredient: Ingredient) {
     if (this._components.some(it => it.ingredient.name === ingredient.name)) {
@@ -28,6 +31,22 @@ export class SecretBase {
 
   public removeComponent(ingredient: Ingredient) {
     this._components = this._components.filter(it => it.ingredient.name !== ingredient.name);
+  }
+
+  public replaceComponents(components: SecretBaseComponent[]) {
+    if (components.length < 2) {
+      throw new Error('원재료는 2개 이상이어야 합니다.');
+    }
+    const before = this._components;
+    this._components = [];
+    try {
+      components.forEach(it => {
+        this.addComponent(it.amount, it.ingredient);
+      });
+    } catch (e) {
+      this._components = before;
+      throw e;
+    }
   }
 
   public hasMinimumComponents(): boolean {
@@ -45,7 +64,7 @@ export class SecretBase {
     this._name = value;
   }
 
-  get components(): { amount: number; ingredient: Ingredient }[] {
+  get components(): SecretBaseComponent[] {
     return this._components;
   }
 
@@ -67,13 +86,14 @@ export class SecretBase {
 
   public ingredient(): SecretBaseIngredient {
     return this.components.reduce((acc, cur) => {
-      acc.calories += cur.ingredient.calories * cur.amount;
-      acc.carbohydrates += cur.ingredient.carbohydrates * cur.amount;
-      acc.sugars += cur.ingredient.sugars * cur.amount;
-      acc.protein += cur.ingredient.protein * cur.amount;
-      acc.caffeine += cur.ingredient.caffeine * cur.amount;
-      acc.fat += cur.ingredient.fat * cur.amount;
-      acc.saturatedFat += cur.ingredient.saturatedFat * cur.amount;
+      const ratio = cur.amount / 100;
+      acc.calories += cur.ingredient.calories * ratio;
+      acc.carbohydrates += cur.ingredient.carbohydrates * ratio;
+      acc.sugars += cur.ingredient.sugars * ratio;
+      acc.protein += cur.ingredient.protein * ratio;
+      acc.caffeine += cur.ingredient.caffeine * ratio;
+      acc.fat += cur.ingredient.fat * ratio;
+      acc.saturatedFat += cur.ingredient.saturatedFat * ratio;
       return acc;
     }, {
       caffeine: 0,
@@ -86,8 +106,29 @@ export class SecretBase {
     });
   }
 
-}
+  public summary(): SecretBaseSummary {
+    const ingredient = this.ingredient();
+    return {
+      name: this.name,
+      memo: this.memo,
+      amount: this._components.reduce((acc, cur) => acc + cur.amount, 0),
+      unitPrice: this._components.reduce((acc, cur) => acc + cur.ingredient.unitPrice * (cur.amount / 100), 0),
+      ingredient
+    }
+  }
 
+}
+export interface SecretBaseSummary {
+  amount: number;
+  unitPrice: number;
+  calories: number;
+  carbohydrates: number;
+  sugars: number;
+  protein: number;
+  caffeine: number;
+  fat: number;
+  saturatedFat: number;
+}
 export interface SecretBaseIngredient {
   calories: number;
   carbohydrates: number;
@@ -105,4 +146,40 @@ ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);
 
 export const SecretBaseMock = {
   ULTRA_MILK: ultraMilk
+}
+
+export class SecretBaseComponent {
+  amount: number;
+  ingredient: Ingredient;
+  constructor(amount: number, ingredient: Ingredient) {
+    this.amount = amount;
+    this.ingredient = ingredient;
+  }
+
+  public static summary(components: SecretBaseComponent[]): SecretBaseSummary {
+    return components.reduce((acc, cur) => {
+      const ratio = Number(cur.amount) / 100;
+      acc.amount += Number(cur.amount);
+      acc.unitPrice += Number(cur.ingredient.unitPrice) * ratio;
+      acc.calories += Number(cur.ingredient.calories) * ratio;
+      acc.carbohydrates += Number(cur.ingredient.carbohydrates) * ratio;
+      acc.sugars += Number(cur.ingredient.sugars) * ratio;
+      acc.protein += Number(cur.ingredient.protein) * ratio;
+      acc.caffeine += Number(cur.ingredient.caffeine) * ratio;
+      acc.fat += Number(cur.ingredient.fat) * ratio;
+      acc.saturatedFat += Number(cur.ingredient.saturatedFat) * ratio;
+      return acc;
+    }, {
+      amount: 0,
+      unitPrice: 0,
+      caffeine: 0,
+      calories: 0,
+      carbohydrates: 0,
+      fat: 0,
+      protein: 0,
+      saturatedFat: 0,
+      sugars: 0,
+    });
+  }
+
 }

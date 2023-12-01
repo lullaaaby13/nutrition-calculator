@@ -3,10 +3,9 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ secretBase.name }}</div>
-        <div class="q-gutter-x-md">
-          <span class="text-caption">중량: {{ secretBaseView.amount.toFixed(2) }}g</span>
-          <span class="text-caption">단가: {{ secretBaseView.unitPrice.toFixed(0) || '-' }}원</span>
-        </div>
+
+        <AmountUnitPriceCaption :amount="secretBaseView.amount" :unit-price="secretBaseView.unitPrice"/>
+
       </div>
 
       <q-space/>
@@ -23,7 +22,7 @@
           dense
           outline
           color="red"
-          @click="$emit('onDeleteButtonClick', secretBase)"
+          @click="onDeleteButtonClick(secretBase)"
           icon="delete"
           flat
         />
@@ -59,7 +58,8 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
+import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 
 const props = defineProps({
   secretBase: {
@@ -67,58 +67,17 @@ const props = defineProps({
   }
 });
 
-defineEmits([
-  'onUpdateButtonClick',
-  'onDeleteButtonClick',
-]);
 const secretBasePageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
-const calcAmount = (components) => {
-  return components
-    .map(component => component.amount)
-    .reduce((acc, cur) => acc + cur, 0)
-}
-
-const calcTotal = (components, property) => {
-  return components
-    .map(component => component.ingredient[property] * (component.amount / 100))
-    .reduce((acc, cur) => Number(acc) + Number(cur), 0)
-}
-
 const secretBaseView = computed(() => {
-
-  const components = props.secretBase.components;
-  const amount = calcAmount(components);
-  const unitPrice = calcTotal(components, 'unitPrice');
-  const calories = calcTotal(components, 'calories');
-  const carbohydrates = calcTotal(components, 'carbohydrates');
-  const sugars = calcTotal(components, 'sugars');
-  const protein = calcTotal(components, 'protein');
-  const caffeine = calcTotal(components, 'caffeine');
-  const fat = calcTotal(components, 'fat');
-  const saturatedFat = calcTotal(components, 'saturatedFat');
-
-  return {
-    amount,
-    unitPrice,
-    carbohydrates,
-    calories,
-    sugars,
-    protein,
-    caffeine,
-    fat,
-    saturatedFat,
-  }
+  return SecretBaseComponent.summary(props.secretBase.components);
 });
 
-const onUpdateButtonClick = (secretBase) => {
-  console.log(secretBase);
-  alert('수정되었습니다.');
+const onDeleteButtonClick = (secretBase) => {
+  if (confirm('정말 삭제 하시겠어요?')) {
+    secretBaseStore.delete(secretBase);
+  }
 }
-// const onDeleteButtonClick = (secretBase) => {
-//   secretBaseStore.delete(secretBase);
-//   alert('삭제되었습니다.')
-// }
 
 </script>
