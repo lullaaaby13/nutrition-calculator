@@ -45,7 +45,6 @@ import CreateSecretBaseCard from 'components/apps/secret-base/CreateSecretBaseCa
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import UpdateSecretBaseCard from 'components/apps/secret-base/UpdateSecretBaseCard.vue';
-import {SecretBase} from 'src/types/secret-base';
 
 const secretBaseStore = useSecretBaseStore();
 const secretBasePageStore = useSecretBasePageStore();

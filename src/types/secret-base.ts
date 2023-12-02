@@ -1,5 +1,6 @@
 import Ingredient, {IngredientMock} from 'src/types/ingredient';
 import {BaseType} from 'src/types/base-type';
+import {ComponentSummary} from 'src/types/summary';
 
 export class SecretBaseComponent {
   readonly amount: number;
@@ -66,13 +67,29 @@ export class SecretBase extends BaseType {
     return this._components;
   }
 
+  get summary(): ComponentSummary {
+    const componentSummary = new ComponentSummary();
+    componentSummary.addSecretBaseComponents(this._components);
+    return componentSummary;
+  }
+
+  get totalAmount(): number {
+    return this._components.reduce((acc, cur) => acc + cur.amount, 0);
+  }
+
 }
 
 const ultraMilk = new SecretBase('울트라 밀크', '고농축 최강 우유');
 ultraMilk.addComponent(10, IngredientMock.MILK);
 ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);
 
+const testSecretBase = new SecretBase('테스트 시크릿베이스');
+testSecretBase.addComponent(10, IngredientMock.TESTA);
+testSecretBase.addComponent(20, IngredientMock.TESTB);
+
+
 export const SecretBaseMock = {
-  ULTRA_MILK: ultraMilk
+  ULTRA_MILK: ultraMilk,
+  TEST: testSecretBase,
 }
 

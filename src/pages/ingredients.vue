@@ -105,7 +105,6 @@ const filteredIngredients = computed(() => {
       );
   }
 
-  console.log(filtered);
   return filtered;
 })
 

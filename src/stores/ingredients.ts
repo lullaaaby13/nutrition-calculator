@@ -4,11 +4,11 @@ import Ingredient, {IngredientMock} from 'src/types/ingredient';
 export const useIngredientStore = defineStore('ingredient', {
   state: (): { ingredients: Ingredient[] } => ({
     ingredients: [
+      // IngredientMock,WATER,
+      IngredientMock.ESPRESSO,
       IngredientMock.MILK,
       IngredientMock.CONDENSED_MILK,
-      // new Ingredient('우유', IngredientCategory.FRESH),
-      // new Ingredient('연유', IngredientCategory.FRESH),
-      // new Ingredient('밀가루', IngredientCategory.FLOUR),
+      IngredientMock.WATER,
     ],
   }),
   actions: {

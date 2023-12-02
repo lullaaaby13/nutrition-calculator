@@ -9,37 +9,37 @@
             <q-list bordered>
               <q-item class="q-my-sm" clickable v-ripple>
                 <q-item-section>
-                  <q-item-label>{{ summary.fresh || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.fresh || '0' }}</q-item-label>
                   <q-item-label caption lines="1">신선 식품</q-item-label>
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ summary.fruit || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.fruit || '0' }}</q-item-label>
                   <q-item-label caption lines="1">과일 & 채소</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item class="q-my-sm" clickable v-ripple>
                 <q-item-section>
-                  <q-item-label>{{ summary.flour || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.flour || '0' }}</q-item-label>
                   <q-item-label caption lines="1">가루류 & 곡류</q-item-label>
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ summary.coffee || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.coffee || '0' }}</q-item-label>
                   <q-item-label caption lines="1">커피 원두 & 차</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item class="q-my-sm" clickable v-ripple>
                 <q-item-section>
-                  <q-item-label>{{ summary.topping || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.topping || '0' }}</q-item-label>
                   <q-item-label caption lines="1">토핑 재료</q-item-label>
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ summary.additives || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.additives || '0' }}</q-item-label>
                   <q-item-label caption lines="1">식품 첨가물</q-item-label>
                 </q-item-section>
               </q-item>
               <q-item class="q-my-sm" clickable v-ripple>
                 <q-item-section>
-                  <q-item-label>{{ summary.packaging || '0' }}</q-item-label>
+                  <q-item-label>{{ ingredientSummary.packaging || '0' }}</q-item-label>
                   <q-item-label caption lines="1">포장 용품</q-item-label>
                 </q-item-section>
               </q-item>
@@ -69,10 +69,10 @@
           <q-separator class="q-my-sm"/>
           <q-card-section>
             <q-list bordered>
-              <q-item>
+              <q-item v-for="(entry, index) in Object.entries(receiptSummaries)" :key="index">
                 <q-item-section>
-                  <q-item-label>0</q-item-label>
-                  <q-item-label caption lines="1">시크릿 베이스</q-item-label>
+                  <q-item-label>{{entry[1]}}</q-item-label>
+                  <q-item-label caption lines="1">{{entry[0]}}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -84,20 +84,30 @@
   </q-page>
 </template>
 
-<script setup>
-import BaseCard from "components/BaseCard.vue";
-import {useIngredientStore} from "stores/ingredients";
-import {computed} from "vue";
-import {useSecretBaseStore} from "stores/secret-base";
+<script setup lang="ts">
+import BaseCard from 'components/BaseCard.vue';
+import {useIngredientStore} from 'stores/ingredients';
+import {computed} from 'vue';
+import {useSecretBaseStore} from 'stores/secret-base';
+import {useReceiptStore} from 'stores/receipt';
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();
+const receiptStore = useReceiptStore();
 
-const summary = computed(() => {
+const ingredientSummary = computed(() => {
   return ingredientStore.ingredients.reduce((acc, cur) => {
     acc[cur.category.name] = acc[cur.category.name] + 1 || 1;
     return acc;
   }, {})
+});
+
+
+const receiptSummaries = computed(() => {
+  return receiptStore.receipts.reduce((acc, cur) => {
+    acc[cur.category.label] = acc[cur.category.label] + 1 || 1;
+    return acc;
+  }, {});
 });
 
 

@@ -141,6 +141,16 @@ export const IngredientCategory = {
 
 export type IngredientCategory = typeof IngredientCategory[keyof typeof IngredientCategory];
 
+const water = new Ingredient('물', IngredientCategory.FRESH);
+const espresso = new Ingredient('에스프레소', IngredientCategory.COFFEE);
+espresso.calories = 1;
+espresso.unitPrice = 300;
+espresso.carbohydrates = 0;
+espresso.sugars = 0;
+espresso.protein = 0.07;
+espresso.caffeine = 75;
+espresso.fat = 0.11;
+espresso.saturatedFat = 0.05;
 
 const milk = new Ingredient('우유', IngredientCategory.FRESH);
 milk.calories = 52;
@@ -160,8 +170,33 @@ condensedMilk.protein = 8;
 condensedMilk.caffeine = 0;
 condensedMilk.fat = 11;
 condensedMilk.saturatedFat = 7;
+
+const testA = new Ingredient('TestIngredientA', IngredientCategory.FRESH);
+testA.calories = 100;
+testA.unitPrice = 100;
+testA.carbohydrates = 100;
+testA.sugars = 100;
+testA.protein = 100;
+testA.caffeine = 100;
+testA.fat = 100;
+testA.saturatedFat = 100;
+
+const testB = new Ingredient('TestIngredientB', IngredientCategory.FRESH);
+testB.calories = 200;
+testB.unitPrice = 200;
+testB.carbohydrates = 200;
+testB.sugars = 200;
+testB.protein = 200;
+testB.caffeine = 200;
+testB.fat = 200;
+testB.saturatedFat = 200;
+
 export const IngredientMock = {
+  WATER: water,
+  ESPRESSO: espresso,
   MILK: milk,
   CONDENSED_MILK: condensedMilk,
+  TESTA: testA,
+  TESTB: testB,
 }
 

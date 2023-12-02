@@ -1,6 +1,6 @@
 import Ingredient from 'src/types/ingredient';
 import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
-import {ReceiptComponent} from 'src/types/receipt';
+import {Receipt, ReceiptComponent} from 'src/types/receipt';
 
 export class ComponentSummary {
   private _amount = 0;
@@ -15,6 +15,7 @@ export class ComponentSummary {
 
   public addIngredient(amount: number, ingredient: Ingredient) {
     const ratio = Number(amount) / 100;
+    // console.log(amount, ingredient, ratio);
     this._amount += Number(amount);
     this._unitPrice += Number(ingredient.unitPrice) * ratio;
     this._calories += Number(ingredient.calories) * ratio;
@@ -26,28 +27,37 @@ export class ComponentSummary {
     this._saturatedFat += Number(ingredient.saturatedFat) * ratio;
   }
 
-  public addSecretBase(secretBase: SecretBase) {
+  public addSecretBase(amount: number, secretBase: SecretBase) {
+    const ratio =  amount / secretBase.totalAmount;
+    console.log(secretBase)
     secretBase.components.forEach(it => {
-      this.addIngredient(it.amount, it.ingredient);
+      this.addIngredient(it.amount * ratio, it.ingredient);
     });
   }
 
   public addSecretBaseComponents(secretBaseComponents: SecretBaseComponent[]) {
     secretBaseComponents.forEach(it => {
       this.addIngredient(it.amount, it.ingredient);
-
     });
   }
 
   public addReceiptComponents(components: ReceiptComponent[]) {
     components.forEach(it => {
+      // console.log(it.amount, it.component.name)
       if (it.component instanceof SecretBase) {
-        this.addSecretBase(it.component);
+        this.addSecretBase(it.amount, it.component);
       } else {
         this.addIngredient(it.amount, it.component);
       }
     });
   }
+
+  // public addReceipt(amount: number, receipt: Receipt) {
+  //   const ratio =  amount / receipt.totalAmount;
+  //   receipt.components.forEach(it => {
+  //     this.addIngredient(it.amount * ratio, it.component);
+  //   });
+  // }
 
 
   get amount(): number {

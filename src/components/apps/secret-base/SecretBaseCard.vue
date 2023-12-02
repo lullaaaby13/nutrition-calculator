@@ -3,9 +3,7 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ secretBase.name }}</div>
-
         <AmountUnitPriceCaption :amount="secretBaseView.amount" :unit-price="secretBaseView.unitPrice"/>
-
       </div>
 
       <q-space/>
@@ -29,10 +27,12 @@
       </div>
     </q-card-section>
 
+    <q-separator/>
+
     <q-card-section>
       <div class="text-subtitle2 q-mb-sm">원재료</div>
       <q-list bordered>
-        <q-item class="q-my-sm" v-for="(component, index) in props.secretBase.components" :key="index">
+        <q-item class="q-my-sm" v-for="(component, index) in props.secretBase?.components" :key="index">
           <q-item-section>
             <q-item-label>{{component.amount}}</q-item-label>
             <q-item-label caption lines="1">{{component.ingredient.name}}(g)</q-item-label>
@@ -60,7 +60,7 @@
   </BaseCard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import {computed} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
@@ -74,6 +74,7 @@ import {ComponentSummary} from 'src/types/summary';
 const props = defineProps({
   secretBase: {
     type: SecretBase,
+    required: true,
   }
 });
 
@@ -82,12 +83,13 @@ const secretBaseStore = useSecretBaseStore();
 
 const secretBaseView = computed(() => {
   let componentSummary = new ComponentSummary();
-  componentSummary.addSecretBase(props.secretBase);
-  console.log(componentSummary);
+  if (props.secretBase) {
+    componentSummary.addSecretBaseComponents(props.secretBase.components);
+  }
   return componentSummary;
 });
 
-const onDeleteButtonClick = (secretBase) => {
+const onDeleteButtonClick = (secretBase: SecretBase) => {
   if (confirm('정말 삭제 하시겠어요?')) {
     secretBaseStore.delete(secretBase);
   }

@@ -21,91 +21,34 @@
         <q-btn
           color="primary"
           label="재료 등록"
-          @click="showSecretBaseRegisterDialog = true"/>
+          @click="receiptPageStore.showCreateReceiptDialog"/>
       </q-card-section>
       <q-card-section class="q-gutter-md flex">
-
-        <BaseCard style="width: 400px;">
-          <q-card-section class="flex">
-            <div>
-              <div class="text-h5">캬라멜 마끼아또</div>
-              <div class="q-gutter-x-md">
-                <span class="text-caption">음료</span>
-              </div>
-            </div>
-            <q-space/>
-            <div class="q-gutter-md">
-              <q-btn
-                dense
-                outline
-                color="secondary"
-                @click="$emit('onUpdateButtonClick', secretBase)"
-                icon="edit"
-                flat
-              />
-              <q-btn
-                dense
-                outline
-                color="red"
-                @click="$emit('onDeleteButtonClick', secretBase)"
-                icon="delete"
-                flat
-              />
-            </div>
-          </q-card-section>
-
-          <q-card-section>
-            <div class="row">
-              <div class="col-6">
-                <div class="text-subtitle2 q-mb-sm">베이스</div>
-                <q-list bordered>
-                  <q-item>
-                    <q-item-section>
-                      <q-item-label>{{ calories }}</q-item-label>
-                      <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </div>
-              <div class="col-6">
-                <div class="text-subtitle2 q-mb-sm">원재료</div>
-                <q-list bordered>
-                  <q-item>
-                    <q-item-section>
-                      <q-item-label>{{ carbohydrates }}</q-item-label>
-                      <q-item-label caption lines="1">탄수화물(g)</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </div>
-            </div>
-          </q-card-section>
-
-          <q-card-section>
-            <NutritionPanel/>
-          </q-card-section>
-
-        </BaseCard>
-
+        <ReceiptCard v-for="(receipt, index) in receiptStore.receipts" :key="index"
+                     :receipt="receipt"
+        />
       </q-card-section>
 
     </BaseCard>
 
+      <CreateReceiptCard v-model="receiptPageStore.createReceiptDialog"/>
   </q-page>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import {computed, ref} from 'vue';
-import {useSecretBaseStore} from 'stores/secret-base';
+import {ref} from 'vue';
 import BaseCard from 'components/BaseCard.vue';
-import NutritionPanel from 'components/NutritionPanel.vue';
+import {useReceiptPageStore} from 'stores/pages/receipt';
+import {useReceiptStore} from 'stores/receipt';
+import ReceiptCard from 'components/apps/receipts/ReceiptCard.vue';
+import CreateReceiptCard from 'components/apps/receipts/CreateReceiptDialog.vue';
 
+const receiptPageStore = useReceiptPageStore();
+const receiptStore = useReceiptStore();
 const searchText = ref('');
-const secretBaseStore = useSecretBaseStore();
 
 
-const showSecretBaseRegisterDialog = ref(false);
 
 </script>
 
