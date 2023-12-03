@@ -79,6 +79,16 @@ export class SecretBase extends BaseType {
 
 }
 
+export const SecretBaseCategory = {
+  SYRUP: {
+    name: 'syrup',
+    label: '시럽',
+  },
+}
+
+export type SecretBaseCategory = typeof SecretBaseCategory[keyof typeof SecretBaseCategory];
+
+
 const ultraMilk = new SecretBase('울트라 밀크', '고농축 최강 우유');
 ultraMilk.addComponent(10, IngredientMock.MILK);
 ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);

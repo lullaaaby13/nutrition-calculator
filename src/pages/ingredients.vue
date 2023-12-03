@@ -1,58 +1,56 @@
 <template>
-  <q-page class="full-width flex justify-center" padding>
-    <BaseCard>
-      <q-card-section>
-        <div class="text-h4 text-bold q-my-sm">원재료 영양성분 & 단가</div>
-      </q-card-section>
+  <q-page class="full-width flex justify-center q-pa-xl">
 
-      <q-card-section class="row">
-        <div class="col-6 q-gutter-md q-px-md">
-            <div class="q-gutter-x-md">
-                <template v-for="(category, index) in Object.values(IngredientCategory)" :key="index">
-                    <q-checkbox size="md" v-model="selectedCategories" :val="category.name" :label="category.label"/>
-                </template>
-            </div>
-            <div>
-                <q-btn color="grey"
-                       label="선택 초기화"
-                       @click="resetCheckbox"
-                />
-            </div>
+    <div class="flex full-width q-mb-md">
+      <span class="text-h4 text-bold">원재료</span>
+    </div>
+
+    <div class="row">
+      <div class="col-6 q-gutter-md q-px-md">
+        <div class="q-gutter-x-md">
+          <template v-for="(category, index) in Object.values(IngredientCategory)" :key="index">
+            <q-checkbox size="md" v-model="selectedCategories" :val="category.name" :label="category.label"/>
+          </template>
         </div>
-        <div class="col-6">
-            <div class="flex justify-end q-px-lg q-gutter-lg">
-                <q-input
-                        v-model="searchText"
-                        type="text"
-                        label="재료 찾기(재료명)"
-                        style="width: 300px"
-                        stack-label
-                        dense
-                >
-                    <template v-slot:append>
-                        <q-icon name="search"/>
-                    </template>
-                </q-input>
-                          <q-btn
-                            color="primary"
-                            label="원재료 등록하기"
-                            padding="10px 15px 10px 10px"
-                            @click="ingredientPageStore.showCreateIngredientDialog"
-                            />
-            </div>
+        <div>
+          <q-btn color="grey"
+                 label="선택 초기화"
+                 @click="resetCheckbox"
+          />
         </div>
-      </q-card-section>
+      </div>
+      <div class="col-6">
+        <div class="flex justify-end q-px-lg q-gutter-lg">
+          <q-input
+              v-model="searchText"
+              type="text"
+              label="재료 찾기(재료명)"
+              style="width: 300px"
+              stack-label
+              dense
+          >
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
+          <q-btn
+              color="primary"
+              label="원재료 등록하기"
+              padding="10px 15px 10px 10px"
+              @click="ingredientPageStore.showCreateIngredientDialog"
+          />
+        </div>
+      </div>
+    </div>
 
-        <q-separator class="q-my-md"/>
+    <q-separator class="q-my-md full-width"/>
 
-      <q-card-section class="q-gutter-md flex">
-        <IngredientCard
+    <div class="q-gutter-md flex full-width">
+      <IngredientCard
           v-for="ingredient in filteredIngredients" :key="ingredient.name"
           :ingredient="ingredient"
-        />
-      </q-card-section>
-
-    </BaseCard>
+      />
+    </div>
 
     <CreateIngredientDialog v-model="ingredientPageStore.createIngredientDialog"/>
     <UpdateIngredientDialog
