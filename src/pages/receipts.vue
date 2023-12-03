@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex justify-center q-pa-xl">
+  <q-page class="full-width q-pa-xl">
 
     <div class="flex full-width q-mb-md">
       <span class="text-h4 text-bold">레시피</span>
@@ -44,7 +44,7 @@
     <q-separator class="q-my-md full-width"/>
 
     <div class="q-gutter-md flex full-width">
-      <ReceiptCard v-for="(receipt, index) in receiptStore.receipts" :key="index"
+      <ReceiptCard v-for="(receipt, index) in filteredReceipts" :key="index"
                    :receipt="receipt"
       />
     </div>
@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import ReceiptCard from 'components/apps/receipts/ReceiptCard.vue';
@@ -72,6 +72,23 @@ const searchText = ref('');
 
 const selectedCategories = ref([]);
 
+const filteredReceipts = computed(() => {
+  let filtered = receiptStore.receipts;
+
+  if (selectedCategories.value.length > 0) {
+    filtered = filtered
+        .filter(receipt =>
+            selectedCategories.value.some(categoryName => receipt.category.name === categoryName)
+        );
+  }
+
+  if (searchText.value) {
+    filtered = filtered.filter(receipt => receipt.name.includes(searchText.value));
+  }
+
+  return filtered;
+})
+
 const resetCheckbox = () => {
   selectedCategories.value = [];
 };
@@ -80,6 +97,6 @@ const resetCheckbox = () => {
 
 <route lang="yaml">
 meta:
-layout: default
+  layout: default
 </route>
 

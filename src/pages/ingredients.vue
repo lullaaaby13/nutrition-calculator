@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex justify-center q-pa-xl">
+  <q-page class="full-width q-pa-xl">
 
     <div class="flex full-width q-mb-md">
       <span class="text-h4 text-bold">원재료</span>
@@ -92,10 +92,7 @@ const filteredIngredients = computed(() => {
   }
 
   if (searchText.value) {
-    filtered = filtered
-      .filter(ingredient =>
-        ingredient.name.includes(searchText.value)
-      );
+    filtered = filtered.filter(ingredient => ingredient.name.includes(searchText.value));
   }
 
   return filtered;

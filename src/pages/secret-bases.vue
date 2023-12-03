@@ -1,5 +1,5 @@
 <template>
-  <q-page class="full-width flex justify-center q-pa-xl">
+  <q-page class="full-width q-pa-xl">
     <div class="flex full-width q-mb-md">
       <span class="text-h4 text-bold">시크릿 베이스</span>
     </div>
