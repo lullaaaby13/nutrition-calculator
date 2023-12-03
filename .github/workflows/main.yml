@@ -24,6 +24,7 @@ jobs:
             cd /app/nutrition-calculator
             pwd
             git checkout main
+            git stash
             git pull
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh

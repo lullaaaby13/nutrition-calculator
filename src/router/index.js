@@ -1,6 +1,6 @@
-import { route } from 'quasar/wrappers'
-import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router/auto'
-import {setupLayouts} from "virtual:generated-layouts";
+import {route} from 'quasar/wrappers'
+import {createMemoryHistory, createRouter, createWebHashHistory, createWebHistory} from 'vue-router/auto'
+import {setupLayouts} from 'virtual:generated-layouts';
 // import routes from './routes'
 
 export default route(function (/* { store, ssrContext } */) {

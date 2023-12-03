@@ -4,7 +4,8 @@ import {Receipt} from 'src/types/receipt';
 
 export const useReceiptPageStore = defineStore('receiptPageStore', () => {
 
-  const createReceiptDialog = ref(true);
+
+  const createReceiptDialog = ref(false);
   const showCreateReceiptDialog = () => {
     createReceiptDialog.value = true;
   }
@@ -34,4 +35,3 @@ export const useReceiptPageStore = defineStore('receiptPageStore', () => {
     closeUpdateReceiptDialog
   }
 });
-

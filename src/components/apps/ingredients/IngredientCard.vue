@@ -48,8 +48,7 @@
     <q-separator/>
 
     <q-card-section>
-      <div class="text-caption text-bold">등록한 날짜: {{ ingredient.createdAt.toISOString() }}</div>
-      <div class="text-caption text-bold">마지막 수정한 날짜: {{ ingredient.updatedAt.toISOString() }}</div>
+      <CreateUpdateDate :createdAt="ingredient.createdAt" :updatedAt="ingredient.updatedAt"/>
     </q-card-section>
 
   </BaseCard>
@@ -62,6 +61,9 @@ import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import Ingredient from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
+import {date} from 'quasar';
+import CreateUpdateDate from 'components/CreateUpdateDate.vue';
+
 
 defineProps({
   ingredient: {

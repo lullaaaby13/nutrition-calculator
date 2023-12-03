@@ -125,28 +125,23 @@ const onBeforeShow = () => {
 const onUpdateButtonClick = () => {
   const ingredient = ingredientStore.findByName(beforeName);
   if (ingredient) {
-    try {
-
-      if (beforeName !== form.value.name && ingredientStore.existsByName(form.value.name)) {
-        throw new Error('이미 존재하는 재료명입니다.');
-      }
-
-      ingredient.category = form.value.category;
-      ingredient.name = form.value.name;
-      ingredient.calories = form.value.calories;
-      ingredient.calories = form.value.calories;
-      ingredient.carbohydrates = form.value.carbohydrates;
-      ingredient.sugars = form.value.sugars;
-      ingredient.protein = form.value.protein;
-      ingredient.caffeine = form.value.caffeine;
-      ingredient.fat = form.value.fat;
-      ingredient.saturatedFat = form.value.saturatedFat;
-      ingredient.memo = form.value.memo;
-
-      ingredientPageStore.closeUpdateIngredientDialog();
-    } catch (e) {
-      alert(e.message);
+    if (beforeName !== form.value.name && ingredientStore.existsByName(form.value.name)) {
+      throw new Error('이미 존재하는 재료명입니다.');
     }
+
+    ingredient.category = form.value.category;
+    ingredient.name = form.value.name;
+    ingredient.calories = form.value.calories;
+    ingredient.calories = form.value.calories;
+    ingredient.carbohydrates = form.value.carbohydrates;
+    ingredient.sugars = form.value.sugars;
+    ingredient.protein = form.value.protein;
+    ingredient.caffeine = form.value.caffeine;
+    ingredient.fat = form.value.fat;
+    ingredient.saturatedFat = form.value.saturatedFat;
+    ingredient.memo = form.value.memo;
+
+    ingredientPageStore.closeUpdateIngredientDialog();
   }
 };
 

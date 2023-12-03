@@ -1,6 +1,6 @@
 import Ingredient from 'src/types/ingredient';
 import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
-import {Receipt, ReceiptComponent} from 'src/types/receipt';
+import {ReceiptComponent} from 'src/types/receipt';
 
 export class ComponentSummary {
   private _amount = 0;

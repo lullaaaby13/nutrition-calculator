@@ -96,14 +96,6 @@ import BaseCard from 'components/BaseCard.vue';
 const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
 
-// defineProps({
-//   modelValue: {
-//     type: Boolean,
-//     default: false,
-//   }
-// });
-// defineEmits([ 'update:modelValue' ]);
-
 const createEmptyForm = () => ({
   category: null,
   name: '',
@@ -122,15 +114,10 @@ const form = ref(createEmptyForm());
 
 
 const onRegisterConfirmButtonClick = () => {
-  try {
-    const ingredient = new Ingredient(form.value.name, form.value.category);
-    ingredientStore.save(ingredient);
-    form.value = createEmptyForm();
-    ingredientPageStore.closeCreateIngredientDialog()
-  } catch(e) {
-    alert(e.message);
-  }
-
+  const ingredient = new Ingredient(form.value.name, form.value.category);
+  ingredientStore.save(ingredient);
+  form.value = createEmptyForm();
+  ingredientPageStore.closeCreateIngredientDialog();
 }
 
 </script>

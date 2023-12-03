@@ -5,15 +5,16 @@ import {BaseType} from 'src/types/base-type';
 export class Receipt extends BaseType {
   private _category: ReceiptCategory = ReceiptCategory.COFFEE;
   private _components: ReceiptComponent[] = [];
-  constructor(name: string, memo?: string) {
+  constructor(name: string, category: ReceiptCategory, memo?: string) {
     super();
+    this._category = category;
     this._components = [];
     this.name = name;
     this.memo = memo;
   }
 
   public static empty(): Receipt {
-    return new Receipt('EMPTY');
+    return new Receipt('EMPTY', ReceiptCategory.COFFEE);
   }
 
   public addIngredient(amount: number, ingredient: Ingredient) {
@@ -65,6 +66,27 @@ export class Receipt extends BaseType {
     return this._components.reduce((acc, cur) => acc + cur.amount, 0);
   }
 
+  public replaceComponents(components: ReceiptComponent[]) {
+    if (components.length < 2) {
+      throw new Error('원재료는 2개 이상이어야 합니다.');
+    }
+    const before = this._components;
+    this._components = [];
+    try {
+      components.forEach(it => {
+        this.addComponent(it);
+      });
+      this.updatedAt = new Date();
+    } catch (e) {
+      this._components = before;
+      throw e;
+    }
+  }
+
+  public hasMinimumComponents(): boolean {
+    return this._components.length >= 2;
+  }
+
 }
 
 
@@ -85,37 +107,37 @@ export class ReceiptComponent {
 export const ReceiptCategory = {
   COFFEE: {
     name: 'coffee',
-    label: 'Coffee'
+    label: '커피'
   },
   TEA: {
     name: 'tea',
-    label: 'Tea'
+    label: '차'
   },
   BREAD: {
     name: 'bread',
-    label: 'Bread'
-  },
-  CAKE: {
-    name: 'cake',
-    label: 'Cake'
+    label: '빵 & 케이크'
   },
   BEVERAGE: {
     name: 'beverage',
-    label: 'Beverage'
+    label: '음료'
+  },
+  SHAVED_ICE: {
+    name: 'shavedIce',
+    label: '빙수'
   },
   OTHER: {
     name: 'other',
-    label: 'Other'
+    label: '기타'
   }
 }
 
 export type ReceiptCategory = typeof ReceiptCategory[keyof typeof ReceiptCategory];
 
-const americano = new Receipt('아메리카노');
+const americano = new Receipt('아메리카노', ReceiptCategory.COFFEE);
 americano.addIngredient(300, IngredientMock.WATER);
 americano.addIngredient(10, IngredientMock.ESPRESSO);
 
-const test = new Receipt('TestReceipt');
+const test = new Receipt('TestReceipt', ReceiptCategory.COFFEE);
 test.addSecretBase(60, SecretBaseMock.TEST);
 test.addIngredient(40, IngredientMock.TESTA);
 

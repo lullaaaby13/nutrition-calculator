@@ -11,24 +11,28 @@ export const useReceiptStore = defineStore({
   }),
 
   actions: {
-    save(secretBase: Receipt) {
+    save(receipt: Receipt) {
 
-      if (this.exists(secretBase)) {
+      if (!receipt.hasMinimumComponents()) {
+        throw new Error('최소 2개 이상의 원재료가 필요 합니다.');
+      }
+
+      if (this.exists(receipt)) {
         throw new Error('같은 이름의 레피시가 이미 존재 합니다.');
       }
 
-      this.receipts.push(secretBase);
+      this.receipts.push(receipt);
     },
 
-    delete(secretBase: Receipt) {
-      if (!this.exists(secretBase)) {
+    delete(receipt: Receipt) {
+      if (!this.exists(receipt)) {
         throw new Error('존재하지 않는 레시피 입니다.');
       }
-      this.receipts = this.receipts.filter(it => it.name !== secretBase.name);
+      this.receipts = this.receipts.filter(it => it.name !== receipt.name);
     },
 
-    exists(secretBase: Receipt) {
-      return this.receipts.some(it => it.name === secretBase.name);
+    exists(receipt: Receipt) {
+      return this.receipts.some(it => it.name === receipt.name);
     },
 
     existsByName(name: string) {

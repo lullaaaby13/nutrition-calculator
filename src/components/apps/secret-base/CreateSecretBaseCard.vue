@@ -118,25 +118,18 @@ const totalIngredients = computed(() => {
 });
 
 const onCreateButtonClick = () => {
+  const secretBase = new SecretBase(name.value, memo.value);
 
-  try {
+  selectedComponents.value.forEach(selectedIngredient => {
+    const amount = Number(selectedIngredient.amount);
+    const ingredient = selectedIngredient.ingredient;
+    secretBase.addComponent(amount, ingredient);
+  });
 
-    const secretBase = new SecretBase(name.value, memo.value);
+  secretBaseStore.save(secretBase);
 
-    selectedComponents.value.forEach(selectedIngredient => {
-      const amount = Number(selectedIngredient.amount);
-      const ingredient = selectedIngredient.ingredient;
-      secretBase.addComponent(amount, ingredient);
-    });
-
-    secretBaseStore.save(secretBase);
-
-    while(selectedComponents.value.pop()) {}
-    secretBasePageStore.closeCreateSecretBaseDialog();
-
-  } catch (e) {
-    alert(e.message);
-  }
+  while(selectedComponents.value.pop()) {}
+  secretBasePageStore.closeCreateSecretBaseDialog();
 
 };
 

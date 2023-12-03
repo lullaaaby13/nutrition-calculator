@@ -49,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import {useIngredientStore} from 'stores/ingredients';
 import {useSecretBaseStore} from 'stores/secret-base';
 
 const secretBaseStore = useSecretBaseStore();

@@ -3,6 +3,7 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ receipt.name }}</div>
+        <div class="text-caption">{{ receipt.category.label }}</div>
         <AmountUnitPriceCaption :amount="receiptSummary.amount" :unit-price="receiptSummary.unitPrice"/>
       </div>
       <q-space/>
@@ -11,7 +12,7 @@
           dense
           outline
           color="secondary"
-
+          @click="receiptPageStore.showUpdateReceiptDialog(receipt)"
           icon="edit"
           flat
         />
@@ -36,7 +37,7 @@
             <q-item v-for="receiptComponent in receipt.secretBases" :key="receiptComponent.component.name">
               <q-item-section>
                 <q-item-label>{{ receiptComponent.amount }}</q-item-label>
-                <q-item-label caption lines="1">{{receiptComponent.component.name}}</q-item-label>
+                <q-item-label caption lines="1">{{ receiptComponent.component.name }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -47,7 +48,7 @@
             <q-item v-for="receiptComponent in receipt.ingredients" :key="receiptComponent.component.name">
               <q-item-section>
                 <q-item-label>{{ receiptComponent.amount }}</q-item-label>
-                <q-item-label caption lines="1">{{receiptComponent.component.name}}</q-item-label>
+                <q-item-label caption lines="1">{{ receiptComponent.component.name }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -68,6 +69,17 @@
       />
     </q-card-section>
 
+    <q-card-section>
+      <div class="text-caption">메모</div>
+      <div style="min-height: 60px;">{{ receipt.memo }}</div>
+    </q-card-section>
+
+    <q-separator/>
+
+    <q-card-section>
+      <CreateUpdateDate :createdAt="receipt.createdAt" :updatedAt="receipt.updatedAt"/>
+    </q-card-section>
+
   </BaseCard>
 </template>
 
@@ -81,6 +93,7 @@ import {Receipt} from 'src/types/receipt';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
+import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
 const props = defineProps({
   receipt: {

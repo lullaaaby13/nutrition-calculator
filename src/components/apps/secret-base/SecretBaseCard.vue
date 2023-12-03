@@ -54,7 +54,12 @@
     </q-card-section>
     <q-card-section>
       <div class="text-caption">메모</div>
-      <div> {{ secretBase.memo }} </div>
+      <div style="min-height: 60px;">{{ secretBase.memo }}</div>
+    </q-card-section>
+    <q-separator/>
+
+    <q-card-section>
+      <CreateUpdateDate :createdAt="secretBase.createdAt" :updatedAt="secretBase.updatedAt"/>
     </q-card-section>
 
   </BaseCard>
@@ -70,6 +75,7 @@ import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import {SecretBase} from 'src/types/secret-base';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
+import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
 const props = defineProps({
   secretBase: {

@@ -1,8 +1,8 @@
 export class BaseType {
   private _name = '';
   protected _memo?: string;
-  protected createdAt: Date = new Date();
-  protected updatedAt: Date = new Date();
+  private _createdAt: Date = new Date();
+  private _updatedAt: Date = new Date();
 
   get name(): string {
     return this._name;
@@ -20,6 +20,18 @@ export class BaseType {
 
   set memo(value: string | undefined) {
     this._memo = value;
-    this.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
+
+  protected set updatedAt(value: Date) {
+    this._updatedAt = value;
   }
 }
