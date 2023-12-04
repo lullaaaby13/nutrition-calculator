@@ -3,10 +3,19 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ receipt.name }}</div>
-        <div class="text-caption">{{ receipt.category.label }}</div>
-        <AmountUnitPriceCaption :amount="receiptSummary.amount" :unit-price="receiptSummary.unitPrice"/>
+        <div class="flex q-gutter-x-md">
+          <div class="text-subtitle2">{{ receipt.category.label }}</div>
+          <span class="text-subtitle2">중량: {{ Number(receipt.summary.amount).toFixed(2) }}g</span>
+        </div>
+        <div class="flex q-gutter-x-md">
+          <div class="text-caption">판매가: {{ Number(receipt.sellingPrice).toFixed(0) }}</div>
+          <div class="text-caption">단가: {{ Number(receipt.summary.unitPrice).toFixed(0) }}</div>
+          <div class="text-caption">마진율: {{ Number(receipt.salesMargin).toFixed(2) }}</div>
+        </div>
       </div>
+
       <q-space/>
+
       <div class="q-gutter-md">
         <q-btn
           dense
@@ -58,14 +67,14 @@
 
     <q-card-section>
       <NutritionPanel
-        :calories="receiptSummary.calories"
-        :unitPrice="receiptSummary.unitPrice"
-        :carbohydrates="receiptSummary.carbohydrates"
-        :sugars="receiptSummary.sugars"
-        :protein="receiptSummary.protein"
-        :caffeine="receiptSummary.caffeine"
-        :fat="receiptSummary.fat"
-        :saturatedFat="receiptSummary.saturatedFat"
+        :calories="receipt.summary.calories"
+        :unitPrice="receipt.summary.unitPrice"
+        :carbohydrates="receipt.summary.carbohydrates"
+        :sugars="receipt.summary.sugars"
+        :protein="receipt.summary.protein"
+        :caffeine="receipt.summary.caffeine"
+        :fat="receipt.summary.fat"
+        :saturatedFat="receipt.summary.saturatedFat"
       />
     </q-card-section>
 
@@ -90,7 +99,6 @@ import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {ComponentSummary} from 'src/types/summary';
 import {Receipt} from 'src/types/receipt';
-import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 import CreateUpdateDate from 'components/CreateUpdateDate.vue';
@@ -106,11 +114,11 @@ const receiptPageStore = useReceiptPageStore();
 const receiptStore = useReceiptStore();
 
 
-const receiptSummary = computed(() => {
-  let componentSummary = new ComponentSummary();
-  componentSummary.addReceiptComponents(props.receipt.components)
-  return componentSummary;
-});
+// const receiptSummary = computed(() => {
+//   let componentSummary = new ComponentSummary();
+//   componentSummary.addReceiptComponents(props.receipt.components)
+//   return componentSummary;
+// });
 
 const onDeleteButtonClick = (receipt: Receipt) => {
   if (confirm('정말 삭제 하시겠어요?')) {

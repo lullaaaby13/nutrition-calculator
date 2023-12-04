@@ -1,14 +1,17 @@
 import {SecretBase, SecretBaseMock} from 'src/types/secret-base';
 import Ingredient, {IngredientMock} from 'src/types/ingredient';
 import {BaseType} from 'src/types/base-type';
+import {ComponentSummary} from 'src/types/summary';
 
 export class Receipt extends BaseType {
   private _category: ReceiptCategory = ReceiptCategory.COFFEE;
   private _components: ReceiptComponent[] = [];
+  private _sellingPrice: number;
   constructor(name: string, category: ReceiptCategory, memo?: string) {
     super();
     this._category = category;
     this._components = [];
+    this._sellingPrice = 0;
     this.name = name;
     this.memo = memo;
   }
@@ -87,6 +90,27 @@ export class Receipt extends BaseType {
     return this._components.length >= 2;
   }
 
+
+  get sellingPrice(): number {
+    return this._sellingPrice;
+  }
+
+  set sellingPrice(value: number) {
+    if (value < 0) {
+      throw new Error('판매가격은 0 이상이어야 합니다.');
+    }
+    this._sellingPrice = value;
+  }
+
+  get salesMargin(): number {
+    return Math.round(((this.sellingPrice - this.summary.unitPrice) / this.sellingPrice) * 100);
+  }
+
+  get summary(): ComponentSummary {
+    const componentSummary = new ComponentSummary();
+    componentSummary.addReceiptComponents(this._components);
+    return componentSummary;
+  }
 }
 
 
@@ -136,10 +160,12 @@ export type ReceiptCategory = typeof ReceiptCategory[keyof typeof ReceiptCategor
 const americano = new Receipt('아메리카노', ReceiptCategory.COFFEE);
 americano.addIngredient(300, IngredientMock.WATER);
 americano.addIngredient(10, IngredientMock.ESPRESSO);
+americano.sellingPrice = 3000;
 
 const test = new Receipt('TestReceipt', ReceiptCategory.COFFEE);
 test.addSecretBase(60, SecretBaseMock.TEST);
 test.addIngredient(40, IngredientMock.TESTA);
+test.sellingPrice = 1000;
 
 export const ReceiptMock = {
   AMERICANO: americano,

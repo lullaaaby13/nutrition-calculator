@@ -19,13 +19,31 @@
 
         <div class="col-4 q-px-md">
           <BaseCard class="q-gutter-y-sm" width="30vw">
-            <div class="text-subtitle1">
-              <q-input v-model="form.name"
-                       type="text"
-                       dense
-                       label="이름"
-                       stack-label
-              />
+            <div class="row">
+              <div class="col-4 q-pr-md">
+                <q-select v-model="form.category"
+                          :options="Object.values(ReceiptCategory)"
+                          label="카테고리"
+                          dense
+                          stack-label
+                />
+              </div>
+              <div class="col-4 q-pr-md">
+                <q-input v-model="form.name"
+                         type="text"
+                         dense
+                         label="이름"
+                         stack-label
+                />
+              </div>
+              <div class="col-4">
+                <q-input v-model="form.sellingPrice"
+                         type="number"
+                         dense
+                         label="희망 판매가(원)"
+                         stack-label
+                />
+              </div>
             </div>
 
             <AmountUnitPriceCaption :amount="summary.amount" :unit-price="summary.unitPrice"/>
@@ -85,8 +103,7 @@ import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchT
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
 import SecretBaseSearchTable from 'components/apps/receipts/SecretBaseSearchTable.vue';
-import {ReceiptComponent} from 'src/types/receipt';
-import {useReceiptStore} from 'stores/receipt';
+import {ReceiptCategory, ReceiptComponent} from 'src/types/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 
 
@@ -95,6 +112,8 @@ const receiptPageStore = useReceiptPageStore();
 const form = ref({
   name: '',
   memo: '',
+  category: ReceiptCategory.COFFEE,
+  sellingPrice: 0,
 });
 
 
@@ -103,6 +122,8 @@ const selectedComponents = ref<ReceiptComponent[]>([]);
 const onUpdateButtonClick = () => {
   receiptPageStore.updateReceipt.name = form.value.name;
   receiptPageStore.updateReceipt.memo = form.value.memo;
+  receiptPageStore.updateReceipt.category = form.value.category;
+  receiptPageStore.updateReceipt.sellingPrice = form.value.sellingPrice;
   receiptPageStore.updateReceipt.replaceComponents(selectedComponents.value);
   receiptPageStore.closeUpdateReceiptDialog();
 }
@@ -130,6 +151,8 @@ const summary = computed(() => {
 const onBeforeShow = () => {
   form.value.name = receiptPageStore.updateReceipt.name;
   form.value.memo = receiptPageStore.updateReceipt.memo || '';
+  form.value.category = receiptPageStore.updateReceipt.category;
+  form.value.sellingPrice = receiptPageStore.updateReceipt.sellingPrice;
   selectedComponents.value = receiptPageStore.updateReceipt.components;
 };
 

@@ -1,5 +1,7 @@
 <template>
-  <q-dialog full-width full-height>
+  <q-dialog full-width full-height
+            @before-hide="onBeforeHide"
+  >
     <BaseCard>
       <q-card-section class="flex justify-between">
         <div class="text-h6">레시피 등록</div>
@@ -16,7 +18,6 @@
           <SecretBaseSearchTable @onSecretBaseClick="onSearchTableClick" />
         </div>
 
-
         <div class="col-4 q-px-md">
           <BaseCard class="q-gutter-y-sm" width="30vw">
             <div class="row">
@@ -28,7 +29,7 @@
                           stack-label
                 />
               </div>
-              <div class="col-8">
+              <div class="col-4 q-pr-md">
                 <q-input v-model="form.name"
                          type="text"
                          dense
@@ -36,8 +37,15 @@
                          stack-label
                 />
               </div>
+              <div class="col-4">
+                <q-input v-model="form.sellingPrice"
+                         type="number"
+                         dense
+                         label="희망 판매가(원)"
+                         stack-label
+                />
+              </div>
             </div>
-
 
             <AmountUnitPriceCaption :amount="summary.amount" :unit-price="summary.unitPrice"/>
 
@@ -91,7 +99,7 @@ import {computed, ref} from 'vue'
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {SecretBase} from 'src/types/secret-base';
-import Ingredient, {IngredientCategory} from 'src/types/ingredient';
+import Ingredient from 'src/types/ingredient';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
@@ -108,6 +116,7 @@ const form = ref({
   name: '',
   memo: '',
   category: ReceiptCategory.COFFEE,
+  sellingPrice: 0,
 });
 
 
@@ -137,6 +146,7 @@ const onCreateButtonClick = () => {
   const receipt = new Receipt(form.value.name, form.value.category, form.value.memo);
 
   selectedComponents.value.forEach(component => receipt.addComponent(component));
+  receipt.sellingPrice = form.value.sellingPrice;
 
   receiptStore.save(receipt);
 
@@ -144,6 +154,15 @@ const onCreateButtonClick = () => {
 
   receiptPageStore.closeCreateReceiptDialog();
 };
+
+const onBeforeHide = () => {
+  form.value = {
+    name: '',
+    memo: '',
+    category: ReceiptCategory.COFFEE,
+    sellingPrice: 0,
+  };
+}
 
 </script>
 
