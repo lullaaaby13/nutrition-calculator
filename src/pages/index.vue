@@ -1,6 +1,9 @@
 <template>
   <q-page class="full-width full-height flex justify-center q-pa-xl">
-    <div class="flex justify-around items-center q-gutter-x-lg">
+    <div class="flex justify-around items-center q-gutter-lg">
+
+      <q-btn label="테스트" @click="onClick"/>
+      <div>{{ result }}</div>
 
       <BaseCard style="width: 400px; height: 400px;">
         <div class="text-h6">원재료</div>
@@ -85,9 +88,10 @@
 <script setup lang="ts">
 import BaseCard from 'components/BaseCard.vue';
 import {useIngredientStore} from 'stores/ingredients';
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import {useReceiptStore} from 'stores/receipt';
+import Ingredient from 'src/types/ingredient';
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();
@@ -108,6 +112,11 @@ const receiptSummaries = computed(() => {
   }, {});
 });
 
+
+const result = ref<Ingredient[]>([]);
+const onClick = async () => {
+  result.value = await window.ingredients.list();
+}
 
 </script>
 

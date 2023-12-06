@@ -61,7 +61,6 @@ import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import Ingredient from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
-import {date} from 'quasar';
 import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
 
