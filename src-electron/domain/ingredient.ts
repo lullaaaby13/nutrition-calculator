@@ -45,11 +45,15 @@ export default class Ingredient {
   @Column({ name: 'memo', type: 'varchar', nullable: true })
   private memo?: string = '';
 
-  @Column({ name: 'category', type: 'varchar', transformer: {
-      from: (value: string) => value,
-      to: (value: string) => value,
-  }})
-  private category: IngredientCategory = '';
+  @Column({
+    name: 'category',
+    type: 'varchar',
+    transformer: {
+      from: (value: string) => IngredientCategory[value],
+      to: (value: IngredientCategory) => value.name,
+    }
+  })
+  private category: IngredientCategory = IngredientCategory.FRESH;
 
   @Column({ name: 'calories', type: 'decimal' })
   private calories = 0;
@@ -106,11 +110,11 @@ export default class Ingredient {
     this.memo = value;
   }
 
-  public getCategory(): string {
+  public getCategory(): IngredientCategory {
     return this.category;
   }
 
-  public setCategory(value: string) {
+  public setCategory(value: IngredientCategory) {
     this.category = value;
   }
 
