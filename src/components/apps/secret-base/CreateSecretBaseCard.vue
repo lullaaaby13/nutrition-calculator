@@ -73,18 +73,17 @@
 
 <script setup lang="ts">
 import {computed, ref} from 'vue'
-import {useIngredientStore} from 'stores/ingredients';
 import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
 
-const ingredientStore = useIngredientStore();
+
 const secretBaseStore = useSecretBaseStore();
 const secretBasePageStore = useSecretBasePageStore();
 

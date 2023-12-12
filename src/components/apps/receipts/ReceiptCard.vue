@@ -94,10 +94,8 @@
 
 <script setup lang="ts">
 
-import {computed} from 'vue';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {ComponentSummary} from 'src/types/summary';
 import {Receipt} from 'src/types/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';

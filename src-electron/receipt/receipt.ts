@@ -1,7 +1,7 @@
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase, SecretBaseMock} from 'src/types/secret-base';
+import Ingredient, {IngredientMock} from 'src/types/ingredient';
 import {BaseType} from 'src/types/base-type';
 import {ComponentSummary} from 'src/types/summary';
-import {Ingredient} from 'src/types/ingredient';
 
 export class Receipt extends BaseType {
   private _category: ReceiptCategory = ReceiptCategory.COFFEE;
@@ -58,8 +58,7 @@ export class Receipt extends BaseType {
   }
 
   get ingredients() {
-    //return this._components.filter(it => it.component instanceof Ingredient);
-    return [];
+    return this._components.filter(it => it.component instanceof Ingredient);
   }
 
   get components(): ReceiptComponent[] {
@@ -158,3 +157,17 @@ export const ReceiptCategory = {
 
 export type ReceiptCategory = typeof ReceiptCategory[keyof typeof ReceiptCategory];
 
+const americano = new Receipt('아메리카노', ReceiptCategory.COFFEE);
+americano.addIngredient(300, IngredientMock.WATER);
+americano.addIngredient(10, IngredientMock.ESPRESSO);
+americano.sellingPrice = 3000;
+
+const test = new Receipt('TestReceipt', ReceiptCategory.COFFEE);
+test.addSecretBase(60, SecretBaseMock.TEST);
+test.addIngredient(40, IngredientMock.TESTA);
+test.sellingPrice = 1000;
+
+export const ReceiptMock = {
+  AMERICANO: americano,
+  TEST: test,
+}

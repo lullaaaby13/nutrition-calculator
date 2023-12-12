@@ -1,5 +1,3 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
-
 export const IngredientCategory = {
   FRESH: {
     name: 'fresh',
@@ -32,63 +30,54 @@ export const IngredientCategory = {
 }
 
 export type IngredientCategory = typeof IngredientCategory[keyof typeof IngredientCategory];
+export const valueOfIngredientCategory = (name: string): IngredientCategory => {
+  switch (name.toUpperCase()) {
+    case 'FRESH':
+      return IngredientCategory.FRESH;
+    case 'FRUITS':
+      return IngredientCategory.FRUITS;
+    case 'FLOUR':
+      return IngredientCategory.FLOUR;
+    case 'COFFEE':
+      return IngredientCategory.COFFEE;
+    case 'TOPPING':
+      return IngredientCategory.TOPPING;
+    case 'ADDITIVES':
+      return IngredientCategory.ADDITIVES;
+    case 'PACKAGING':
+      return IngredientCategory.PACKAGING;
+    default:
+      throw new Error(`식자재 카테고리를 찾을 수 없습니다. [name = ${name}]`);
+  }
+}
 
-@Entity()
+
 export default class Ingredient {
-
-  @PrimaryGeneratedColumn({ name: 'id' })
   private id?: number;
-
-  @Column({ name: 'name', type: 'varchar' })
   private name = '';
-
-  @Column({ name: 'memo', type: 'varchar', nullable: true })
   private memo?: string = '';
-
-  @Column({
-    name: 'category',
-    type: 'varchar',
-    transformer: {
-      from: (value: string) => IngredientCategory[value],
-      to: (value: IngredientCategory) => value.name,
-    }
-  })
   private category: IngredientCategory = IngredientCategory.FRESH;
-
-  @Column({ name: 'calories', type: 'decimal' })
   private calories = 0;
-
-  @Column({ name: 'unitPrice', type: 'decimal' })
   private unitPrice = 0;
-
-  @Column({ name: 'carbohydrates', type: 'decimal' })
   private carbohydrates = 0;
-
-  @Column({ name: 'sugars', type: 'decimal' })
   private sugars = 0;
-
-  @Column({ name: 'protein', type: 'decimal' })
   private protein = 0;
-
-  @Column({ name: 'caffeine', type: 'decimal' })
   private caffeine = 0;
-
-  @Column({ name: 'fat', type: 'decimal' })
   private fat = 0;
-
-  @Column({ name: 'saturatedFat', type: 'decimal' })
   private saturatedFat = 0;
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
-  @CreateDateColumn()
-  @Column({ name: 'createdAt', type: 'datetime' })
-  private createdAt: Date = new Date();
+  public getId(): number | undefined {
+    return this.id;
+  }
 
-  @UpdateDateColumn()
-  @Column({ name: 'updatedAt', type: 'datetime' })
-  private updatedAt: Date= new Date();
+  public setId(value: number) {
+    if (!value || value < 1) {
+      throw new Error('식자재 ID는 1보다 작을 수 없습니다.');
+    }
 
-  public getId(): number {
-    return this.id || -1;
+    this.id = value;
   }
 
   public getName(): string {
@@ -126,7 +115,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('칼로리는 0보다 작을 수 없습니다.');
     }
-    this.calories = value;
+    this.calories = Number(value);
   }
 
   public getUnitPrice(): number {
@@ -137,7 +126,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('단위 가격은 0보다 작을 수 없습니다.');
     }
-    this.unitPrice = value;
+    this.unitPrice = Number(value);
   }
 
   public getCarbohydrates(): number {
@@ -148,7 +137,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('탄수화물은 0보다 작을 수 없습니다.');
     }
-    this.carbohydrates = value;
+    this.carbohydrates = Number(value);
   }
 
   public getSugars(): number {
@@ -159,7 +148,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('당류는 0보다 작을 수 없습니다.');
     }
-    this.sugars = value;
+    this.sugars = Number(value);
   }
 
   public getProtein(): number {
@@ -170,7 +159,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('단백질은 0보다 작을 수 없습니다.');
     }
-    this.protein = value;
+    this.protein = Number(value);
   }
 
   public getCaffeine(): number {
@@ -181,7 +170,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('카페인은 0보다 작을 수 없습니다.');
     }
-    this.caffeine = value;
+    this.caffeine = Number(value);
   }
 
   public getFat(): number {
@@ -192,7 +181,7 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('지방은 0보다 작을 수 없습니다.');
     }
-    this.fat = value;
+    this.fat = Number(value);
   }
 
   public getSaturatedFat(): number {
@@ -203,14 +192,20 @@ export default class Ingredient {
     if (value < 0) {
       throw new Error('포화지방산은 0보다 작을 수 없습니다.');
     }
-    this.saturatedFat = value;
+    this.saturatedFat = Number(value);
   }
 
-  public getCreatedAt(): Date {
+  public getCreatedAt(): Date | undefined {
     return this.createdAt;
   }
 
-  public getUpdatedAt(): Date {
+  public setCreatedAt(value: Date) {
+    if (!this.createdAt) {
+      this.createdAt = value;
+    }
+  }
+
+  public getUpdatedAt(): Date | undefined{
     return this.updatedAt;
   }
 

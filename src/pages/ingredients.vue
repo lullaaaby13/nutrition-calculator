@@ -47,8 +47,21 @@
 
     <div class="q-gutter-md flex full-width">
       <IngredientCard
-          v-for="ingredient in filteredIngredients" :key="ingredient.name"
-          :ingredient="ingredient"
+          v-for="ingredient in filteredIngredients" :key="ingredient.id"
+          :id="ingredient.id"
+          :name="ingredient.name"
+          :category="ingredient.category"
+          :unitPrice="ingredient.unitPrice"
+          :calories="ingredient.calories"
+          :carbohydrates="ingredient.carbohydrates"
+          :sugars="ingredient.sugars"
+          :protein="ingredient.protein"
+          :caffeine="ingredient.caffeine"
+          :fat="ingredient.fat"
+          :saturatedFat="ingredient.saturatedFat"
+          :memo="ingredient.memo"
+          :createdAt="ingredient.createdAt"
+          :updatedAt="ingredient.updatedAt"
       />
     </div>
 
@@ -62,12 +75,11 @@
 
 <script setup>
 
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 
 import {useIngredientStore} from 'stores/ingredients';
 import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
 import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
-import BaseCard from 'components/BaseCard.vue';
 import {IngredientCategory} from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
@@ -101,6 +113,10 @@ const filteredIngredients = computed(() => {
 const resetCheckbox = () => {
   selectedCategories.value = [];
 }
+
+onMounted(() => {
+  ingredientStore.refresh();
+})
 
 </script>
 

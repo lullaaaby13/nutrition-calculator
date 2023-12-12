@@ -4,6 +4,7 @@ import path from 'path';
 import os from 'os';
 import {NestFactory} from '@nestjs/core';
 import AppModule from 'app/src-electron/app.module';
+import GlobalExceptionFilter from './global-exception.filter';
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -43,23 +44,28 @@ function createWindow() {
   });
 }
 
+
+app.whenReady().then(createWindow);
+app.on('window-all-closed', () => {
+  if (platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (mainWindow === undefined) {
+    createWindow();
+  }
+});
+
+
 async function bootstrap() {
-  await app.whenReady();
 
-  NestFactory.create(AppModule);
-
-  createWindow();
-
-  app.on('window-all-closed', () => {
-    if (platform !== 'darwin') {
-      app.quit();
-    }
-  });
-
-  app.on('activate', () => {
-    if (mainWindow === undefined) {
-      createWindow();
-    }
+  const application = await NestFactory.create(AppModule);
+  application.enableCors();
+  application.useGlobalFilters(new GlobalExceptionFilter());
+  application.listen(17664, () => {
+    console.log('Listening at http://localhost:17664');
   });
 
 }

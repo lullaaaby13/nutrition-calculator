@@ -47,10 +47,8 @@ import {computed, ref} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import SecretBaseCard from 'components/apps/secret-base/SecretBaseCard.vue';
 import CreateSecretBaseCard from 'components/apps/secret-base/CreateSecretBaseCard.vue';
-import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import UpdateSecretBaseCard from 'components/apps/secret-base/UpdateSecretBaseCard.vue';
-import {ReceiptCategory} from 'src/types/receipt';
 
 const secretBaseStore = useSecretBaseStore();
 const secretBasePageStore = useSecretBasePageStore();

@@ -67,7 +67,7 @@ import {computed, ref} from 'vue';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import {SecretBaseComponent} from 'src/types/secret-base';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import {ComponentSummary} from 'src/types/summary';

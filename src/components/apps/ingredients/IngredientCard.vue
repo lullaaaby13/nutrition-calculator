@@ -20,7 +20,7 @@
           dense outline flat
           color="red"
           icon="delete"
-          @click="onDeleteButtonClick(ingredient)"
+          @click="onDeleteButtonClick(ingredient.id)"
         />
       </div>
     </q-card-section>
@@ -54,28 +54,22 @@
   </BaseCard>
 </template>
 
-<script setup>
-
+<script setup lang="ts">
 import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/Ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
-
-defineProps({
-  ingredient: {
-    type: Ingredient,
-  }
-});
+const ingredient = defineProps<Ingredient>();
 
 const ingredientStore = useIngredientStore();
 const ingredientPageStore = useIngredientPageStore();
 
-const onDeleteButtonClick = ingredient => {
+const onDeleteButtonClick = (id: number) => {
   if (confirm('정말로 삭제 하시겠어요?')) {
-    ingredientStore.delete(ingredient);
+    ingredientStore.delete(id);
   }
 }
 

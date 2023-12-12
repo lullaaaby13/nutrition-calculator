@@ -22,14 +22,12 @@
           <q-input v-model="form.name"
                    type="text"
                    label="이름"
-                   rules=""
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.calories"
                    type="text"
                    label="칼로리(Kcal)"
-                   :rule="[val => val < 0 || '0보다 커야 합니다.']"
           />
         </div>
         <div class="col-6 q-px-sm">
@@ -85,11 +83,11 @@
   </q-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import {ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
-import Ingredient, {IngredientCategory} from 'src/types/ingredient';
+import {Ingredient, IngredientCategory} from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import BaseCard from 'components/BaseCard.vue';
 
@@ -97,7 +95,7 @@ const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
 
 const createEmptyForm = () => ({
-  category: null,
+  category: IngredientCategory.FRESH,
   name: '',
   calories: 0,
   unitPrice: 0,
@@ -113,9 +111,22 @@ const createEmptyForm = () => ({
 const form = ref(createEmptyForm());
 
 
-const onRegisterConfirmButtonClick = () => {
-  const ingredient = new Ingredient(form.value.name, form.value.category);
-  ingredientStore.save(ingredient);
+const onRegisterConfirmButtonClick = async () => {
+
+  const ingredient = {
+    name: form.value.name,
+    category: form.value.category,
+    calories: Number(form.value.calories),
+    unitPrice: Number(form.value.unitPrice),
+    carbohydrates: Number(form.value.carbohydrates),
+    sugars: Number(form.value.sugars),
+    protein: Number(form.value.protein),
+    caffeine: Number(form.value.caffeine),
+    fat: Number(form.value.fat),
+    saturatedFat: Number(form.value.saturatedFat),
+    memo: form.value.memo
+  }
+  await ingredientStore.save(ingredient);
   form.value = createEmptyForm();
   ingredientPageStore.closeCreateIngredientDialog();
 }

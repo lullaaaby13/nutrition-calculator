@@ -1,4 +1,4 @@
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
 import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
 import {ReceiptComponent} from 'src/types/receipt';
 

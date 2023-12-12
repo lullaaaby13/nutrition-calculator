@@ -112,7 +112,7 @@ const onBeforeShow = () => {
   form.value.category = updateIngredient.category;
   form.value.name = updateIngredient.name;
   form.value.calories = updateIngredient.calories;
-  form.value.calories = updateIngredient.calories;
+  form.value.unitPrice = updateIngredient.unitPrice;
   form.value.carbohydrates = updateIngredient.carbohydrates;
   form.value.sugars = updateIngredient.sugars;
   form.value.protein = updateIngredient.protein;
@@ -129,17 +129,31 @@ const onUpdateButtonClick = () => {
       throw new Error('이미 존재하는 재료명입니다.');
     }
 
-    ingredient.category = form.value.category;
-    ingredient.name = form.value.name;
-    ingredient.calories = form.value.calories;
-    ingredient.calories = form.value.calories;
-    ingredient.carbohydrates = form.value.carbohydrates;
-    ingredient.sugars = form.value.sugars;
-    ingredient.protein = form.value.protein;
-    ingredient.caffeine = form.value.caffeine;
-    ingredient.fat = form.value.fat;
-    ingredient.saturatedFat = form.value.saturatedFat;
-    ingredient.memo = form.value.memo;
+    // ingredient.category = form.value.category;
+    // ingredient.name = form.value.name;
+    // ingredient.calories = form.value.calories;
+    // ingredient.calories = form.value.calories;
+    // ingredient.carbohydrates = form.value.carbohydrates;
+    // ingredient.sugars = form.value.sugars;
+    // ingredient.protein = form.value.protein;
+    // ingredient.caffeine = form.value.caffeine;
+    // ingredient.fat = form.value.fat;
+    // ingredient.saturatedFat = form.value.saturatedFat;
+    // ingredient.memo = form.value.memo;
+    ingredientStore.update({
+      id: ingredient.id,
+      name: form.value.name,
+      category: form.value.category,
+      calories: form.value.calories,
+      unitPrice: form.value.unitPrice,
+      carbohydrates: form.value.carbohydrates,
+      sugars: form.value.sugars,
+      protein: form.value.protein,
+      caffeine: form.value.caffeine,
+      fat: form.value.fat,
+      saturatedFat: form.value.saturatedFat,
+      memo: form.value.memo,
+    })
 
     ingredientPageStore.closeUpdateIngredientDialog();
   }

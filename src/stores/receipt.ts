@@ -1,13 +1,11 @@
 import {defineStore} from 'pinia';
-import {Receipt, ReceiptMock} from 'src/types/receipt';
+import {Receipt} from 'src/types/receipt';
 
 
 export const useReceiptStore = defineStore({
   id: 'receiptStore',
   state: (): { receipts: Receipt[] } => ({
-    receipts: [
-      ReceiptMock.AMERICANO
-    ]
+    receipts: []
   }),
 
   actions: {

@@ -68,6 +68,7 @@
 
 import {onErrorCaptured, ref} from 'vue';
 import BaseCard from 'components/BaseCard.vue';
+import {AxiosError} from 'axios';
 
 const leftDrawerOpen = ref(true);
 
@@ -76,7 +77,13 @@ const errorMessage = ref('');
 
 onErrorCaptured(err => {
   console.error('onErrorCaptured : ', err.message, err)
-  errorMessage.value = err.message;
+
+  if (err instanceof AxiosError) {
+    errorMessage.value = err.response?.data?.message ?? err.message;
+  } else {
+    errorMessage.value = err.message;
+  }
+
   errorDialog.value = true;
 })
 

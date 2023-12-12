@@ -1,21 +1,14 @@
 import {defineStore} from 'pinia';
-import Ingredient, {IngredientCategory, IngredientMock} from 'src/types/ingredient';
+import IngredientAPI from 'src/api/ingredient';
+import {Ingredient, IngredientCategory} from 'src/types/ingredient';
 
 export const useIngredientStore = defineStore('ingredient', {
   state: (): { ingredients: Ingredient[] } => ({
-    ingredients: [
-      // IngredientMock,WATER,
-      IngredientMock.ESPRESSO,
-      IngredientMock.MILK,
-      IngredientMock.CONDENSED_MILK,
-      IngredientMock.WATER,
-    ],
+    ingredients: [],
   }),
   actions: {
-    async save(ingredient: Ingredient) {
-      if (this.existsByName(ingredient.name)) {
-        throw new Error('같은 이름의 성분이 이미 존재 합니다.');
-      }
+
+    async save(ingredient: any) {
 
       const request = {
         name: ingredient.name,
@@ -30,14 +23,36 @@ export const useIngredientStore = defineStore('ingredient', {
         fat: ingredient.fat,
         saturatedFat: ingredient.saturatedFat,
       };
-      await window.ingredients.save(JSON.stringify(request));
-      // TODO refresh로 로직 변경
+
+      await IngredientAPI.save(request);
+
       await this.refresh();
     },
 
-    delete(ingredient: Ingredient) {
-      const index = this.ingredients.indexOf(ingredient);
-      this.ingredients.splice(index, 1);
+    async update(ingredient: any) {
+        const request = {
+            id: ingredient.id,
+            name: ingredient.name,
+            category: ingredient.category.name,
+            memo: ingredient.memo,
+            calories: ingredient.calories,
+            unitPrice: ingredient.unitPrice,
+            carbohydrates: ingredient.carbohydrates,
+            sugars: ingredient.sugars,
+            protein: ingredient.protein,
+            caffeine: ingredient.caffeine,
+            fat: ingredient.fat,
+            saturatedFat: ingredient.saturatedFat,
+        };
+
+        await IngredientAPI.update(ingredient.id, request);
+
+        await this.refresh();
+    },
+
+    async delete(id: number) {
+      await IngredientAPI.delete(id);
+      await this.refresh()
     },
 
     exists(ingredient: Ingredient) {
@@ -53,28 +68,13 @@ export const useIngredientStore = defineStore('ingredient', {
     },
 
     async refresh() {
-      const ingredients = await window.ingredients.list();
-      console.log(ingredients);
-      this.ingredients = ingredients.map(it => JSON.parse(it));
-
-      // this.ingredients = ingredients.map(it => ({
-      //   name: it.name,
-      //   category: IngredientCategory.FRESH,
-      //   memo: it.memo,
-      //   calories: it.calories,
-      //   unitPrice: it.unitPrice,
-      //   carbohydrates: it.carbohydrates,
-      //   sugars: it.sugars,
-      //   protein: it.protein,
-      //   caffeine: it.caffeine,
-      //   fat: it.fat,
-      //   saturatedFat: it.saturatedFat,
-      // }))
+      const ingredients: Ingredient[] = await IngredientAPI.list();
+      this.ingredients = ingredients;
     },
 
     emptyIngredient() {
       return {
-        category: null,
+        category: IngredientCategory.FRESH,
         name: '',
         calories: 0,
         unitPrice: 0,

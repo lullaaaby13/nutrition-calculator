@@ -2,9 +2,6 @@
   <q-page class="full-width full-height flex justify-center q-pa-xl">
     <div class="flex justify-around items-center q-gutter-lg">
 
-      <q-btn label="테스트" @click="onClick"/>
-      <div>{{ result }}</div>
-
       <BaseCard style="width: 400px; height: 400px;">
         <div class="text-h6">원재료</div>
         <q-separator class="q-my-sm"/>
@@ -91,7 +88,8 @@ import {useIngredientStore} from 'stores/ingredients';
 import {computed, ref} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import {useReceiptStore} from 'stores/receipt';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
+
 
 const ingredientStore = useIngredientStore();
 const secretBaseStore = useSecretBaseStore();
@@ -99,6 +97,7 @@ const receiptStore = useReceiptStore();
 
 const ingredientSummary = computed(() => {
   return ingredientStore.ingredients.reduce((acc, cur) => {
+    // @ts-ignore
     acc[cur.category.name] = acc[cur.category.name] + 1 || 1;
     return acc;
   }, {})
@@ -107,6 +106,7 @@ const ingredientSummary = computed(() => {
 
 const receiptSummaries = computed(() => {
   return receiptStore.receipts.reduce((acc, cur) => {
+    // @ts-ignore
     acc[cur.category.label] = acc[cur.category.label] + 1 || 1;
     return acc;
   }, {});
@@ -114,9 +114,6 @@ const receiptSummaries = computed(() => {
 
 
 const result = ref<Ingredient[]>([]);
-const onClick = async () => {
-  result.value = await window.ingredients.list();
-}
 
 </script>
 

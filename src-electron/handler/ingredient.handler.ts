@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@nestjs/common';
-import IngredientService from 'app/src-electron/service/ingredient.service';
+import IngredientService from 'app/src-electron/ingredient/ingredient.service';
 import {ipcMain} from 'electron';
 
 @Injectable()

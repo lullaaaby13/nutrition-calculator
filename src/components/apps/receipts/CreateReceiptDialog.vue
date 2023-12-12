@@ -99,7 +99,7 @@ import {computed, ref} from 'vue'
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {SecretBase} from 'src/types/secret-base';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';

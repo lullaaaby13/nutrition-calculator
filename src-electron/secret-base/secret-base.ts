@@ -1,7 +1,6 @@
-
+import Ingredient, {IngredientMock} from 'src/types/ingredient';
 import {BaseType} from 'src/types/base-type';
 import {ComponentSummary} from 'src/types/summary';
-import {Ingredient} from 'src/types/ingredient';
 
 export class SecretBaseComponent {
   readonly amount: number;
@@ -86,3 +85,21 @@ export const SecretBaseCategory = {
     label: '시럽',
   },
 }
+
+export type SecretBaseCategory = typeof SecretBaseCategory[keyof typeof SecretBaseCategory];
+
+
+const ultraMilk = new SecretBase('울트라 밀크', '고농축 최강 우유');
+ultraMilk.addComponent(10, IngredientMock.MILK);
+ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);
+
+const testSecretBase = new SecretBase('테스트 시크릿베이스');
+testSecretBase.addComponent(10, IngredientMock.TESTA);
+testSecretBase.addComponent(20, IngredientMock.TESTB);
+
+
+export const SecretBaseMock = {
+  ULTRA_MILK: ultraMilk,
+  TEST: testSecretBase,
+}
+

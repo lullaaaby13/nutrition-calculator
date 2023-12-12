@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import Ingredient from 'src/types/ingredient';
+import {Ingredient} from 'src/types/ingredient';
 
 export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
 
