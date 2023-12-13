@@ -1,131 +1,31 @@
-import {SecretBase, SecretBaseMock} from 'src/types/secret-base';
-import Ingredient, {IngredientMock} from 'src/types/ingredient';
-import {BaseType} from 'src/types/base-type';
-import {ComponentSummary} from 'src/types/summary';
-
-export class Receipt extends BaseType {
-  private _category: ReceiptCategory = ReceiptCategory.COFFEE;
-  private _components: ReceiptComponent[] = [];
-  private _sellingPrice: number;
-  constructor(name: string, category: ReceiptCategory, memo?: string) {
-    super();
-    this._category = category;
-    this._components = [];
-    this._sellingPrice = 0;
-    this.name = name;
-    this.memo = memo;
-  }
-
-  public static empty(): Receipt {
-    return new Receipt('EMPTY', ReceiptCategory.COFFEE);
-  }
-
-  public addIngredient(amount: number, ingredient: Ingredient) {
-    if (this._components.some(it => it.component.name === ingredient.name)) {
-      throw new Error('이미 추가된 원재료 입니다.');
-    }
-    this._components.push(new ReceiptComponent(amount, ingredient));
-    this.updatedAt = new Date();
-  }
-  public addSecretBase(amount: number, secretBase: SecretBase) {
-    if (this._components.some(it => it.component.name === secretBase.name)) {
-      throw new Error('이미 추가된 원재료 입니다.');
-    }
-    this._components.push(new ReceiptComponent(amount, secretBase));
-    this.updatedAt = new Date();
-  }
-  public addComponent(component: ReceiptComponent) {
-    if (this._components.some(it => it.component.name === component.component.name)) {
-      throw new Error('이미 추가된 원재료 입니다.');
-    }
-    this._components.push(component);
-    this.updatedAt = new Date();
-  }
-
-  get category(): ReceiptCategory {
-    return this._category;
-  }
-
-  set category(value: ReceiptCategory) {
-    if (!value) {
-      throw new Error('카테고리를 선택해 주세요.');
-    }
-    this._category = value;
-  }
-
-  get secretBases() {
-    return this._components.filter(it => it.component instanceof SecretBase);
-  }
-
-  get ingredients() {
-    return this._components.filter(it => it.component instanceof Ingredient);
-  }
-
-  get components(): ReceiptComponent[] {
-    return this._components;
-  }
-
-  get totalAmount(): number {
-    return this._components.reduce((acc, cur) => acc + cur.amount, 0);
-  }
-
-  public replaceComponents(components: ReceiptComponent[]) {
-    if (components.length < 2) {
-      throw new Error('원재료는 2개 이상이어야 합니다.');
-    }
-    const before = this._components;
-    this._components = [];
-    try {
-      components.forEach(it => {
-        this.addComponent(it);
-      });
-      this.updatedAt = new Date();
-    } catch (e) {
-      this._components = before;
-      throw e;
-    }
-  }
-
-  public hasMinimumComponents(): boolean {
-    return this._components.length >= 2;
-  }
-
-
-  get sellingPrice(): number {
-    return this._sellingPrice;
-  }
-
-  set sellingPrice(value: number) {
-    if (value < 0) {
-      throw new Error('판매가격은 0 이상이어야 합니다.');
-    }
-    this._sellingPrice = value;
-  }
-
-  get salesMargin(): number {
-    return Math.round(((this.sellingPrice - this.summary.unitPrice) / this.sellingPrice) * 100);
-  }
-
-  get summary(): ComponentSummary {
-    const componentSummary = new ComponentSummary();
-    componentSummary.addReceiptComponents(this._components);
-    return componentSummary;
-  }
-}
-
-
 export class ReceiptComponent {
-  readonly amount: number;
-  readonly component: SecretBase | Ingredient;
+  private readonly amount: number;
+  private readonly source: 'Ingredient' | 'SecretBase' = 'Ingredient';
+  private readonly sourceId: number;
 
-  constructor(amount: number, component: SecretBase | Ingredient) {
-    if (amount < 1) {
-      throw new Error('원재료의 양은 1 이상이어야 합니다.');
-    }
+
+  constructor(amount: number, source: 'Ingredient' | 'SecretBase', sourceId: number) {
     this.amount = amount;
-    this.component = component;
+    this.source = source;
+    this.sourceId = sourceId;
   }
 
+  public getAmount(): number {
+    return this.amount;
+  }
+
+  public getSource(): 'Ingredient' | 'SecretBase' {
+    return this.source;
+  }
+
+  public getSourceId(): number {
+    return this.sourceId;
+  }
+
+  public isSame(other: ReceiptComponent): boolean {
+    return this.source === other.source && this.sourceId === other.sourceId;
+
+  }
 }
 
 export const ReceiptCategory = {
@@ -157,17 +57,124 @@ export const ReceiptCategory = {
 
 export type ReceiptCategory = typeof ReceiptCategory[keyof typeof ReceiptCategory];
 
-const americano = new Receipt('아메리카노', ReceiptCategory.COFFEE);
-americano.addIngredient(300, IngredientMock.WATER);
-americano.addIngredient(10, IngredientMock.ESPRESSO);
-americano.sellingPrice = 3000;
+export class Receipt {
+  private id?: number;
+  private name = '';
+  private category: ReceiptCategory = ReceiptCategory.COFFEE;
+  private components: ReceiptComponent[] = [];
+  private sellingPrice = 0;
+  private memo?: string = '';
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
-const test = new Receipt('TestReceipt', ReceiptCategory.COFFEE);
-test.addSecretBase(60, SecretBaseMock.TEST);
-test.addIngredient(40, IngredientMock.TESTA);
-test.sellingPrice = 1000;
+  public getId(): number | undefined {
+    return this.id;
+  }
 
-export const ReceiptMock = {
-  AMERICANO: americano,
-  TEST: test,
+  public setId(value: number) {
+    if (!value || value < 1) {
+      throw new Error('식자재 ID는 1보다 작을 수 없습니다.');
+    }
+
+    this.id = value;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public setName(value: string) {
+    if (!value) {
+      throw new Error('이름을 입력해 주세요.');
+    }
+    this.name = value;
+  }
+
+  public getMemo(): string {
+    return this.memo || '';
+  }
+
+  public setMemo(value: string) {
+    this.memo = value;
+  }
+
+
+  public addComponent(component: ReceiptComponent) {
+    if (this.components.some(it => it.isSame(component))) {
+      throw new Error('이미 추가된 원재료 입니다.');
+    }
+    this.components.push(component);
+    this.updatedAt = new Date();
+  }
+
+  public getCategory(): ReceiptCategory {
+    return this.category;
+  }
+
+  public setCategory(value: ReceiptCategory) {
+    if (!value) {
+      throw new Error('카테고리를 선택해 주세요.');
+    }
+    this.category = value;
+  }
+
+  public replaceComponents(components: ReceiptComponent[]) {
+    if (components.length < 2) {
+      throw new Error('원재료는 2개 이상이어야 합니다.');
+    }
+    const before = this.components;
+    this.components = [];
+    try {
+      components.forEach(it => {
+        this.addComponent(it);
+      });
+      this.updatedAt = new Date();
+    } catch (e) {
+      this.components = before;
+      throw e;
+    }
+  }
+
+  public getComponents(): ReceiptComponent[] {
+    return this.components;
+  }
+
+  public getSellingPrice(): number {
+    return this.sellingPrice;
+  }
+
+  public setSellingPrice(value: number) {
+    if (value < 0) {
+      throw new Error('판매가격은 0 이상이어야 합니다.');
+    }
+    this.sellingPrice = value;
+  }
+
+  public getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+
+  public setCreatedAt(value: Date) {
+    if (!this.createdAt) {
+      this.createdAt = value;
+    }
+  }
+
+  public getUpdatedAt(): Date | undefined{
+    return this.updatedAt;
+  }
+
+  public setUpdatedAt(value: Date) {
+    this.updatedAt = value;
+  }
+
+  public validate() {
+    if (this.components.length < 2) {
+      throw new Error('재료는 2개 이상 이어야 합니다.');
+    }
+    if (this.components.some(it => it.getAmount() < 1)) {
+      throw new Error('재료 수량은 1 이상 이어야 합니다.');
+    }
+  }
+
 }

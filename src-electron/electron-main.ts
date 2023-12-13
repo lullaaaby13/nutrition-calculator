@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { app, BrowserWindow } from 'electron';
+import {app, BrowserWindow} from 'electron';
 import path from 'path';
 import os from 'os';
 import {NestFactory} from '@nestjs/core';

@@ -14,8 +14,8 @@
       <q-card-section class="row">
 
         <div class="col-8 q-gutter-y-md">
-          <IngredientSearchTable @onIngredientClick="onSearchTableClick" />
-          <SecretBaseSearchTable @onSecretBaseClick="onSearchTableClick" />
+          <IngredientSearchTable @onIngredientClick="onIngredientSearchTableClick" />
+          <SecretBaseSearchTable @onSecretBaseClick="onSecretBaseSearchTableClick" />
         </div>
 
         <div class="col-4 q-px-md">
@@ -54,10 +54,10 @@
                 재료
               </div>
               <q-list bordered>
-                <q-item v-for="component in selectedComponents" :key="component.component.name">
+                <q-item v-for="component in selectedComponents" :key="component.source.name">
                   <q-item-section>
                     <q-input type="number"
-                             :label="component.component.name"
+                             :label="component.source.name"
                              stack-label
                              v-model="component.amount"
 
@@ -71,14 +71,14 @@
 
             <q-card-section>
               <NutritionPanel
-                  :calories="summary.calories"
-                  :unitPrice="summary.unitPrice"
-                  :carbohydrates="summary.carbohydrates"
-                  :sugars="summary.sugars"
-                  :protein="summary.protein"
-                  :caffeine="summary.caffeine"
-                  :fat="summary.fat"
-                  :saturatedFat="summary.saturatedFat"
+                  :calories="summary.getCalories()"
+                  :unitPrice="summary.getUnitPrice()"
+                  :carbohydrates="summary.getCarbohydrates()"
+                  :sugars="summary.getSugars()"
+                  :protein="summary.getProtein()"
+                  :caffeine="summary.getCaffeine()"
+                  :fat="summary.getFat()"
+                  :saturatedFat="summary.getSaturatedFat()"
               />
             </q-card-section>
 
@@ -98,19 +98,21 @@
 import {computed, ref} from 'vue'
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBaseType} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
 import SecretBaseSearchTable from 'components/apps/receipts/SecretBaseSearchTable.vue';
-import {Receipt, ReceiptCategory, ReceiptComponent} from 'src/types/receipt';
+import {isSameReceiptComponent, ReceiptCategory, ReceiptComponentType, ReceiptType} from 'src/types/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
+import {useSecretBaseStore} from 'stores/secret-base';
 
 
 const receiptPageStore = useReceiptPageStore();
 const receiptStore = useReceiptStore();
+let secretBaseStore = useSecretBaseStore();
 
 const form = ref({
   name: '',
@@ -119,18 +121,36 @@ const form = ref({
   sellingPrice: 0,
 });
 
+const selectedComponents = ref<ReceiptComponentType[]>([]);
 
-const selectedComponents = ref<ReceiptComponent[]>([]);
-
-const onSearchTableClick = (source: SecretBase | Ingredient) => {
-  const exists = selectedComponents.value.some(component => component.component.name === source.name);
+const onIngredientSearchTableClick = (ingredient: Ingredient) => {
+  const receiptComponent: ReceiptComponentType = {
+    amount: 10,
+    sourceType: 'Ingredient',
+    source: ingredient,
+  }
+  const exists = selectedComponents.value.some(component => isSameReceiptComponent(component, receiptComponent));
   if (!exists) {
-    selectedComponents.value.push(new ReceiptComponent(10, source));
+    selectedComponents.value.push(receiptComponent);
   }
 };
-
-const onRemoveSelectedComponentClick = (component: ReceiptComponent) => {
-  const index = selectedComponents.value.findIndex(it => it.component.name === component.component.name);
+const onSecretBaseSearchTableClick = (componentSummary: ComponentSummary) => {
+  let secretBase = secretBaseStore.findById(componentSummary.getId()!);
+  if (!secretBase) {
+    throw new Error('SecretBase not found');
+  }
+  const receiptComponent: ReceiptComponentType = {
+    amount: 10,
+    sourceType: 'SecretBase',
+    source: secretBase,
+  }
+  const exists = selectedComponents.value.some(component => isSameReceiptComponent(component, receiptComponent));
+  if (!exists) {
+    selectedComponents.value.push(receiptComponent);
+  }
+};
+const onRemoveSelectedComponentClick = (component: ReceiptComponentType) => {
+  const index = selectedComponents.value.findIndex(it => isSameReceiptComponent(it, component));
   if (index !== -1) {
     selectedComponents.value.splice(index, 1);
   }
@@ -138,15 +158,20 @@ const onRemoveSelectedComponentClick = (component: ReceiptComponent) => {
 
 const summary = computed(() => {
   const componentSummary = new ComponentSummary();
+  console.log('cacl summary: ', selectedComponents.value)
   componentSummary.addReceiptComponents(selectedComponents.value);
   return componentSummary;
 });
 
 const onCreateButtonClick = () => {
-  const receipt = new Receipt(form.value.name, form.value.category, form.value.memo);
 
-  selectedComponents.value.forEach(component => receipt.addComponent(component));
-  receipt.sellingPrice = form.value.sellingPrice;
+  const receipt: ReceiptType = {
+    name: form.value.name,
+    memo: form.value.memo,
+    category: form.value.category,
+    sellingPrice: form.value.sellingPrice,
+    components: selectedComponents.value,
+  };
 
   receiptStore.save(receipt);
 
@@ -162,6 +187,7 @@ const onBeforeHide = () => {
     category: ReceiptCategory.COFFEE,
     sellingPrice: 0,
   };
+  while(selectedComponents.value.pop()) {}
 }
 
 </script>

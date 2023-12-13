@@ -45,7 +45,14 @@
 
     <div class="q-gutter-md flex full-width">
       <ReceiptCard v-for="(receipt, index) in filteredReceipts" :key="index"
-                   :receipt="receipt"
+                   :id="receipt.id"
+                   :name="receipt.name"
+                   :memo="receipt.memo"
+                   :category="receipt.category"
+                   :selling-price="receipt.sellingPrice"
+                   :components="receipt.components"
+                   :created-at="receipt.createdAt"
+                   :updated-at="receipt.updatedAt"
       />
     </div>
 
@@ -57,7 +64,7 @@
 
 <script setup lang="ts">
 
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import ReceiptCard from 'components/apps/receipts/ReceiptCard.vue';
@@ -92,6 +99,10 @@ const filteredReceipts = computed(() => {
 const resetCheckbox = () => {
   selectedCategories.value = [];
 };
+
+onMounted(async () => {
+  await receiptStore.refresh();
+});
 
 </script>
 

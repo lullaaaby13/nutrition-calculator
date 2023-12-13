@@ -1,5 +1,4 @@
 import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common';
-import {writeFileSync} from 'fs';
 
 @Catch()
 export default class GlobalExceptionFilter implements ExceptionFilter{

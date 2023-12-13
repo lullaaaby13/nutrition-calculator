@@ -1,103 +1,101 @@
 import {Ingredient} from 'src/types/ingredient';
-import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
-import {ReceiptComponent} from 'src/types/receipt';
+import { SecretBaseComponent, SecretBaseType, totalAmountOfSecretBase} from 'src/types/secret-base';
+import {ReceiptComponentType} from 'src/types/receipt';
 
 export class ComponentSummary {
-  private _amount = 0;
-  private _unitPrice = 0;
-  private _calories = 0;
-  private _carbohydrates = 0;
-  private _sugars = 0;
-  private _protein = 0;
-  private _caffeine = 0;
-  private _fat = 0;
-  private _saturatedFat = 0;
+  id? = 0;
+  name? = '';
+  amount = 0;
+  unitPrice = 0;
+  calories = 0;
+  carbohydrates = 0;
+  sugars = 0;
+  protein = 0;
+  caffeine = 0;
+  fat = 0;
+  saturatedFat = 0;
+  constructor(id?: number, name?: string) {
+    this.id = id;
+    this.name = name;
+  }
 
   public addIngredient(amount: number, ingredient: Ingredient) {
     const ratio = Number(amount) / 100;
     // console.log(amount, ingredient, ratio);
-    this._amount += Number(amount);
-    this._unitPrice += Number(ingredient.unitPrice) * ratio;
-    this._calories += Number(ingredient.calories) * ratio;
-    this._carbohydrates += Number(ingredient.carbohydrates) * ratio;
-    this._sugars += Number(ingredient.sugars) * ratio;
-    this._protein += Number(ingredient.protein) * ratio;
-    this._caffeine += Number(ingredient.caffeine) * ratio;
-    this._fat += Number(ingredient.fat) * ratio;
-    this._saturatedFat += Number(ingredient.saturatedFat) * ratio;
+    this.amount += Number(amount);
+    this.unitPrice += Number(ingredient.unitPrice) * ratio;
+    this.calories += Number(ingredient.calories) * ratio;
+    this.carbohydrates += Number(ingredient.carbohydrates) * ratio;
+    this.sugars += Number(ingredient.sugars) * ratio;
+    this.protein += Number(ingredient.protein) * ratio;
+    this.caffeine += Number(ingredient.caffeine) * ratio;
+    this.fat += Number(ingredient.fat) * ratio;
+    this.saturatedFat += Number(ingredient.saturatedFat) * ratio;
   }
 
-  public addSecretBase(amount: number, secretBase: SecretBase) {
-    const ratio =  amount / secretBase.totalAmount;
-    console.log(secretBase)
+  public addSecretBase(amount: number, secretBase: SecretBaseType) {
+
+    const ratio =  amount / totalAmountOfSecretBase(secretBase);
+    console.log('addSecretBase: ', secretBase, amount, totalAmountOfSecretBase(secretBase), ratio)
     secretBase.components.forEach(it => {
       this.addIngredient(it.amount * ratio, it.ingredient);
     });
   }
 
   public addSecretBaseComponents(secretBaseComponents: SecretBaseComponent[]) {
-    console.log(secretBaseComponents)
+
     secretBaseComponents.forEach(it => {
       this.addIngredient(it.amount, it.ingredient);
     });
   }
 
-  public addReceiptComponents(components: ReceiptComponent[]) {
+  public addReceiptComponents(components: ReceiptComponentType[]) {
     components.forEach(it => {
       // console.log(it.amount, it.component.name)
-      if (it.component instanceof SecretBase) {
-        this.addSecretBase(it.amount, it.component);
+      if (it.sourceType === 'SecretBase') {
+        this.addSecretBase(it.amount, it.source as SecretBaseType);
       } else {
-        this.addIngredient(it.amount, it.component);
+        this.addIngredient(it.amount, it.source as Ingredient);
       }
     });
   }
 
-  // public addReceipt(amount: number, receipt: Receipt) {
-  //   const ratio =  amount / receipt.totalAmount;
-  //   receipt.components.forEach(it => {
-  //     this.addIngredient(it.amount * ratio, it.component);
-  //   });
-  // }
+    getId(): number | undefined {
+        return this.id;
+    }
+    getName(): string | undefined {
+        return this.name;
+    }
 
-
-  get amount(): number {
-    return this._amount;
+  getAmount(): string {
+    return Number(this.amount).toFixed(2);
   }
-
-  get unitPrice(): number {
-    return this._unitPrice;
+  getUnitPrice(): string {
+    return Number(this.unitPrice).toFixed(2);
   }
-
-  get calories(): number {
-    return this._calories;
+  getCalories(): string {
+    return Number(this.calories).toFixed(2);
   }
-
-  get carbohydrates(): number {
-    return this._carbohydrates;
+  getCarbohydrates(): string {
+    return Number(this.carbohydrates).toFixed(2);
   }
-
-  get sugars(): number {
-    return this._sugars;
+  getSugars(): string {
+    return Number(this.sugars).toFixed(2);
   }
-
-  get protein(): number {
-    return this._protein;
+  getProtein(): string {
+    return Number(this.protein).toFixed(2);
   }
-
-  get caffeine(): number {
-    return this._caffeine;
+  getCaffeine(): string {
+    return Number(this.caffeine).toFixed(2);
   }
-
-  get fat(): number {
-    return this._fat;
+  getFat(): string {
+    return Number(this.fat).toFixed(2);
   }
-
-  get saturatedFat(): number {
-    return this._saturatedFat;
+  getSaturatedFat(): string {
+    return Number(this.saturatedFat).toFixed(2);
   }
 }
-//
+
 // export function summaryOfSecretBaseComponents(components: SecretBaseComponent[]): ComponentSummary {
 //   return components.reduce((acc, cur) => {
 //     const ratio = Number(cur.amount) / 100;

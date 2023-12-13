@@ -1,40 +1,47 @@
 import {defineStore} from 'pinia';
-import {Receipt} from 'src/types/receipt';
+import { ReceiptType} from 'src/types/receipt';
+import ReceiptAPI from 'src/api/receipts';
 
 
 export const useReceiptStore = defineStore({
   id: 'receiptStore',
-  state: (): { receipts: Receipt[] } => ({
+  state: (): { receipts: ReceiptType[] } => ({
     receipts: []
   }),
 
   actions: {
-    save(receipt: Receipt) {
+    async save(receipt: ReceiptType) {
 
-      if (!receipt.hasMinimumComponents()) {
-        throw new Error('최소 2개 이상의 원재료가 필요 합니다.');
-      }
+      const request = {
+        name: receipt.name,
+        memo: receipt.memo,
+        category: receipt.category,
+        components: receipt.components.map(component => ({
+          amount: component.amount,
+          sourceType: component.sourceType,
+          sourceId: component.source.id
+        })),
+        sellingPrice: receipt.sellingPrice,
+      };
 
-      if (this.exists(receipt)) {
-        throw new Error('같은 이름의 레피시가 이미 존재 합니다.');
-      }
-
-      this.receipts.push(receipt);
+      await ReceiptAPI.save(request);
+      await this.refresh();
     },
 
-    delete(receipt: Receipt) {
-      if (!this.exists(receipt)) {
-        throw new Error('존재하지 않는 레시피 입니다.');
-      }
-      this.receipts = this.receipts.filter(it => it.name !== receipt.name);
+    async delete(id: number) {
+      await ReceiptAPI.delete(id);
+      await this.refresh();
     },
 
-    exists(receipt: Receipt) {
-      return this.receipts.some(it => it.name === receipt.name);
+    async update(id: number, request: any) {
+        await ReceiptAPI.update(id, request);
+        await this.refresh();
     },
 
-    existsByName(name: string) {
-      return this.receipts.some(it => it.name === name);
+    async refresh() {
+      const receiptTypes = await ReceiptAPI.list();
+      console.log('refresh:' , receiptTypes)
+      this.receipts = receiptTypes;
     },
   }
 });

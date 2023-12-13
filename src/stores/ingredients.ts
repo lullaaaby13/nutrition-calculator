@@ -55,14 +55,6 @@ export const useIngredientStore = defineStore('ingredient', {
       await this.refresh()
     },
 
-    exists(ingredient: Ingredient) {
-      return this.ingredients.some(it => it.name === ingredient.name);
-    },
-
-    existsByName(name: string) {
-      return this.ingredients.some(it => it.name === name);
-    },
-
     findByName(name: string) {
         return this.ingredients.find(it => it.name === name);
     },

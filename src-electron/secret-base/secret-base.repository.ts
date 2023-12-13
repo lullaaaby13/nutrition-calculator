@@ -1,5 +1,4 @@
 import {Inject, Injectable, Logger} from '@nestjs/common';
-import Ingredient from 'app/src-electron/ingredient/ingredient';
 import Store from 'electron-store';
 import {SecretBase} from 'app/src-electron/secret-base/secret-base';
 

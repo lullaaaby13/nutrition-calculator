@@ -1,15 +1,31 @@
 import {defineStore} from 'pinia';
-import {SecretBase, SecretBaseType} from 'src/types/secret-base';
+import { SecretBaseType} from 'src/types/secret-base';
 import SecretBaseAPI from 'src/api/secret-base';
+import {ComponentSummary} from 'src/types/summary';
 
 export const useSecretBaseStore = defineStore({
-    id: 'secret-base',
+    id: 'secretBaseStore',
     state: (): { secretBases: SecretBaseType[] } => ({
         secretBases: []
     }),
 
+    getters: {
+      summaries(): ComponentSummary[] {
+        return this.secretBases.map(it => {
+          const summary = new ComponentSummary(it.id, it.name);
+          summary.addSecretBaseComponents(it.components);
+          return summary;
+        });
+      },
+    },
+
     actions: {
-        async save(secretBase: any) {
+
+        findById(id: number) {
+            return this.secretBases.find(it => it.id === id);
+        },
+
+        async save(secretBase: SecretBaseType) {
             const request = {
                 name: secretBase.name,
                 memo: secretBase.memo,
@@ -22,17 +38,11 @@ export const useSecretBaseStore = defineStore({
             await SecretBaseAPI.save(request);
 
             await this.refresh();
-
-
         },
 
         async delete(id: number) {
             await SecretBaseAPI.delete(id);
             await this.refresh();
-        },
-
-        exists(secretBase: SecretBase) {
-            return this.secretBases.some(it => it.name === secretBase.name);
         },
 
         async refresh() {
@@ -41,7 +51,7 @@ export const useSecretBaseStore = defineStore({
         },
 
         async update(id: number, secretBase: any) {
-            console.log(id, secretBase);
+
             const request = {
                 name: secretBase.name,
                 memo: secretBase.memo,
@@ -50,7 +60,6 @@ export const useSecretBaseStore = defineStore({
                     ingredientId: it.ingredient.id
                 })),
             };
-            console.log(request)
             await SecretBaseAPI.update(id, request)
             await this.refresh();
         }

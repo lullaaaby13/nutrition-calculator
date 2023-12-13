@@ -8,5 +8,6 @@ import IngredientModule from 'app/src-electron/ingredient/ingredient.module';
     imports: [IngredientModule],
     controllers: [SecretBaseController],
     providers: [SecretBaseService, SecretBaseRepository],
+  exports: [SecretBaseService],
 })
 export default class SecretBaseModule {}

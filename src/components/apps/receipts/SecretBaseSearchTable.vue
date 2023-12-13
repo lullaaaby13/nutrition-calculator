@@ -29,19 +29,19 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="secretBase in secretBaseStore.secretBases" :key="secretBase.name"
-          @click="$emit('onSecretBaseClick', secretBase)"
+      <tr v-for="summary in secretBaseStore.summaries" :key="summary.getId()"
+          @click="$emit('onSecretBaseClick', summary)"
       >
-        <td class="text-center">{{ secretBase.name }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.calories).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.carbohydrates).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.protein).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.fat).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.saturatedFat).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.sugars).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.caffeine).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.amount).toFixed(2) }}</td>
-        <td class="text-right">{{ Number(secretBase.summary.unitPrice).toFixed(0) }}</td>
+        <td class="text-center">{{ summary.getName() }}</td>
+        <td class="text-right">{{  summary.getCalories() }}</td>
+        <td class="text-right">{{ summary.getCarbohydrates() }}</td>
+        <td class="text-right">{{ summary.getProtein() }}</td>
+        <td class="text-right">{{ summary.getFat() }}</td>
+        <td class="text-right">{{ summary.getSaturatedFat() }}</td>
+        <td class="text-right">{{ summary.getSugars() }}</td>
+        <td class="text-right">{{ summary.getCaffeine() }}</td>
+        <td class="text-right">{{ summary.getAmount() }}</td>
+        <td class="text-right">{{ summary.getUnitPrice() }}</td>
       </tr>
       </tbody>
     </q-markup-table>
@@ -53,6 +53,6 @@ import {useSecretBaseStore} from 'stores/secret-base';
 
 const secretBaseStore = useSecretBaseStore();
 
-
 defineEmits(['onSecretBaseClick']);
+
 </script>

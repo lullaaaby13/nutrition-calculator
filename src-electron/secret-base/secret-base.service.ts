@@ -10,26 +10,39 @@ export default class SecretBaseService {
         @Inject(SecretBaseRepository) private readonly secretBaseRepository: SecretBaseRepository,
         @Inject(IngredientService) private readonly ingredientService: IngredientService,
     ) {
+        console.log('SecretBaseService constructor', ingredientService)
     }
 
     list() {
         const secretBases = this.secretBaseRepository.list();
+        return secretBases.map(it => this.toFrontView(it))
+    }
 
-        return secretBases.map(it => {
+    findFrontViewById(id: number) {
+        const secretBase = this.secretBaseRepository.findById(id);
+        if (!secretBase) {
+            throw new Error(`존재하지 않는 시크릿 베이스 입니다. [id = ${id}]`);
+        }
+        return this.toFrontView(secretBase);
+    }
+
+    private toFrontView(secretBase: SecretBase) {
+        const components = secretBase.getComponents().map(component => {
             return {
-                id: it.getId(),
-                name: it.getName(),
-                memo: it.getMemo(),
-                components: it.getComponents().map(component => {
-                    // console.log(this.ingredientService.findById(component.getIngredientId()))
-                    return {
-                        amount: component.getAmount(),
-                        ingredient: this.ingredientService.findById(component.getIngredientId()),
-                    }
-                }),
+                amount: component.getAmount(),
+                ingredient: this.ingredientService.findById(component.getIngredientId()),
             }
         });
+        return {
+            id: secretBase.getId(),
+            name: secretBase.getName(),
+            memo: secretBase.getMemo(),
+            components: components,
+            createdAt: secretBase.getCreatedAt(),
+            updatedAt: secretBase.getUpdatedAt(),
+        }
     }
+
 
     save(request: any) {
 
@@ -77,7 +90,7 @@ export default class SecretBaseService {
                 if (!ingredient) {
                     throw new Error(`존재하지 않는 원재료 입니다. [ingredientId = ${it.ingredientId}]`);
                 }
-               return new SecretBaseComponent(it.amount, it.ingredientId)
+                return new SecretBaseComponent(it.amount, it.ingredientId)
             });
         secretBase.replaceComponents(newComponents);
 

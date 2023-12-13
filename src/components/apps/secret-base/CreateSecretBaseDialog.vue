@@ -80,7 +80,7 @@ import {computed, ref} from 'vue'
 import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {SecretBase, SecretBaseComponent} from 'src/types/secret-base';
+import {SecretBaseComponentType, SecretBaseType} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
@@ -94,7 +94,7 @@ const secretBasePageStore = useSecretBasePageStore();
 const name = ref('');
 const memo = ref('');
 
-const selectedComponents = ref<SecretBaseComponent[]>([]);
+const selectedComponents = ref<SecretBaseComponentType[]>([]);
 
 const onIngredientClick = (ingredient: Ingredient) => {
   const exists = selectedComponents.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
@@ -120,13 +120,16 @@ const totalIngredients = computed(() => {
 });
 
 const onCreateButtonClick = () => {
-  const secretBase = new SecretBase(name.value, memo.value);
-
-  selectedComponents.value.forEach(selectedIngredient => {
-    const amount = Number(selectedIngredient.amount);
-    const ingredient = selectedIngredient.ingredient;
-    secretBase.addComponent(amount, ingredient);
-  });
+  const secretBase: SecretBaseType = {
+    name: name.value,
+    memo: memo.value,
+    components: selectedComponents.value.map(selectedIngredient => {
+      return {
+        amount: selectedIngredient.amount,
+        ingredient: selectedIngredient.ingredient,
+      };
+    })
+  }
 
   secretBaseStore.save(secretBase);
 

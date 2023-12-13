@@ -42,14 +42,14 @@
     </q-card-section>
     <q-card-section>
       <NutritionPanel
-        :calories="secretBaseView.calories"
-        :unitPrice="secretBaseView.unitPrice"
-        :carbohydrates="secretBaseView.carbohydrates"
-        :sugars="secretBaseView.sugars"
-        :protein="secretBaseView.protein"
-        :caffeine="secretBaseView.caffeine"
-        :fat="secretBaseView.fat"
-        :saturatedFat="secretBaseView.saturatedFat"
+        :calories="secretBaseView.getCalories()"
+        :unitPrice="secretBaseView.getUnitPrice()"
+        :carbohydrates="secretBaseView.getCarbohydrates()"
+        :sugars="secretBaseView.getSugars()"
+        :protein="secretBaseView.getProtein()"
+        :caffeine="secretBaseView.getCaffeine()"
+        :fat="secretBaseView.getFat()"
+        :saturatedFat="secretBaseView.getSaturatedFat()"
       />
     </q-card-section>
     <q-card-section>
@@ -85,9 +85,9 @@ const secretBaseStore = useSecretBaseStore();
 const secretBaseView = computed(() => {
   let componentSummary = new ComponentSummary();
   if (secretBase) {
-    console.log(secretBase)
     componentSummary.addSecretBaseComponents(secretBase.components);
   }
+
   return componentSummary;
 });
 
