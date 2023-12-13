@@ -47,7 +47,16 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPanel v-bind="totalIngredients"/>
+              <NutritionPanel
+                  :calories="totalIngredients.calories"
+                  :unitPrice="totalIngredients.unitPrice"
+                  :carbohydrates="totalIngredients.carbohydrates"
+                  :sugars="totalIngredients.sugars"
+                  :protein="totalIngredients.protein"
+                  :caffeine="totalIngredients.caffeine"
+                  :fat="totalIngredients.fat"
+                  :saturatedFat="totalIngredients.saturatedFat"
+              />
             </q-card-section>
 
             <q-card-section>
@@ -66,25 +75,35 @@
 import {computed, ref} from 'vue';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBaseComponent} from 'src/types/secret-base';
+import {SecretBaseComponentType} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import {ComponentSummary} from 'src/types/summary';
+import {useSecretBaseStore} from 'stores/secret-base';
 
+let secretBaseStore = useSecretBaseStore();
 const secretBasePageStore = useSecretBasePageStore();
 
 const form = ref({
   name: '',
   memo: '',
 });
-const selectedComponents = ref<SecretBaseComponent[]>([]);
+const selectedComponents = ref<SecretBaseComponentType[]>([]);
 
 
-const onUpdateButtonClick = () => {
+const onUpdateButtonClick = async () => {
   secretBasePageStore.updateSecretBase.name = form.value.name;
   secretBasePageStore.updateSecretBase.memo = form.value.memo;
-  secretBasePageStore.updateSecretBase.replaceComponents(selectedComponents.value);
+
+  await secretBaseStore.update(
+      secretBasePageStore.updateSecretBase.id!,
+      {
+        name: form.value.name,
+        memo: form.value.memo,
+        components: selectedComponents.value,
+      }
+  );
   secretBasePageStore.closeUpdateSecretBaseDialog();
 };
 
@@ -98,7 +117,7 @@ const onIngredientClick = (ingredient: Ingredient) => {
   }
 };
 
-const onRemoveSelectedComponentClick = (component: SecretBaseComponent) => {
+const onRemoveSelectedComponentClick = (component: SecretBaseComponentType) => {
   const index = selectedComponents.value.findIndex(it => it.ingredient.name === component.ingredient.name);
   if (index !== -1) {
     selectedComponents.value.splice(index, 1);
@@ -108,6 +127,7 @@ const onRemoveSelectedComponentClick = (component: SecretBaseComponent) => {
 const totalIngredients = computed(() => {
   let componentSummary = new ComponentSummary();
   componentSummary.addSecretBaseComponents(selectedComponents.value);
+  console.log('totalIngredients', componentSummary)
   return componentSummary;
 });
 

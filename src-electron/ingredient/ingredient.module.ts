@@ -6,7 +6,7 @@ import IngredientRepository from './ingredient.repository';
 @Module({
   controllers: [IngredientController],
   providers: [IngredientService, IngredientRepository],
-  exports: [],
+  exports: [IngredientService],
 })
 export default class IngredientModule {
 

@@ -15,11 +15,11 @@ export default class IngredientService {
     ) {
     }
 
-    async list(): Promise<Ingredient[]> {
+    list(): Ingredient[] {
         return this.ingredientRepository.list();
     }
 
-    async save(request: CreateIngredientDto) {
+    save(request: CreateIngredientDto) {
 
         if (this.ingredientRepository.findByName(request.name)) {
             throw new Error('같은 이름의 성분이 이미 존재 합니다.');
@@ -40,16 +40,16 @@ export default class IngredientService {
         ingredient.setSaturatedFat(request.saturatedFat);
         ingredient.setCreatedAt(new Date());
         ingredient.setUpdatedAt(new Date());
-        await this.ingredientRepository.save(ingredient);
+        this.ingredientRepository.save(ingredient);
         this.logger.log(`원재료 저장 완료: ${ingredient.getName()}`);
     }
 
-    async delete(id: number) {
+    delete(id: number) {
         this.ingredientRepository.delete(id);
     }
 
-    async update(id: number, request: UpdateIngredientDto) {
-        const ingredient = await this.ingredientRepository.findById(id);
+    update(id: number, request: UpdateIngredientDto) {
+        const ingredient = this.ingredientRepository.findById(id);
         console.log('check update ingredient', id, request, ingredient)
         if (ingredient) {
             ingredient.setName(request.name);
@@ -63,7 +63,11 @@ export default class IngredientService {
             ingredient.setCaffeine(request.caffeine);
             ingredient.setFat(request.fat);
             ingredient.setSaturatedFat(request.saturatedFat);
-            await this.ingredientRepository.save(ingredient);
+            this.ingredientRepository.save(ingredient);
         }
+    }
+
+    findById(id: number) {
+        return this.ingredientRepository.findById(id);
     }
 }

@@ -1,5 +1,9 @@
 <template>
-  <q-dialog full-width full-height>
+  <q-dialog
+      full-width
+      full-height
+      @before-hide="onBeforeHide"
+  >
     <BaseCard>
       <q-card-section class="flex justify-between">
         <div class="text-h6">시크릿 베이스 등록</div>
@@ -93,11 +97,10 @@ const memo = ref('');
 const selectedComponents = ref<SecretBaseComponent[]>([]);
 
 const onIngredientClick = (ingredient: Ingredient) => {
-  console.log(ingredient)
   const exists = selectedComponents.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
   if (!exists) {
     selectedComponents.value.push({
-      amount: 0,
+      amount: 10,
       ingredient: ingredient,
     });
   }
@@ -130,6 +133,12 @@ const onCreateButtonClick = () => {
   while(selectedComponents.value.pop()) {}
   secretBasePageStore.closeCreateSecretBaseDialog();
 
+};
+
+const onBeforeHide = () => {
+  name.value = '';
+  memo.value = '';
+  while(selectedComponents.value.pop()) {}
 };
 
 </script>

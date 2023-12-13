@@ -36,7 +36,6 @@ export class ComponentSummary {
   }
 
   public addSecretBaseComponents(secretBaseComponents: SecretBaseComponent[]) {
-    console.log(secretBaseComponents)
     secretBaseComponents.forEach(it => {
       this.addIngredient(it.amount, it.ingredient);
     });

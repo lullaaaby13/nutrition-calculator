@@ -1,105 +1,113 @@
-import Ingredient, {IngredientMock} from 'src/types/ingredient';
-import {BaseType} from 'src/types/base-type';
-import {ComponentSummary} from 'src/types/summary';
-
 export class SecretBaseComponent {
-  readonly amount: number;
-  readonly ingredient: Ingredient;
-  constructor(amount: number, ingredient: Ingredient) {
+  private readonly amount: number;
+  private readonly ingredientId: number;
+  constructor(amount: number, ingredientId: number) {
     if (amount < 1) {
       throw new Error('원재료의 양은 1 이상이어야 합니다.');
     }
     this.amount = amount;
-    this.ingredient = ingredient;
+    this.ingredientId = ingredientId;
   }
 
+  public getAmount(): number {
+    return this.amount;
+  }
+
+  public getIngredientId(): number {
+    return this.ingredientId;
+  }
 }
 
-export class SecretBase extends BaseType {
+export class SecretBase {
 
-  private _components: SecretBaseComponent[];
-  constructor(name: string, memo?: string) {
-    super();
-    this._components = [];
-    this.name = name;
-    this.memo = memo;
-  }
+  private id?: number;
+  private name = '';
+  private components: SecretBaseComponent[] = [];
+  private memo?: string;
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
-  public static empty(): SecretBase {
-    return new SecretBase('EMPTY');
-  }
-
-  public addComponent(amount: number, ingredient: Ingredient) {
-    if (this._components.some(it => it.ingredient.name === ingredient.name)) {
+  public addComponent(amount: number, ingredientId: number) {
+    if (this.components.some(it => it.getIngredientId() === ingredientId)) {
       throw new Error('이미 추가된 원재료 입니다.');
     }
-    this._components.push(new SecretBaseComponent(amount, ingredient));
-    this.updatedAt = new Date();
-  }
-
-  public removeComponent(ingredient: Ingredient) {
-    this._components = this._components.filter(it => it.ingredient.name !== ingredient.name);
+    this.components.push(new SecretBaseComponent(amount, ingredientId));
     this.updatedAt = new Date();
   }
 
   public replaceComponents(components: SecretBaseComponent[]) {
-    if (components.length < 2) {
-      throw new Error('원재료는 2개 이상이어야 합니다.');
-    }
-    const before = this._components;
-    this._components = [];
+
+    const before = this.components;
+    this.components = [];
     try {
       components.forEach(it => {
-        this.addComponent(it.amount, it.ingredient);
+        this.addComponent(it.getAmount(), it.getIngredientId());
       });
-      this.updatedAt = new Date();
     } catch (e) {
-      this._components = before;
-      throw e;
+      this.components = before;
+      throw e
     }
   }
 
-  public hasMinimumComponents(): boolean {
-    return this._components.length >= 2;
+  public validate() {
+    if (!this.name) {
+      throw new Error('이름을 입력해 주세요.');
+    }
+    if (this.components.length < 2) {
+      throw new Error('원재료는 2개 이상이어야 합니다.');
+    }
+  }
+  public getComponents(): SecretBaseComponent[] {
+    return this.components;
   }
 
-  get components(): SecretBaseComponent[] {
-    return this._components;
+  public getId(): number | undefined {
+    return this.id;
   }
 
-  get summary(): ComponentSummary {
-    const componentSummary = new ComponentSummary();
-    componentSummary.addSecretBaseComponents(this._components);
-    return componentSummary;
+    public setId(value: number) {
+        if (!value || value < 1) {
+        throw new Error('식자재 ID는 1보다 작을 수 없습니다.');
+        }
+
+        this.id = value;
+    }
+
+  public getName(): string {
+    return this.name;
   }
 
-  get totalAmount(): number {
-    return this._components.reduce((acc, cur) => acc + cur.amount, 0);
+  public setName(value: string) {
+    if (!value) {
+      throw new Error('이름을 입력해 주세요.');
+    }
+    this.name = value;
+  }
+
+  public getMemo(): string {
+    return this.memo || '';
+  }
+
+  public setMemo(value: string) {
+    this.memo = value;
+  }
+
+  public getCreatedAt(): Date | undefined {
+    return this.createdAt;
+  }
+
+  public setCreatedAt(value: Date) {
+    if (!this.createdAt) {
+      this.createdAt = value;
+    }
+  }
+
+  public getUpdatedAt(): Date | undefined{
+    return this.updatedAt;
+  }
+
+  public setUpdatedAt(value: Date) {
+    this.updatedAt = value;
   }
 
 }
-
-export const SecretBaseCategory = {
-  SYRUP: {
-    name: 'syrup',
-    label: '시럽',
-  },
-}
-
-export type SecretBaseCategory = typeof SecretBaseCategory[keyof typeof SecretBaseCategory];
-
-
-const ultraMilk = new SecretBase('울트라 밀크', '고농축 최강 우유');
-ultraMilk.addComponent(10, IngredientMock.MILK);
-ultraMilk.addComponent(20, IngredientMock.CONDENSED_MILK);
-
-const testSecretBase = new SecretBase('테스트 시크릿베이스');
-testSecretBase.addComponent(10, IngredientMock.TESTA);
-testSecretBase.addComponent(20, IngredientMock.TESTB);
-
-
-export const SecretBaseMock = {
-  ULTRA_MILK: ultraMilk,
-  TEST: testSecretBase,
-}
-

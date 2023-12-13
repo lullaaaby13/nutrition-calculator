@@ -20,7 +20,7 @@
           dense
           outline
           color="red"
-          @click="onDeleteButtonClick(secretBase)"
+          @click="onDeleteButtonClick(secretBase.id)"
           icon="delete"
           flat
         />
@@ -32,7 +32,7 @@
     <q-card-section>
       <div class="text-subtitle2 q-mb-sm">원재료</div>
       <q-list bordered>
-        <q-item class="q-my-sm" v-for="(component, index) in props.secretBase?.components" :key="index">
+        <q-item class="q-my-sm" v-for="(component, index) in secretBase?.components" :key="index">
           <q-item-section>
             <q-item-label>{{component.amount}}</q-item-label>
             <q-item-label caption lines="1">{{component.ingredient.name}}(g)</q-item-label>
@@ -72,32 +72,28 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBaseType} from 'src/types/secret-base';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
 import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
-const props = defineProps({
-  secretBase: {
-    type: SecretBase,
-    required: true,
-  }
-});
+const secretBase = defineProps<SecretBaseType>();
 
 const secretBasePageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
 const secretBaseView = computed(() => {
   let componentSummary = new ComponentSummary();
-  if (props.secretBase) {
-    componentSummary.addSecretBaseComponents(props.secretBase.components);
+  if (secretBase) {
+    console.log(secretBase)
+    componentSummary.addSecretBaseComponents(secretBase.components);
   }
   return componentSummary;
 });
 
-const onDeleteButtonClick = (secretBase: SecretBase) => {
+const onDeleteButtonClick = (id: number) => {
   if (confirm('정말 삭제 하시겠어요?')) {
-    secretBaseStore.delete(secretBase);
+    secretBaseStore.delete(id);
   }
 }
 

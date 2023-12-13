@@ -10,7 +10,6 @@ export default class IngredientRepository {
   constructor(
     @Inject(Store) private readonly store: Store,
   ) {
-    console.log('IngredientRepository constructor', store)
 
     const read: string = this.store.get('ingredients') as string
 
@@ -40,11 +39,11 @@ export default class IngredientRepository {
     }
   }
 
-  async list() {
+  list() {
     return this.ingredients;
   }
 
-  async save(ingredient: Ingredient) {
+  save(ingredient: Ingredient) {
     const id = ingredient.getId();
     if (!id) {
       ingredient.setId(this.nextId());
