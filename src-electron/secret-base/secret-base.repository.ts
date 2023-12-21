@@ -12,6 +12,7 @@ export default class SecretBaseRepository {
     ) {
         const read: string = this.store.get('secretBases') as string
 
+      console.log('secretBaseRepository: ', read)
         if (read) {
             try {
                 this.secretBases = Array.from(JSON.parse(read)).map((it: any) => {
@@ -26,7 +27,9 @@ export default class SecretBaseRepository {
                     secretBase.setUpdatedAt(new Date(it.updatedAt));
                     return secretBase;
                 })
-            } catch (e) {
+            } catch (e: any) {
+                this.logger.error(e.message, e.stack);
+
                 this.store.reset('secretBases');
             }
         }

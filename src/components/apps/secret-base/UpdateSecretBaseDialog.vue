@@ -48,14 +48,14 @@
 
             <q-card-section>
               <NutritionPanel
-                  :calories="totalIngredients.calories"
-                  :unitPrice="totalIngredients.unitPrice"
-                  :carbohydrates="totalIngredients.carbohydrates"
-                  :sugars="totalIngredients.sugars"
-                  :protein="totalIngredients.protein"
-                  :caffeine="totalIngredients.caffeine"
-                  :fat="totalIngredients.fat"
-                  :saturatedFat="totalIngredients.saturatedFat"
+                  :calories="totalIngredients.getCalories()"
+                  :unitPrice="totalIngredients.getUnitPrice()"
+                  :carbohydrates="totalIngredients.getCarbohydrates()"
+                  :sugars="totalIngredients.getSugars()"
+                  :protein="totalIngredients.getProtein()"
+                  :caffeine="totalIngredients.getCaffeine()"
+                  :fat="totalIngredients.getFat()"
+                  :saturatedFat="totalIngredients.getSaturatedFat()"
               />
             </q-card-section>
 

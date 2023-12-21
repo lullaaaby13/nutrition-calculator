@@ -8,6 +8,7 @@ export class ReceiptComponent {
     this.amount = amount;
     this.source = source;
     this.sourceId = sourceId;
+    console.log('checkReceiptComponent: ', this.amount, this.source, this.sourceId);
   }
 
   public getAmount(): number {
@@ -104,6 +105,7 @@ export class Receipt {
       throw new Error('이미 추가된 원재료 입니다.');
     }
     this.components.push(component);
+    console.log('addComponent: ', this.components);
     this.updatedAt = new Date();
   }
 

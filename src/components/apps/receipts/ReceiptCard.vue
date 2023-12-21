@@ -5,11 +5,11 @@
         <div class="text-h5">{{ receipt.name }}</div>
         <div class="flex q-gutter-x-md">
           <div class="text-subtitle2">{{ receipt.category.label }}</div>
-          <span class="text-subtitle2">중량: {{ summary.getAmount() }}g</span>
+          <span class="text-subtitle2">중량: {{ Number(summary.getAmount()).toFixed(0) }}g</span>
         </div>
         <div class="flex q-gutter-x-md">
-          <div class="text-caption">판매가: {{ Number(receipt.sellingPrice).toFixed(0) }}</div>
-          <div class="text-caption">단가: {{ summary.getUnitPrice() }}</div>
+          <div class="text-caption">판매가: {{ Number(receipt.sellingPrice).toFixed(0) }}원</div>
+          <div class="text-caption">단가: {{ Number(summary.getUnitPrice()).toFixed(0) }}원</div>
           <div class="text-caption">마진율: {{ salesMargin.toFixed(2) * 100 }}%</div>
         </div>
       </div>

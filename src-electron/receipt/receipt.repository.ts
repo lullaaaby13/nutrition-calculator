@@ -12,17 +12,22 @@ export default class ReceiptRepository {
     ) {
         const read: string = this.store.get('receipts') as string
 
+      console.log('ReceiptRepository:', read)
+
         if (read) {
             try {
                 this.receipts = Array.from(JSON.parse(read)).map((it: any) => {
-                    const receipt = new Receipt();
+
+                  const receipt = new Receipt();
                   receipt.setId(it.id);
                   receipt.setName(it.name);
                   receipt.setMemo(it.memo);
                   receipt.setCategory(it.category);
                   it.components
-                    .map((component: any) => new ReceiptComponent(component.amount, component.sourceId, component.sourceType))
+                    .map((component: any) => new ReceiptComponent(component.amount, component.source, component.sourceId))
                     .forEach((component: ReceiptComponent) => receipt.addComponent(component));
+                  console.dir('CheckComponents: ', it.components);
+
                   receipt.setSellingPrice(it.sellingPrice);
                   receipt.setCreatedAt(it.createdAt);
                   receipt.setUpdatedAt(it.updatedAt);
@@ -30,8 +35,9 @@ export default class ReceiptRepository {
                   return receipt;
                 })
             } catch (e: any) {
-                this.logger.error(`레시피 데이터를 읽어오는데 실패했습니다. 초기화 됩니다. [${e.message}]`, e.stack);
-                // this.store.reset('receipts');
+              console.error(e);
+                // this.logger.error(`레시피 데이터를 읽어오는데 실패했습니다. 초기화 됩니다. [${e.message}]`, e.stack);
+                this.store.reset('receipts');
             }
         }
     }

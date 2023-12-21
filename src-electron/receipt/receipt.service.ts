@@ -17,8 +17,9 @@ export default class ReceiptService {
 
   list() {
     const receipts = this.receiptRepository.list();
+    console.dir(receipts.map(it => it.getComponents()))
     return receipts.map(receipt => {
-      console.log('check: ', receipt);
+      console.dir(receipt)
       return {
         id: receipt.getId(),
         name: receipt.getName(),
@@ -26,6 +27,7 @@ export default class ReceiptService {
         category: receipt.getCategory(),
         sellingPrice: receipt.getSellingPrice(),
         components: receipt.getComponents().map(component => {
+          console.log('checkComponent: ', component)
           if (component.getSource() === 'Ingredient') {
             return {
               amount: component.getAmount(),

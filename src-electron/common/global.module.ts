@@ -7,6 +7,9 @@ const Store = require('electron-store');
   providers: [{
     provide: Store,
     useFactory: () => new Store(),
+  }, {
+    provide: 'AppRoot',
+    useValue: process.cwd(),
   }],
   exports: [Store],
 })

@@ -149,7 +149,7 @@ const onSecretBaseSearchTableClick = (componentSummary: ComponentSummary) => {
   }
 };
 
-const onUpdateButtonClick = () => {
+const onUpdateButtonClick = async () => {
   const request = {
     name: form.value.name,
     memo: form.value.memo,
@@ -162,7 +162,7 @@ const onUpdateButtonClick = () => {
     })),
   }
 
-  receiptStore.update(receiptPageStore.updateReceipt.id!, request);
+  await receiptStore.update(receiptPageStore.updateReceipt.id!, request);
   receiptPageStore.closeUpdateReceiptDialog();
 }
 
