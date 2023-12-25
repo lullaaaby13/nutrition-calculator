@@ -54,11 +54,12 @@
           :unitPrice="ingredient.unitPrice"
           :calories="ingredient.calories"
           :carbohydrates="ingredient.carbohydrates"
-          :sugars="ingredient.sugars"
+          :sugar="ingredient.sugar"
           :protein="ingredient.protein"
           :caffeine="ingredient.caffeine"
           :fat="ingredient.fat"
           :saturatedFat="ingredient.saturatedFat"
+          :fiber="ingredient.fiber"
           :memo="ingredient.memo"
           :createdAt="ingredient.createdAt"
           :updatedAt="ingredient.updatedAt"
@@ -107,6 +108,7 @@ const filteredIngredients = computed(() => {
     filtered = filtered.filter(ingredient => ingredient.name.includes(searchText.value));
   }
 
+  console.log('computed', filtered);
   return filtered;
 })
 

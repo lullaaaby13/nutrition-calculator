@@ -56,11 +56,6 @@
       <div class="text-caption">메모</div>
       <div style="min-height: 60px;">{{ secretBase.memo }}</div>
     </q-card-section>
-    <q-separator/>
-
-    <q-card-section>
-      <CreateUpdateDate :createdAt="secretBase.createdAt" :updatedAt="secretBase.updatedAt"/>
-    </q-card-section>
 
   </BaseCard>
 </template>

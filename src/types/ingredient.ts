@@ -5,11 +5,12 @@ export interface Ingredient {
   calories: number;
   unitPrice: number;
   carbohydrates: number;
-  sugars: number;
+  sugar: number;
   protein: number;
   caffeine: number;
   fat: number;
   saturatedFat: number;
+  fiber: number;
   memo?: string;
   createdAt?: string;
   updatedAt?: string;

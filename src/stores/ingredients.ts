@@ -17,11 +17,12 @@ export const useIngredientStore = defineStore('ingredient', {
         calories: ingredient.calories,
         unitPrice: ingredient.unitPrice,
         carbohydrates: ingredient.carbohydrates,
-        sugars: ingredient.sugars,
+        sugar: ingredient.sugar,
         protein: ingredient.protein,
         caffeine: ingredient.caffeine,
         fat: ingredient.fat,
         saturatedFat: ingredient.saturatedFat,
+        fiber: ingredient.fiber
       };
 
       await IngredientAPI.save(request);
@@ -38,12 +39,14 @@ export const useIngredientStore = defineStore('ingredient', {
             calories: ingredient.calories,
             unitPrice: ingredient.unitPrice,
             carbohydrates: ingredient.carbohydrates,
-            sugars: ingredient.sugars,
+            sugar: ingredient.sugar,
             protein: ingredient.protein,
             caffeine: ingredient.caffeine,
             fat: ingredient.fat,
             saturatedFat: ingredient.saturatedFat,
+            fiber: ingredient.fiber
         };
+        console.log('update : ', ingredient)
 
         await IngredientAPI.update(ingredient.id, request);
 
@@ -59,6 +62,10 @@ export const useIngredientStore = defineStore('ingredient', {
         return this.ingredients.find(it => it.name === name);
     },
 
+    findById(id: number) {
+      return this.ingredients.find(it => it.id === id);
+    },
+
     async refresh() {
       const ingredients: Ingredient[] = await IngredientAPI.list();
       this.ingredients = ingredients;
@@ -71,11 +78,12 @@ export const useIngredientStore = defineStore('ingredient', {
         calories: 0,
         unitPrice: 0,
         carbohydrates: 0,
-        sugars: 0,
+        sugar: 0,
         protein: 0,
         caffeine: 0,
         fat: 0,
         saturatedFat: 0,
+        fiber: 0,
         memo: '',
       };
     }

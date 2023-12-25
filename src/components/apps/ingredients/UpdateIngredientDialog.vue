@@ -47,7 +47,7 @@
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.sugars"
+          <q-input v-model="form.sugar"
                    type="text"
                    label="당류(g)"
           />
@@ -74,6 +74,12 @@
           <q-input v-model="form.saturatedFat"
                    type="text"
                    label="포화지방(g)"
+          />
+        </div>
+        <div class="col-6 q-px-sm">
+          <q-input v-model="form.fiber"
+                   type="text"
+                   label="식이섬유(g)"
           />
         </div>
 
@@ -104,59 +110,43 @@ const ingredientStore = useIngredientStore();
 const ingredientPageStore = useIngredientPageStore();
 
 const form = ref(ingredientStore.emptyIngredient());
-let beforeName = '';
 
 const onBeforeShow = () => {
+  console.log('onBeforeShow', ingredientPageStore.updateIngredient);
   const updateIngredient = ingredientPageStore.updateIngredient;
-  beforeName = updateIngredient.name;
-  form.value.category = updateIngredient.category;
+  form.value.category = IngredientCategory[updateIngredient.category.toUpperCase()];
   form.value.name = updateIngredient.name;
   form.value.calories = updateIngredient.calories;
   form.value.unitPrice = updateIngredient.unitPrice;
   form.value.carbohydrates = updateIngredient.carbohydrates;
-  form.value.sugars = updateIngredient.sugars;
+  form.value.sugar = updateIngredient.sugar;
   form.value.protein = updateIngredient.protein;
   form.value.caffeine = updateIngredient.caffeine;
   form.value.fat = updateIngredient.fat;
   form.value.saturatedFat = updateIngredient.saturatedFat;
+  form.value.fiber = updateIngredient.fiber;
   form.value.memo = updateIngredient.memo;
 };
 
-const onUpdateButtonClick = () => {
-  const ingredient = ingredientStore.findByName(beforeName);
-  if (ingredient) {
-    if (beforeName !== form.value.name && ingredientStore.existsByName(form.value.name)) {
-      throw new Error('이미 존재하는 재료명입니다.');
-    }
+const onUpdateButtonClick = async () => {
+  console.log('onUpdateButtonClick', form.value);
+  await ingredientStore.update({
+    id: ingredientPageStore.updateIngredient?.id,
+    name: form.value.name,
+    category: form.value.category,
+    calories: form.value.calories,
+    unitPrice: form.value.unitPrice,
+    carbohydrates: form.value.carbohydrates,
+    sugar: form.value.sugar,
+    protein: form.value.protein,
+    caffeine: form.value.caffeine,
+    fat: form.value.fat,
+    saturatedFat: form.value.saturatedFat,
+    fiber: form.value.fiber,
+    memo: form.value.memo,
+  })
 
-    // ingredient.category = form.value.category;
-    // ingredient.name = form.value.name;
-    // ingredient.calories = form.value.calories;
-    // ingredient.calories = form.value.calories;
-    // ingredient.carbohydrates = form.value.carbohydrates;
-    // ingredient.sugars = form.value.sugars;
-    // ingredient.protein = form.value.protein;
-    // ingredient.caffeine = form.value.caffeine;
-    // ingredient.fat = form.value.fat;
-    // ingredient.saturatedFat = form.value.saturatedFat;
-    // ingredient.memo = form.value.memo;
-    ingredientStore.update({
-      id: ingredient.id,
-      name: form.value.name,
-      category: form.value.category,
-      calories: form.value.calories,
-      unitPrice: form.value.unitPrice,
-      carbohydrates: form.value.carbohydrates,
-      sugars: form.value.sugars,
-      protein: form.value.protein,
-      caffeine: form.value.caffeine,
-      fat: form.value.fat,
-      saturatedFat: form.value.saturatedFat,
-      memo: form.value.memo,
-    })
-
-    ingredientPageStore.closeUpdateIngredientDialog();
-  }
+  ingredientPageStore.closeUpdateIngredientDialog();
 };
 
 </script>

@@ -83,12 +83,6 @@
       <div style="min-height: 60px;">{{ receipt.memo }}</div>
     </q-card-section>
 
-    <q-separator/>
-
-    <q-card-section>
-      <CreateUpdateDate :createdAt="receipt.createdAt" :updatedAt="receipt.updatedAt"/>
-    </q-card-section>
-
   </BaseCard>
 </template>
 

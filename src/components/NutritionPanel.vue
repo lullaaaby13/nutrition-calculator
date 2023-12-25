@@ -18,7 +18,7 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ sugars }}</q-item-label>
+              <q-item-label>{{ sugar }}</q-item-label>
               <q-item-label caption lines="1">당류(g)</q-item-label>
             </q-item-section>
           </q-item>
@@ -69,7 +69,7 @@ defineProps({
     type: String,
     default: () => '0',
   },
-  sugars: {
+  sugar: {
     type: String,
     default: () => '0',
   },

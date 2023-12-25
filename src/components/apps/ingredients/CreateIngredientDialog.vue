@@ -43,7 +43,7 @@
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.sugars"
+          <q-input v-model="form.sugar"
                    type="text"
                    label="당류(g)"
           />
@@ -71,6 +71,12 @@
                    type="text"
                    label="포화지방(g)"
           />
+          <div class="col-6 q-px-sm">
+            <q-input v-model="form.fiber"
+                     type="text"
+                     label="식이섬유(g)"
+            />
+          </div>
         </div>
 
       </q-card-section>
@@ -87,7 +93,7 @@
 
 import {ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
-import {Ingredient, IngredientCategory} from 'src/types/ingredient';
+import {IngredientCategory} from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import BaseCard from 'components/BaseCard.vue';
 
@@ -100,11 +106,12 @@ const createEmptyForm = () => ({
   calories: 0,
   unitPrice: 0,
   carbohydrates: 0,
-  sugars: 0,
+  sugar: 0,
   protein: 0,
   caffeine: 0,
   fat: 0,
   saturatedFat: 0,
+  fiber: 0,
   memo: '',
 });
 
@@ -119,13 +126,16 @@ const onRegisterConfirmButtonClick = async () => {
     calories: Number(form.value.calories),
     unitPrice: Number(form.value.unitPrice),
     carbohydrates: Number(form.value.carbohydrates),
-    sugars: Number(form.value.sugars),
+    sugar: Number(form.value.sugar),
     protein: Number(form.value.protein),
     caffeine: Number(form.value.caffeine),
     fat: Number(form.value.fat),
     saturatedFat: Number(form.value.saturatedFat),
+    fiber: Number(form.value.fiber),
     memo: form.value.memo
   }
+
+  console.log(ingredient)
   await ingredientStore.save(ingredient);
   form.value = createEmptyForm();
   ingredientPageStore.closeCreateIngredientDialog();

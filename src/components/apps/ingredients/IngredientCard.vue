@@ -32,7 +32,7 @@
         :calories="ingredient.calories"
         :unitPrice="ingredient.unitPrice"
         :carbohydrates="ingredient.carbohydrates"
-        :sugars="ingredient.sugars"
+        :sugar="ingredient.sugar"
         :protein="ingredient.protein"
         :caffeine="ingredient.caffeine"
         :fat="ingredient.fat"
@@ -43,12 +43,6 @@
     <q-card-section>
       <div class="text-caption">메모</div>
       <div style="min-height: 60px;">{{ ingredient.memo }}</div>
-    </q-card-section>
-
-    <q-separator/>
-
-    <q-card-section>
-      <CreateUpdateDate :createdAt="ingredient.createdAt" :updatedAt="ingredient.updatedAt"/>
     </q-card-section>
 
   </BaseCard>

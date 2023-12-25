@@ -7,8 +7,11 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
+
+const baseURL = process.env.NODE_ENV === 'production' ? process.env.PROD_API_URL : process.env.DEV_API_URL;
+console.log('baseURL', baseURL);
 const api = axios.create({
-  baseURL: 'http://localhost:17664',
+  baseURL:  baseURL,
   headers: {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
