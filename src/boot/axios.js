@@ -8,7 +8,9 @@ import axios from 'axios'
 // "export default () => {}" function below (which runs individually
 // for each client)
 
-const baseURL = process.env.API_URL;
+const baseURL = process.env.DEV ? process.env.DEV_API_URL : process.env.API_URL;
+console.log('isDevlopment', process.env.DEV);
+console.log('baseURL', baseURL);
 
 const api = axios.create({
   baseURL: baseURL,
