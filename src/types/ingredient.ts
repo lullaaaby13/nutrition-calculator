@@ -13,7 +13,7 @@ export interface Ingredient {
   memo?: string;
   createdAt?: string;
   updatedAt?: string;
-}
+};
 
 
 export const IngredientCategory = {
@@ -45,6 +45,6 @@ export const IngredientCategory = {
     name: 'packaging',
     label: '포장 용품',
   },
-}
+};
 
 export type IngredientCategory = typeof IngredientCategory[keyof typeof IngredientCategory];

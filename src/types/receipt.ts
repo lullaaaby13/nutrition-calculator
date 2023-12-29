@@ -1,6 +1,4 @@
 import {SecretBaseType} from 'src/types/secret-base';
-import {BaseType} from 'src/types/base-type';
-import {ComponentSummary} from 'src/types/summary';
 import {Ingredient} from 'src/types/ingredient';
 
 export interface ReceiptComponentType {

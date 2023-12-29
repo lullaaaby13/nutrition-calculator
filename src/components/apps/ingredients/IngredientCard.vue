@@ -58,7 +58,7 @@
 import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {Ingredient} from 'src/types/Ingredient';
+import {Ingredient} from '../../../types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 
 
