@@ -6,48 +6,55 @@
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ calories }}</q-item-label>
+              <q-item-label>{{ ingredient.calories }}</q-item-label>
               <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ protein }}</q-item-label>
-              <q-item-label caption lines="1">단백질(g)</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>
-              <q-item-label>{{ sugars }}</q-item-label>
+              <q-item-label>{{ ingredient.sugar }}</q-item-label>
               <q-item-label caption lines="1">당류(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ caffeine }}</q-item-label>
-              <q-item-label caption lines="1">카페인(mg)</q-item-label>
+              <q-item-label>{{ ingredient.fat }}</q-item-label>
+              <q-item-label caption lines="1">지방(g)</q-item-label>
             </q-item-section>
           </q-item>
+          <q-item>
+            <q-item-section>
+              <q-item-label>{{ ingredient.protein }}</q-item-label>
+              <q-item-label caption lines="1">단백질(g)</q-item-label>
+            </q-item-section>
+          </q-item>
+
         </q-list>
       </div>
       <div class="col-6">
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ carbohydrates }}</q-item-label>
+              <q-item-label>{{ ingredient.carbohydrates }}</q-item-label>
               <q-item-label caption lines="1">탄수화물(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ fat }}</q-item-label>
-              <q-item-label caption lines="1">지방(g)</q-item-label>
+              <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
+              <q-item-label caption lines="1">식이섬유(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ saturatedFat }}</q-item-label>
-              <q-item-label caption lines="1">포화지방(Kcal)</q-item-label>
+              <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
+              <q-item-label caption lines="1">포화지방(g)</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>
+              <q-item-label>{{ ingredient.caffeine }}</q-item-label>
+              <q-item-label caption lines="1">카페인(mg)</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -57,38 +64,9 @@
 
 </template>
 
-<script setup>
-const digits = 2;
+<script setup lang="ts">
+import {Ingredient} from "src/types/ingredient";
 
-defineProps({
-  calories: {
-    type: String,
-    default: () => '0',
-  },
-  protein: {
-    type: String,
-    default: () => '0',
-  },
-  sugars: {
-    type: String,
-    default: () => '0',
-  },
-  caffeine: {
-    type: String,
-    default: () => '0',
-  },
-  carbohydrates: {
-    type: String,
-    default: () => '0',
-  },
-  fat: {
-    type: String,
-    default: () => '0',
-  },
-  saturatedFat: {
-    type: String,
-    default: () => '0',
-  },
-});
+const ingredient = defineProps<Ingredient>();
 
 </script>

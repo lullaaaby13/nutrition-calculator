@@ -1,5 +1,5 @@
 import {api} from 'boot/axios';
-import {Ingredient} from 'src/types/ingredient';
+import {CreateIngredientRequest, Ingredient} from 'src/types/ingredient';
 
 export default class IngredientAPI {
   static async list(): Promise<Ingredient[]> {
@@ -7,8 +7,8 @@ export default class IngredientAPI {
      return data;
   }
 
-  static async save(ingredient: any) {
-      const { data } = await api.post('ingredients', ingredient);
+  static async save(request: CreateIngredientRequest): Promise<Ingredient> {
+      const { data } = await api.post('ingredients', request);
       return data;
   }
 

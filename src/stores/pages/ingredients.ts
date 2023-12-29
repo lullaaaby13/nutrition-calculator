@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import {Ingredient} from 'src/types/ingredient';
+import {emptyIngredient, Ingredient} from 'src/types/ingredient';
 
 export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
 
@@ -12,9 +12,10 @@ export const useIngredientPageStore = defineStore('ingredientPageStore', () => {
     createIngredientDialog.value = false;
   }
 
-  const updateIngredient = ref<Ingredient | any>({});
+  const updateIngredient = ref<Ingredient>(emptyIngredient);
   const updateIngredientDialog = ref(false);
   const showUpdateIngredientDialog = (ingredient: Ingredient) => {
+    console.log('showUpdateIngredientDialog', ingredient);
     updateIngredient.value = ingredient;
     updateIngredientDialog.value = true;
   }

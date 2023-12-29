@@ -16,7 +16,7 @@
 
       <q-card-section class="row">
         <div class="col-6 q-px-sm">
-          <q-select v-model="form.category" :options="Object.values(IngredientCategory)" label="카테고리"/>
+          <q-select v-model="category" :options="ingredientCategoryOptions" label="카테고리"/>
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.name"
@@ -43,7 +43,7 @@
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.sugars"
+          <q-input v-model="form.sugar"
                    type="text"
                    label="당류(g)"
           />
@@ -87,20 +87,27 @@
 
 import {ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
-import {Ingredient, IngredientCategory} from 'src/types/ingredient';
+import {
+  CreateIngredientRequest,
+  IngredientCategory,
+  IngredientCategoryOption,
+  ingredientCategoryOptions
+} from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import BaseCard from 'components/BaseCard.vue';
 
 const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
 
-const createEmptyForm = () => ({
-  category: IngredientCategory.FRESH,
+const category = ref<IngredientCategoryOption>(ingredientCategoryOptions[0]);
+const createEmptyForm = (): CreateIngredientRequest => ({
+  category: IngredientCategory.fresh,
   name: '',
   calories: 0,
   unitPrice: 0,
   carbohydrates: 0,
-  sugars: 0,
+  sugar: 0,
+  fiber: 0,
   protein: 0,
   caffeine: 0,
   fat: 0,
@@ -108,25 +115,27 @@ const createEmptyForm = () => ({
   memo: '',
 });
 
-const form = ref(createEmptyForm());
+const form = ref<CreateIngredientRequest>(createEmptyForm());
 
 
 const onRegisterConfirmButtonClick = async () => {
 
-  const ingredient = {
+  const request: CreateIngredientRequest = {
     name: form.value.name,
-    category: form.value.category,
-    calories: Number(form.value.calories),
+    memo: form.value.memo,
     unitPrice: Number(form.value.unitPrice),
-    carbohydrates: Number(form.value.carbohydrates),
-    sugars: Number(form.value.sugars),
+    calories: Number(form.value.calories),
     protein: Number(form.value.protein),
-    caffeine: Number(form.value.caffeine),
     fat: Number(form.value.fat),
+    carbohydrates: Number(form.value.carbohydrates),
+    sugar: Number(form.value.sugar),
+    fiber: Number(form.value.fiber),
+    caffeine: Number(form.value.caffeine),
     saturatedFat: Number(form.value.saturatedFat),
-    memo: form.value.memo
+    category: category.value.value,
   }
-  await ingredientStore.save(ingredient);
+
+  await ingredientStore.save(request);
   form.value = createEmptyForm();
   ingredientPageStore.closeCreateIngredientDialog();
 }

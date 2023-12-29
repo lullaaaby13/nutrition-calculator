@@ -1,83 +1,53 @@
 import {defineStore} from 'pinia';
 import IngredientAPI from 'src/api/ingredient';
-import {Ingredient, IngredientCategory} from 'src/types/ingredient';
+import {CreateIngredientRequest, Ingredient, UpdateIngredientRequest} from 'src/types/ingredient';
+import {ref} from "vue";
 
-export const useIngredientStore = defineStore('ingredient', {
-  state: (): { ingredients: Ingredient[] } => ({
-    ingredients: [],
-  }),
-  actions: {
+export const useIngredientStore = defineStore('ingredient', () => {
+  const ingredients = ref<Ingredient[]>([]);
 
-    async save(ingredient: any) {
+  const fetchAll = async () => {
+      const responses = await IngredientAPI.list();
+      clear();
+      responses.forEach(it => ingredients.value.push(it));
+  };
 
-      const request = {
-        name: ingredient.name,
-        category: ingredient.category.name,
-        memo: ingredient.memo,
-        calories: ingredient.calories,
-        unitPrice: ingredient.unitPrice,
-        carbohydrates: ingredient.carbohydrates,
-        sugars: ingredient.sugars,
-        protein: ingredient.protein,
-        caffeine: ingredient.caffeine,
-        fat: ingredient.fat,
-        saturatedFat: ingredient.saturatedFat,
-      };
+  const save = async (request: CreateIngredientRequest) => {
+    const ingredient = await IngredientAPI.save(request);
+    ingredients.value.push(ingredient);
+  };
 
-      await IngredientAPI.save(request);
+  const update = async (id: number, request: UpdateIngredientRequest) => {
+    const ingredient = await IngredientAPI.update(id, request);
+    await replace(ingredient);
+  };
 
-      await this.refresh();
-    },
-
-    async update(ingredient: any) {
-        const request = {
-            id: ingredient.id,
-            name: ingredient.name,
-            category: ingredient.category.name,
-            memo: ingredient.memo,
-            calories: ingredient.calories,
-            unitPrice: ingredient.unitPrice,
-            carbohydrates: ingredient.carbohydrates,
-            sugars: ingredient.sugars,
-            protein: ingredient.protein,
-            caffeine: ingredient.caffeine,
-            fat: ingredient.fat,
-            saturatedFat: ingredient.saturatedFat,
-        };
-
-        await IngredientAPI.update(ingredient.id, request);
-
-        await this.refresh();
-    },
-
-    async delete(id: number) {
-      await IngredientAPI.delete(id);
-      await this.refresh()
-    },
-
-    findByName(name: string) {
-        return this.ingredients.find(it => it.name === name);
-    },
-
-    async refresh() {
-      const ingredients: Ingredient[] = await IngredientAPI.list();
-      this.ingredients = ingredients;
-    },
-
-    emptyIngredient() {
-      return {
-        category: IngredientCategory.FRESH,
-        name: '',
-        calories: 0,
-        unitPrice: 0,
-        carbohydrates: 0,
-        sugars: 0,
-        protein: 0,
-        caffeine: 0,
-        fat: 0,
-        saturatedFat: 0,
-        memo: '',
-      };
+  const remove = async (id: number) => {
+    await IngredientAPI.delete(id);
+    let index = ingredients.value.findIndex(it => it.id === id);
+    if (index !== -1) {
+      ingredients.value.splice(index, 1);
     }
+  };
+
+  const replace = async (ingredient: Ingredient) => {
+    const index = ingredients.value.findIndex(it => it.id === ingredient.id);
+    if (index !== -1) {
+      ingredients.value[index] = ingredient;
+    }
+  };
+
+  const clear = () => {
+    ingredients.value.splice(0, ingredients.value.length);
   }
+
+  return {
+    ingredients,
+    fetchAll,
+    save,
+    update,
+    remove,
+    replace,
+    clear,
+  };
 });

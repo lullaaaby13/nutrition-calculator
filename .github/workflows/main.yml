@@ -28,5 +28,6 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git pull
             yarn install
+            rm -rf ./dist
             yarn build
             API_URL=${{ secrets.API_URL }} nohup quasar serve dist/spa -p ${{ secrets.SERVICE_PORT }} > ./logs/app.log 2> ./logs/error.log &

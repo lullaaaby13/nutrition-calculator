@@ -16,10 +16,7 @@
 
       <q-card-section class="row">
         <div class="col-6 q-px-sm">
-          <q-select v-model="form.category"
-                    :options="Object.values(IngredientCategory)"
-                    label="카테고리"
-          />
+          <q-select v-model="category" :options="ingredientCategoryOptions" label="카테고리"/>
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.name"
@@ -47,7 +44,7 @@
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.sugars"
+          <q-input v-model="form.sugar"
                    type="text"
                    label="당류(g)"
           />
@@ -81,8 +78,7 @@
 
 
       <q-card-section>
-        <q-input :model-value="form.memo"
-                 @update:model-value="value => $emit('update:ingredient', { field: 'memo', value })"
+        <q-input v-model="form.memo"
                  type="textarea"
                  label="메모"/>
       </q-card-section>
@@ -92,10 +88,15 @@
   </q-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
+import {
+  IngredientCategory,
+  IngredientCategoryOption,
+  ingredientCategoryOptions,
+  UpdateIngredientRequest
+} from 'src/types/ingredient';
 import {useIngredientStore} from 'stores/ingredients';
-import {IngredientCategory} from 'src/types/ingredient';
 import {ref} from 'vue';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 
@@ -103,18 +104,34 @@ import {useIngredientPageStore} from 'stores/pages/ingredients';
 const ingredientStore = useIngredientStore();
 const ingredientPageStore = useIngredientPageStore();
 
-const form = ref(ingredientStore.emptyIngredient());
-let beforeName = '';
+const category = ref<IngredientCategoryOption>(ingredientCategoryOptions[0]);
+
+const form = ref<UpdateIngredientRequest>({
+  category: IngredientCategory.fresh,
+  name: '',
+  calories: 0,
+  unitPrice: 0,
+  carbohydrates: 0,
+  sugar: 0,
+  fiber: 0,
+  protein: 0,
+  caffeine: 0,
+  fat: 0,
+  saturatedFat: 0,
+  memo: '',
+});
 
 const onBeforeShow = () => {
   const updateIngredient = ingredientPageStore.updateIngredient;
-  beforeName = updateIngredient.name;
-  form.value.category = updateIngredient.category;
+  console.log('beforeShow: ', updateIngredient)
+
+  category.value = ingredientCategoryOptions.find(option => option.value === updateIngredient.category) || ingredientCategoryOptions[0];
   form.value.name = updateIngredient.name;
   form.value.calories = updateIngredient.calories;
   form.value.unitPrice = updateIngredient.unitPrice;
   form.value.carbohydrates = updateIngredient.carbohydrates;
-  form.value.sugars = updateIngredient.sugars;
+  form.value.sugar = updateIngredient.sugar;
+  form.value.fiber = updateIngredient.fiber;
   form.value.protein = updateIngredient.protein;
   form.value.caffeine = updateIngredient.caffeine;
   form.value.fat = updateIngredient.fat;
@@ -122,41 +139,26 @@ const onBeforeShow = () => {
   form.value.memo = updateIngredient.memo;
 };
 
-const onUpdateButtonClick = () => {
-  const ingredient = ingredientStore.findByName(beforeName);
-  if (ingredient) {
-    if (beforeName !== form.value.name && ingredientStore.existsByName(form.value.name)) {
-      throw new Error('이미 존재하는 재료명입니다.');
-    }
+const onUpdateButtonClick = async () => {
 
-    // ingredient.category = form.value.category;
-    // ingredient.name = form.value.name;
-    // ingredient.calories = form.value.calories;
-    // ingredient.calories = form.value.calories;
-    // ingredient.carbohydrates = form.value.carbohydrates;
-    // ingredient.sugars = form.value.sugars;
-    // ingredient.protein = form.value.protein;
-    // ingredient.caffeine = form.value.caffeine;
-    // ingredient.fat = form.value.fat;
-    // ingredient.saturatedFat = form.value.saturatedFat;
-    // ingredient.memo = form.value.memo;
-    ingredientStore.update({
-      id: ingredient.id,
-      name: form.value.name,
-      category: form.value.category,
-      calories: form.value.calories,
-      unitPrice: form.value.unitPrice,
-      carbohydrates: form.value.carbohydrates,
-      sugars: form.value.sugars,
-      protein: form.value.protein,
-      caffeine: form.value.caffeine,
-      fat: form.value.fat,
-      saturatedFat: form.value.saturatedFat,
-      memo: form.value.memo,
-    })
-
-    ingredientPageStore.closeUpdateIngredientDialog();
+  const request: UpdateIngredientRequest = {
+    name: form.value.name,
+    memo: form.value.memo,
+    unitPrice: form.value.unitPrice,
+    calories: form.value.calories,
+    protein: form.value.protein,
+    fat: form.value.fat,
+    carbohydrates: form.value.carbohydrates,
+    sugar: form.value.sugar,
+    fiber: form.value.fiber,
+    caffeine: form.value.caffeine,
+    saturatedFat: form.value.saturatedFat,
+    category: category.value.value,
   }
+  console.log(request)
+
+  await ingredientStore.update(ingredientPageStore.updateIngredient.id, request);
+  ingredientPageStore.closeUpdateIngredientDialog();
 };
 
 </script>

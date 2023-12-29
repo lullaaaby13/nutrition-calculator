@@ -39,7 +39,7 @@
         <td class="text-right">{{ ingredient.protein }}</td>
         <td class="text-right">{{ ingredient.fat }}</td>
         <td class="text-right">{{ ingredient.saturatedFat }}</td>
-        <td class="text-right">{{ ingredient.sugars }}</td>
+        <td class="text-right">{{ ingredient.sugar }}</td>
         <td class="text-right">{{ ingredient.caffeine }}</td>
         <td class="text-right">{{ ingredient.unitPrice }}</td>
       </tr>

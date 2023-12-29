@@ -9,7 +9,7 @@ export class ComponentSummary {
   unitPrice = 0;
   calories = 0;
   carbohydrates = 0;
-  sugars = 0;
+  sugar = 0;
   protein = 0;
   caffeine = 0;
   fat = 0;
@@ -26,7 +26,7 @@ export class ComponentSummary {
     this.unitPrice += Number(ingredient.unitPrice) * ratio;
     this.calories += Number(ingredient.calories) * ratio;
     this.carbohydrates += Number(ingredient.carbohydrates) * ratio;
-    this.sugars += Number(ingredient.sugars) * ratio;
+    this.sugar += Number(ingredient.sugar) * ratio;
     this.protein += Number(ingredient.protein) * ratio;
     this.caffeine += Number(ingredient.caffeine) * ratio;
     this.fat += Number(ingredient.fat) * ratio;
@@ -80,7 +80,7 @@ export class ComponentSummary {
     return Number(this.carbohydrates).toFixed(2);
   }
   getSugars(): string {
-    return Number(this.sugars).toFixed(2);
+    return Number(this.sugar).toFixed(2);
   }
   getProtein(): string {
     return Number(this.protein).toFixed(2);
@@ -103,7 +103,7 @@ export class ComponentSummary {
 //     acc.unitPrice += Number(cur.ingredient.unitPrice) * ratio;
 //     acc.calories += Number(cur.ingredient.calories) * ratio;
 //     acc.carbohydrates += Number(cur.ingredient.carbohydrates) * ratio;
-//     acc.sugars += Number(cur.ingredient.sugars) * ratio;
+//     acc.sugar += Number(cur.ingredient.sugar) * ratio;
 //     acc.protein += Number(cur.ingredient.protein) * ratio;
 //     acc.caffeine += Number(cur.ingredient.caffeine) * ratio;
 //     acc.fat += Number(cur.ingredient.fat) * ratio;
