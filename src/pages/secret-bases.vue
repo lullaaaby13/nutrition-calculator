@@ -21,7 +21,6 @@
             </template>
           </q-input>
           <q-btn
-              unelevated
               color="primary"
               label="시크릿 베이스 등록하기"
               @click="secretBasePageStore.showCreateSecretBaseDialog"/>
@@ -33,12 +32,7 @@
 
     <div class="q-gutter-md flex full-width">
       <SecretBaseCard v-for="secretBase in filteredSecretBases" :key="secretBase.name"
-                      :id="secretBase.id"
-                      :name="secretBase.name"
-                      :memo="secretBase.memo"
-                      :components="secretBase.components"
-                      :created-at="secretBase.createdAt"
-                      :updated-at="secretBase.updatedAt"
+                      v-bind="secretBase"
       />
     </div>
 

@@ -3,7 +3,7 @@ import IngredientAPI from 'src/api/ingredient';
 import {CreateIngredientRequest, Ingredient, UpdateIngredientRequest} from 'src/types/ingredient';
 import {ref} from "vue";
 
-export const useIngredientStore = defineStore('ingredient', () => {
+export const useIngredientStore = defineStore('ingredients', () => {
   const ingredients = ref<Ingredient[]>([]);
 
   const fetchAll = async () => {
@@ -19,7 +19,8 @@ export const useIngredientStore = defineStore('ingredient', () => {
 
   const update = async (id: number, request: UpdateIngredientRequest) => {
     const ingredient = await IngredientAPI.update(id, request);
-    await replace(ingredient);
+    console.log('update', ingredient)
+    replace(ingredient);
   };
 
   const remove = async (id: number) => {
@@ -30,7 +31,7 @@ export const useIngredientStore = defineStore('ingredient', () => {
     }
   };
 
-  const replace = async (ingredient: Ingredient) => {
+  const replace = (ingredient: Ingredient) => {
     const index = ingredients.value.findIndex(it => it.id === ingredient.id);
     if (index !== -1) {
       ingredients.value[index] = ingredient;

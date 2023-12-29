@@ -14,7 +14,7 @@ const receiptStore = useReceiptStore();
 
 onMounted(async () => {
   await ingredientStore.fetchAll();
-  // await secretBaseStore.refresh();
+  await secretBaseStore.refresh();
   // await receiptStore.refresh();
 });
 </script>

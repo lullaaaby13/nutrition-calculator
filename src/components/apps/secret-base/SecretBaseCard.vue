@@ -3,7 +3,7 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ secretBase.name }}</div>
-        <AmountUnitPriceCaption :amount="secretBaseView.amount" :unit-price="secretBaseView.unitPrice"/>
+        <AmountUnitPriceCaption :amount="componentSummary.amount" :unit-price="componentSummary.unitPrice"/>
       </div>
 
       <q-space/>
@@ -41,25 +41,11 @@
       </q-list>
     </q-card-section>
     <q-card-section>
-      <NutritionPanel
-        :calories="secretBaseView.getCalories()"
-        :unitPrice="secretBaseView.getUnitPrice()"
-        :carbohydrates="secretBaseView.getCarbohydrates()"
-        :sugars="secretBaseView.getSugars()"
-        :protein="secretBaseView.getProtein()"
-        :caffeine="secretBaseView.getCaffeine()"
-        :fat="secretBaseView.getFat()"
-        :saturatedFat="secretBaseView.getSaturatedFat()"
-      />
+      <NutritionPanel v-bind="componentSummary"/>
     </q-card-section>
     <q-card-section>
       <div class="text-caption">메모</div>
       <div style="min-height: 60px;">{{ secretBase.memo }}</div>
-    </q-card-section>
-    <q-separator/>
-
-    <q-card-section>
-      <CreateUpdateDate :createdAt="secretBase.createdAt" :updatedAt="secretBase.updatedAt"/>
     </q-card-section>
 
   </BaseCard>
@@ -72,17 +58,16 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBaseType} from 'src/types/secret-base';
+import {SecretBase} from 'src/types/secret-base';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import {ComponentSummary} from 'src/types/summary';
-import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 
-const secretBase = defineProps<SecretBaseType>();
+const secretBase = defineProps<SecretBase>();
 
 const secretBasePageStore = useSecretBasePageStore();
 const secretBaseStore = useSecretBaseStore();
 
-const secretBaseView = computed(() => {
+const componentSummary = computed(() => {
   let componentSummary = new ComponentSummary();
   if (secretBase) {
     componentSummary.addSecretBaseComponents(secretBase.components);
@@ -93,7 +78,7 @@ const secretBaseView = computed(() => {
 
 const onDeleteButtonClick = (id: number) => {
   if (confirm('정말 삭제 하시겠어요?')) {
-    secretBaseStore.delete(id);
+    secretBaseStore.remove(id);
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <q-dialog>
-    <BaseCard class="q-pa-md" style="width: 600px;">
+    <BaseCard class="q-pa-md" style="width: 680px;">
       <q-card-section class="flex justify-between">
         <div>
           <div class="text-h6">원재료 등록</div>
@@ -14,69 +14,109 @@
 
       <q-separator/>
 
-      <q-card-section class="row">
-        <div class="col-6 q-px-sm">
-          <q-select v-model="category" :options="ingredientCategoryOptions" label="카테고리"/>
+      <q-card-section class="row q-gutter-y-sm">
+        <div class="col-4 q-px-sm">
+          <q-select v-model="category"
+                    :options="ingredientCategoryOptions"
+                    label="카테고리"
+                    stack-label
+                    outlined
+          />
         </div>
-        <div class="col-6 q-px-sm">
+        <div class="col-4 q-px-sm">
           <q-input v-model="form.name"
                    type="text"
                    label="이름"
+                   stack-label
+                   outlined
           />
         </div>
+        <div class="col-4 q-px-sm">
+          <q-input v-model="form.unitPrice"
+                   type="number"
+                   label="단가(원)"
+                   stack-label
+                   outlined
+          />
+        </div>
+
+        <q-separator/>
+
         <div class="col-6 q-px-sm">
           <q-input v-model="form.calories"
-                   type="text"
+                   type="number"
                    label="칼로리(Kcal)"
+                   stack-label
+                   outlined
           />
         </div>
-        <div class="col-6 q-px-sm">
-          <q-input v-model="form.unitPrice"
-                   type="text"
-                   label="단가(원)"
-          />
-        </div>
+
         <div class="col-6 q-px-sm">
           <q-input v-model="form.carbohydrates"
-                   type="text"
+                   type="number"
                    label="탄수화물(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.sugar"
-                   type="text"
+                   type="number"
                    label="당류(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.protein"
-                   type="text"
-                   label="단백질(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input v-model="form.caffeine"
-                   type="text"
-                   label="카페인(mg)"
+          <q-input v-model="form.fiber"
+                   type="number"
+                   label="식이섬유(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.fat"
-                   type="text"
+                   type="number"
                    label="지방(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.saturatedFat"
-                   type="text"
+                   type="number"
                    label="포화지방(g)"
+                   stack-label
+                   outlined
+          />
+        </div>
+        <div class="col-6 q-px-sm">
+          <q-input v-model="form.protein"
+                   type="number"
+                   label="단백질(g)"
+                   stack-label
+                   outlined
+          />
+        </div>
+        <div class="col-6 q-px-sm">
+          <q-input v-model="form.caffeine"
+                   type="number"
+                   label="카페인(mg)"
+                   stack-label
+                   outlined
           />
         </div>
 
       </q-card-section>
 
       <q-card-section>
-        <q-input v-model="form.memo" type="textarea" label="메모"/>
+        <q-input v-model="form.memo"
+                 type="textarea"
+                 label="메모"
+                 stack-label
+                 outlined
+        />
       </q-card-section>
 
     </BaseCard>

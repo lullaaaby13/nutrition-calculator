@@ -4,7 +4,7 @@
           :flat="flat"
           :bordered="bordered"
           v-bind="$attrs">
-    <template v-for="(_, name) in $slots" :key="name">
+    <template v-if="$slots" v-for="(_, name) in $slots" :key="name">
       <slot :name="name"/>
     </template>
   </q-card>

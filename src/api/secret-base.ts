@@ -1,13 +1,13 @@
 import {api} from 'boot/axios';
-import {SecretBaseType} from 'src/types/secret-base';
+import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/types/secret-base';
 
 export default class SecretBaseAPI {
-    static async list(): Promise<SecretBaseType[]> {
+    static async list(): Promise<SecretBase[]> {
         const {data} = await api.get('secret-bases');
         return data;
     }
 
-    static async save(request: any) {
+    static async save(request: CreateSecretBaseRequest): Promise<SecretBase> {
         const {data} = await api.post('secret-bases', request);
         return data;
     }
@@ -17,7 +17,7 @@ export default class SecretBaseAPI {
         return data;
     }
 
-    static async update(id: number, request: any) {
+    static async update(id: number, request: UpdateSecretBaseRequest): Promise<SecretBase> {
         const {data} = await api.put(`secret-bases/${id}`, request);
         return data;
     }

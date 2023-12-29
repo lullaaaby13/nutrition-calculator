@@ -1,10 +1,10 @@
-import {SecretBaseType} from 'src/types/secret-base';
+import {SecretBase} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 
 export interface ReceiptComponentType {
   amount: number;
   sourceType: 'Ingredient' | 'SecretBase';
-  source: SecretBaseType | Ingredient;
+  source: SecretBase | Ingredient;
 }
 
 export const isSameReceiptComponent = (a: ReceiptComponentType, b: ReceiptComponentType) => {

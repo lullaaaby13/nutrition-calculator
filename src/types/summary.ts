@@ -1,5 +1,5 @@
 import {Ingredient} from 'src/types/ingredient';
-import { SecretBaseComponent, SecretBaseType, totalAmountOfSecretBase} from 'src/types/secret-base';
+import { SecretBaseComponent, SecretBase, totalAmountOfSecretBase} from 'src/types/secret-base';
 import {ReceiptComponentType} from 'src/types/receipt';
 
 export class ComponentSummary {
@@ -10,6 +10,7 @@ export class ComponentSummary {
   calories = 0;
   carbohydrates = 0;
   sugar = 0;
+  fiber = 0;
   protein = 0;
   caffeine = 0;
   fat = 0;
@@ -27,13 +28,14 @@ export class ComponentSummary {
     this.calories += Number(ingredient.calories) * ratio;
     this.carbohydrates += Number(ingredient.carbohydrates) * ratio;
     this.sugar += Number(ingredient.sugar) * ratio;
+    this.fiber += Number(ingredient.fiber) * ratio;
     this.protein += Number(ingredient.protein) * ratio;
     this.caffeine += Number(ingredient.caffeine) * ratio;
     this.fat += Number(ingredient.fat) * ratio;
     this.saturatedFat += Number(ingredient.saturatedFat) * ratio;
   }
 
-  public addSecretBase(amount: number, secretBase: SecretBaseType) {
+  public addSecretBase(amount: number, secretBase: SecretBase) {
 
     const ratio =  amount / totalAmountOfSecretBase(secretBase);
     console.log('addSecretBase: ', secretBase, amount, totalAmountOfSecretBase(secretBase), ratio)
@@ -53,7 +55,7 @@ export class ComponentSummary {
     components.forEach(it => {
       // console.log(it.amount, it.component.name)
       if (it.sourceType === 'SecretBase') {
-        this.addSecretBase(it.amount, it.source as SecretBaseType);
+        this.addSecretBase(it.amount, it.source as SecretBase);
       } else {
         this.addIngredient(it.amount, it.source as Ingredient);
       }

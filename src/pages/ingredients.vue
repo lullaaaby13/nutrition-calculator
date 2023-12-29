@@ -26,7 +26,6 @@
           <q-btn
               color="primary"
               label="원재료 등록하기"
-              padding="10px 15px 10px 10px"
               @click="ingredientPageStore.showCreateIngredientDialog"
           />
         </div>

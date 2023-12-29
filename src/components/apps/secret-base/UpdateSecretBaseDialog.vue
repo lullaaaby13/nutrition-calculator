@@ -18,9 +18,9 @@
             <div class="text-subtitle1">
               <q-input v-model="form.name"
                        type="text"
-                       dense
                        label="이름"
                        stack-label
+                        outlined
               />
             </div>
 
@@ -30,16 +30,21 @@
               <div class="text-subtitle2 q-mb-sm">
                 원재료
               </div>
-              <q-list bordered>
+              <q-list>
                 <q-item v-for="(component, index) in selectedComponents" :key="index">
                   <q-item-section>
                     <q-input v-model="component.amount"
                              type="number"
                              :label="component.ingredient.name"
-                             stack-label
                              @input="component.amount = Number($event)"
+                             stack-label
+                             outlined
                     >
-                      <q-icon name="close" size="12px" @click="onRemoveSelectedComponentClick(component)"/>
+                      <template v-slot:append>
+                        <q-item-label>
+                          <q-icon name="close" size="12px" class="cursor-pointer" @click="onRemoveSelectedComponentClick(component)"/>
+                        </q-item-label>
+                      </template>
                     </q-input>
                   </q-item-section>
                 </q-item>
@@ -47,16 +52,7 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPanel
-                  :calories="totalIngredients.getCalories()"
-                  :unitPrice="totalIngredients.getUnitPrice()"
-                  :carbohydrates="totalIngredients.getCarbohydrates()"
-                  :sugars="totalIngredients.getSugars()"
-                  :protein="totalIngredients.getProtein()"
-                  :caffeine="totalIngredients.getCaffeine()"
-                  :fat="totalIngredients.getFat()"
-                  :saturatedFat="totalIngredients.getSaturatedFat()"
-              />
+              <NutritionPanel v-bind="totalIngredients"/>
             </q-card-section>
 
             <q-card-section>
@@ -75,7 +71,7 @@
 import {computed, ref} from 'vue';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBaseComponentType} from 'src/types/secret-base';
+import {SecretBaseComponent} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
@@ -89,7 +85,25 @@ const form = ref({
   name: '',
   memo: '',
 });
-const selectedComponents = ref<SecretBaseComponentType[]>([]);
+const selectedComponents = ref<SecretBaseComponent[]>([]);
+
+const onBeforeShow = () => {
+  form.value.name = secretBasePageStore.updateSecretBase.name;
+  form.value.memo = secretBasePageStore.updateSecretBase.memo || '';
+  console.log(secretBasePageStore.updateSecretBase);
+  secretBasePageStore.updateSecretBase.components.forEach(it => {
+    selectedComponents.value.push({
+      amount: it.amount,
+      ingredient: it.ingredient,
+    });
+  });
+};
+
+const onBeforeHide = () => {
+  form.value.name = '';
+  form.value.memo = '';
+  selectedComponents.value = [];
+}
 
 
 const onUpdateButtonClick = async () => {
@@ -97,11 +111,16 @@ const onUpdateButtonClick = async () => {
   secretBasePageStore.updateSecretBase.memo = form.value.memo;
 
   await secretBaseStore.update(
-      secretBasePageStore.updateSecretBase.id!,
+      secretBasePageStore.updateSecretBase.id,
       {
         name: form.value.name,
         memo: form.value.memo,
-        components: selectedComponents.value,
+        components: selectedComponents.value.map(it => {
+          return {
+            amount: it.amount,
+            ingredientId: it.ingredient.id,
+          };
+        }),
       }
   );
   secretBasePageStore.closeUpdateSecretBaseDialog();
@@ -117,7 +136,7 @@ const onIngredientClick = (ingredient: Ingredient) => {
   }
 };
 
-const onRemoveSelectedComponentClick = (component: SecretBaseComponentType) => {
+const onRemoveSelectedComponentClick = (component: SecretBaseComponent) => {
   const index = selectedComponents.value.findIndex(it => it.ingredient.name === component.ingredient.name);
   if (index !== -1) {
     selectedComponents.value.splice(index, 1);
@@ -131,21 +150,6 @@ const totalIngredients = computed(() => {
   return componentSummary;
 });
 
-const onBeforeShow = () => {
-  form.value.name = secretBasePageStore.updateSecretBase.name;
-  form.value.memo = secretBasePageStore.updateSecretBase.memo || '';
-  secretBasePageStore.updateSecretBase.components.forEach(it => {
-    selectedComponents.value.push({
-      amount: it.amount,
-      ingredient: it.ingredient,
-    });
-  });
-};
 
-const onBeforeHide = () => {
-  form.value.name = '';
-  form.value.memo = '';
-  selectedComponents.value = [];
-}
 
 </script>

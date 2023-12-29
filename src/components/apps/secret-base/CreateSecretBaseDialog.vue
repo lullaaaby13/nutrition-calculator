@@ -22,9 +22,9 @@
             <div class="text-subtitle1">
               <q-input v-model="name"
                        type="text"
-                       dense
                        label="이름"
                        stack-label
+                       outlined
               />
             </div>
 
@@ -34,16 +34,20 @@
               <div class="text-subtitle2 q-mb-sm">
                 원재료
               </div>
-              <q-list bordered>
+              <q-list>
                 <q-item v-for="ingredient in selectedComponents" :key="ingredient.ingredient.name">
                   <q-item-section>
                     <q-input type="number"
+                             v-model="ingredient.amount"
                              :label="ingredient.ingredient.name"
                              stack-label
-                             v-model="ingredient.amount"
-
+                             outlined
                     >
-                      <q-icon name="close" size="12px" @click="onRemoveSelectedIngredientClick(ingredient)"/>
+                      <template v-slot:append>
+                        <q-item-label>
+                          <q-icon name="close" size="12px" class="cursor-pointer" @click="onRemoveSelectedIngredientClick(ingredient)"/>
+                        </q-item-label>
+                      </template>
                     </q-input>
                   </q-item-section>
                 </q-item>
@@ -51,16 +55,7 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPanel
-                  :calories="totalIngredients.getCalories()"
-                  :unitPrice="totalIngredients.getUnitPrice()"
-                  :carbohydrates="totalIngredients.getCarbohydrates()"
-                  :sugars="totalIngredients.getSugars()"
-                  :protein="totalIngredients.getProtein()"
-                  :caffeine="totalIngredients.getCaffeine()"
-                  :fat="totalIngredients.getFat()"
-                  :saturatedFat="totalIngredients.getSaturatedFat()"
-              />
+              <NutritionPanel v-bind="totalIngredients"/>
             </q-card-section>
 
             <q-card-section>
@@ -80,7 +75,7 @@ import {computed, ref} from 'vue'
 import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {SecretBaseComponentType, SecretBaseType} from 'src/types/secret-base';
+import {SecretBaseComponent, SecretBase, CreateSecretBaseRequest} from 'src/types/secret-base';
 import {Ingredient} from 'src/types/ingredient';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
@@ -94,7 +89,7 @@ const secretBasePageStore = useSecretBasePageStore();
 const name = ref('');
 const memo = ref('');
 
-const selectedComponents = ref<SecretBaseComponentType[]>([]);
+const selectedComponents = ref<SecretBaseComponent[]>([]);
 
 const onIngredientClick = (ingredient: Ingredient) => {
   const exists = selectedComponents.value.some(selectedIngredient => selectedIngredient.ingredient.name === ingredient.name);
@@ -119,21 +114,21 @@ const totalIngredients = computed(() => {
   return componentSummary;
 });
 
-const onCreateButtonClick = () => {
-  const secretBase: SecretBaseType = {
+const onCreateButtonClick = async () => {
+  const secretBase: CreateSecretBaseRequest = {
     name: name.value,
     memo: memo.value,
     components: selectedComponents.value.map(selectedIngredient => {
       return {
         amount: selectedIngredient.amount,
-        ingredient: selectedIngredient.ingredient,
+        ingredientId: selectedIngredient.ingredient.id,
       };
     })
   }
 
-  secretBaseStore.save(secretBase);
+  await secretBaseStore.save(secretBase);
 
-  while(selectedComponents.value.pop()) {}
+  selectedComponents.value.splice(0, selectedComponents.value.length);
   secretBasePageStore.closeCreateSecretBaseDialog();
 
 };

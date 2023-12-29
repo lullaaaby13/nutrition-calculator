@@ -6,25 +6,25 @@
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.calories }}</q-item-label>
+              <q-item-label>{{ calories.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">칼로리(Kcal)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.sugar }}</q-item-label>
+              <q-item-label>{{ sugar.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">당류(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.fat }}</q-item-label>
+              <q-item-label>{{ fat.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">지방(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.protein }}</q-item-label>
+              <q-item-label>{{ protein.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">단백질(g)</q-item-label>
             </q-item-section>
           </q-item>
@@ -35,25 +35,25 @@
         <q-list bordered>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.carbohydrates }}</q-item-label>
+              <q-item-label>{{ carbohydrates.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">탄수화물(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
+              <q-item-label>{{ fiber.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">식이섬유(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.saturatedFat }}</q-item-label>
+              <q-item-label>{{ saturatedFat.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">포화지방(g)</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>{{ ingredient.caffeine }}</q-item-label>
+              <q-item-label>{{ caffeine.toFixed(2) }}</q-item-label>
               <q-item-label caption lines="1">카페인(mg)</q-item-label>
             </q-item-section>
           </q-item>
@@ -65,8 +65,39 @@
 </template>
 
 <script setup lang="ts">
-import {Ingredient} from "src/types/ingredient";
 
-const ingredient = defineProps<Ingredient>();
-
+defineProps({
+  calories: {
+    type: Number,
+    required: true,
+  },
+  carbohydrates: {
+    type: Number,
+    required: true,
+  },
+  sugar: {
+    type: Number,
+    required: true,
+  },
+  fiber: {
+    type: Number,
+    required: true,
+  },
+  fat: {
+    type: Number,
+    required: true,
+  },
+  saturatedFat: {
+    type: Number,
+    required: true,
+  },
+  protein: {
+    type: Number,
+    required: true,
+  },
+  caffeine: {
+    type: Number,
+    required: true,
+  },
+});
 </script>
