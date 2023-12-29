@@ -187,8 +187,6 @@ module.exports = configure(function (/* ctx */) {
 
         // Windows only
         // win32metadata: { ... }
-        platform: 'darwin',
-        arch: 'all',
       },
 
       builder: {

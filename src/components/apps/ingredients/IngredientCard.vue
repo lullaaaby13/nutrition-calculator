@@ -48,7 +48,7 @@
     <q-separator/>
 
     <q-card-section>
-      <CreateUpdateDate :createdAt="ingredient.createdAt" :updatedAt="ingredient.updatedAt"/>
+<!--      <CreateUpdateDate :createdAt="ingredient.createdAt" :updatedAt="ingredient.updatedAt"/>-->
     </q-card-section>
 
   </BaseCard>
@@ -60,7 +60,7 @@ import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {Ingredient} from 'src/types/Ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
-import CreateUpdateDate from 'components/CreateUpdateDate.vue';
+
 
 const ingredient = defineProps<Ingredient>();
 
