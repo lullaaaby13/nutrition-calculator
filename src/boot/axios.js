@@ -11,6 +11,7 @@ import axios from 'axios'
 const baseURL = process.env.DEV ? process.env.DEV_API_URL : process.env.API_URL;
 console.log('isDevlopment', process.env.DEV);
 console.log('baseURL', baseURL);
+console.log(process.env);
 
 const api = axios.create({
   baseURL: baseURL,
