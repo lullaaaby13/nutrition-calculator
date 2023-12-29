@@ -69,12 +69,6 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      extendViteConf (viteConf) {
-        Object.assign(viteConf.resolve.alias, {
-          "@": path.join(__dirname, './src')
-        })
-      },
-
       // viteVuePluginOptions: {},
 
 
