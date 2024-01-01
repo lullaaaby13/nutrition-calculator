@@ -16,12 +16,15 @@ export default defineConfig({
     ],
   },
   plugins: [
+    // @ts-ignore
     vue({
       template: { transformAssetUrls },
     }),
+    // @ts-ignore
     quasar({
       sassVariables: 'src/quasar-variables.scss',
     }),
+    // @ts-ignore
     tsconfigPaths(),
   ],
 });

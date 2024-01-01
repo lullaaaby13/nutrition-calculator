@@ -9,21 +9,11 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 
-const {configure} = require('quasar/wrappers');
-const path = require('path')
+const { configure } = require('quasar/wrappers');
 
 
 module.exports = configure(function (/* ctx */) {
   return {
-    eslint: {
-      // fix: true,
-      // include: [],
-      // exclude: [],
-      // rawOptions: {},
-      warnings: true,
-      errors: true
-    },
-
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
 
@@ -31,6 +21,7 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+
       'axios',
     ],
 
@@ -56,7 +47,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+        browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
         node: 'node16'
       },
 
@@ -70,21 +61,15 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      env: {
-        DEV_API_URL: process.env.API_URL || 'http://localhost:8080',
-        PROD_API_URL: process.env.API_URL || 'http://localhost:3000',
-      },
+       env: {
+        DEV_API_URL: 'http://localhost:8080',
+        PROD_API_URL: 'http://49.247.29.14:17663',
+       },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
       // polyfillModulePreload: true,
       // distDir
-
-      extendViteConf(viteConf) {
-        Object.assign(viteConf.resolve.alias, {
-          "@": path.join(__dirname, './src')
-        })
-      },
 
       // viteVuePluginOptions: {},
 
@@ -93,14 +78,16 @@ module.exports = configure(function (/* ctx */) {
         ['unplugin-vue-router/vite', {
           routeBlockLang: 'yaml'
         }],
-        ['vite-plugin-vue-layouts', {}],
+        [ 'vite-plugin-vue-layouts', {
+
+        }],
       ]
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
-      open: true // opens browser window automatically
+      open: false // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -140,7 +127,7 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {
       // ssrPwaHtmlFilename: 'offline.html', // do NOT use index.html as name!
-      // will mess up SSR
+                                          // will mess up SSR
 
       // extendSSRWebserverConf (esbuildConf) {},
       // extendPackageJson (json) {},
@@ -203,8 +190,6 @@ module.exports = configure(function (/* ctx */) {
 
         // Windows only
         // win32metadata: { ... }
-        platform: 'darwin',
-        arch: 'all',
       },
 
       builder: {

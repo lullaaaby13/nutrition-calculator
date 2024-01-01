@@ -14,83 +14,109 @@
 
       <q-separator/>
 
-      <q-card-section class="row">
-        <div class="col-6 q-px-sm">
-          <q-select v-model="form.category"
-                    :options="Object.values(IngredientCategory)"
+      <q-card-section class="row q-gutter-y-sm">
+        <div class="col-4 q-px-sm">
+          <q-select v-model="category"
+                    :options="ingredientCategoryOptions"
                     label="카테고리"
+                    stack-label
+                    outlined
           />
         </div>
-        <div class="col-6 q-px-sm">
+        <div class="col-4 q-px-sm">
           <q-input v-model="form.name"
                    type="text"
                    label="이름"
+                   stack-label
+                   outlined
           />
         </div>
+        <div class="col-4 q-px-sm">
+          <q-input v-model="form.unitPrice"
+                   type="number"
+                   label="단가(원)"
+                   stack-label
+                   outlined
+          />
+        </div>
+
+        <q-separator/>
+
         <div class="col-6 q-px-sm">
           <q-input v-model="form.calories"
-                   type="text"
+                   type="number"
                    label="칼로리(Kcal)"
-                   :rule="[val => val < 0 || '0보다 커야 합니다.']"
+                   stack-label
+                   outlined
           />
         </div>
-        <div class="col-6 q-px-sm">
-          <q-input v-model="form.unitPrice"
-                   type="text"
-                   label="단가(원)"
-          />
-        </div>
+
         <div class="col-6 q-px-sm">
           <q-input v-model="form.carbohydrates"
-                   type="text"
+                   type="number"
                    label="탄수화물(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.sugar"
-                   type="text"
+                   type="number"
                    label="당류(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.protein"
-                   type="text"
-                   label="단백질(g)"
-          />
-        </div>
-        <div class="col-6 q-px-sm">
-          <q-input v-model="form.caffeine"
-                   type="text"
-                   label="카페인(mg)"
+          <q-input v-model="form.sugar"
+                   type="number"
+                   label="식이섬유(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.fat"
-                   type="text"
+                   type="number"
                    label="지방(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
           <q-input v-model="form.saturatedFat"
-                   type="text"
+                   type="number"
                    label="포화지방(g)"
+                   stack-label
+                   outlined
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.fiber"
-                   type="text"
-                   label="식이섬유(g)"
+          <q-input v-model="form.protein"
+                   type="number"
+                   label="단백질(g)"
+                   stack-label
+                   outlined
+          />
+        </div>
+        <div class="col-6 q-px-sm">
+          <q-input v-model="form.caffeine"
+                   type="number"
+                   label="카페인(mg)"
+                   stack-label
+                   outlined
           />
         </div>
 
       </q-card-section>
 
-
       <q-card-section>
-        <q-input :model-value="form.memo"
-                 @update:model-value="value => $emit('update:ingredient', { field: 'memo', value })"
+        <q-input v-model="form.memo"
                  type="textarea"
-                 label="메모"/>
+                 label="메모"
+                 stack-label
+                 outlined
+        />
       </q-card-section>
 
 
@@ -98,10 +124,15 @@
   </q-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
+import {
+  IngredientCategory,
+  IngredientCategoryOption,
+  ingredientCategoryOptions,
+  UpdateIngredientRequest
+} from 'src/types/ingredient';
 import {useIngredientStore} from 'stores/ingredients';
-import {IngredientCategory} from 'src/types/ingredient';
 import {ref} from 'vue';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 
@@ -109,43 +140,60 @@ import {useIngredientPageStore} from 'stores/pages/ingredients';
 const ingredientStore = useIngredientStore();
 const ingredientPageStore = useIngredientPageStore();
 
-const form = ref(ingredientStore.emptyIngredient());
+const category = ref<IngredientCategoryOption>(ingredientCategoryOptions[0]);
+
+const form = ref<UpdateIngredientRequest>({
+  category: IngredientCategory.fresh,
+  name: '',
+  calories: 0,
+  unitPrice: 0,
+  carbohydrates: 0,
+  sugar: 0,
+  fiber: 0,
+  protein: 0,
+  caffeine: 0,
+  fat: 0,
+  saturatedFat: 0,
+  memo: '',
+});
 
 const onBeforeShow = () => {
-  console.log('onBeforeShow', ingredientPageStore.updateIngredient);
   const updateIngredient = ingredientPageStore.updateIngredient;
-  form.value.category = IngredientCategory[updateIngredient.category.toUpperCase()];
+  console.log('beforeShow: ', updateIngredient)
+
+  category.value = ingredientCategoryOptions.find(option => option.value === updateIngredient.category) || ingredientCategoryOptions[0];
   form.value.name = updateIngredient.name;
   form.value.calories = updateIngredient.calories;
   form.value.unitPrice = updateIngredient.unitPrice;
   form.value.carbohydrates = updateIngredient.carbohydrates;
   form.value.sugar = updateIngredient.sugar;
+  form.value.fiber = updateIngredient.fiber;
   form.value.protein = updateIngredient.protein;
   form.value.caffeine = updateIngredient.caffeine;
   form.value.fat = updateIngredient.fat;
   form.value.saturatedFat = updateIngredient.saturatedFat;
-  form.value.fiber = updateIngredient.fiber;
   form.value.memo = updateIngredient.memo;
 };
 
 const onUpdateButtonClick = async () => {
-  console.log('onUpdateButtonClick', form.value);
-  await ingredientStore.update({
-    id: ingredientPageStore.updateIngredient?.id,
+
+  const request: UpdateIngredientRequest = {
     name: form.value.name,
-    category: form.value.category,
-    calories: form.value.calories,
+    memo: form.value.memo,
     unitPrice: form.value.unitPrice,
+    calories: form.value.calories,
+    protein: form.value.protein,
+    fat: form.value.fat,
     carbohydrates: form.value.carbohydrates,
     sugar: form.value.sugar,
-    protein: form.value.protein,
-    caffeine: form.value.caffeine,
-    fat: form.value.fat,
-    saturatedFat: form.value.saturatedFat,
     fiber: form.value.fiber,
-    memo: form.value.memo,
-  })
+    caffeine: form.value.caffeine,
+    saturatedFat: form.value.saturatedFat,
+    category: category.value.value,
+  }
+  console.log(request)
 
+  await ingredientStore.update(ingredientPageStore.updateIngredient.id, request);
   ingredientPageStore.closeUpdateIngredientDialog();
 };
 

@@ -15,7 +15,7 @@ describe('ComponentSummary', () => {
   //   expect(componentSummary.unitPrice).toBe(0.4 * IngredientMock.MILK.unitPrice + 0.6 * IngredientMock.CONDENSED_MILK.unitPrice);
   //   expect(componentSummary.calories).toBe(0.4 * IngredientMock.MILK.calories + 0.6 * IngredientMock.CONDENSED_MILK.calories);
   //   expect(componentSummary.carbohydrates).toBe(0.4 * IngredientMock.MILK.carbohydrates + 0.6 * IngredientMock.CONDENSED_MILK.carbohydrates);
-  //   expect(componentSummary.sugars).toBe(0.4 * IngredientMock.MILK.sugars + 0.6 * IngredientMock.CONDENSED_MILK.sugars);
+  //   expect(componentSummary.sugar).toBe(0.4 * IngredientMock.MILK.sugar + 0.6 * IngredientMock.CONDENSED_MILK.sugar);
   //   expect(componentSummary.protein).toBe(0.4 * IngredientMock.MILK.protein + 0.6 * IngredientMock.CONDENSED_MILK.protein);
   //   expect(componentSummary.caffeine).toBe(0.4 * IngredientMock.MILK.caffeine + 0.6 * IngredientMock.CONDENSED_MILK.caffeine);
   //   expect(componentSummary.fat).toBe(0.4 * IngredientMock.MILK.fat + 0.6 * IngredientMock.CONDENSED_MILK.fat);

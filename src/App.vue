@@ -13,8 +13,8 @@ const secretBaseStore = useSecretBaseStore();
 const receiptStore = useReceiptStore();
 
 onMounted(async () => {
-  await ingredientStore.refresh();
+  await ingredientStore.fetchAll();
   await secretBaseStore.refresh();
-  await receiptStore.refresh();
+  // await receiptStore.refresh();
 });
 </script>

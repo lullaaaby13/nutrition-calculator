@@ -3,7 +3,7 @@
     <q-card-section class="flex">
       <div>
         <div class="text-h5">{{ ingredient.name }}</div>
-        <div class="text-caption">{{ ingredient.category.label }}</div>
+        <div class="text-caption">{{ labelOfIngredientCategory(ingredient.category) }}</div>
         <span class="text-caption">단가: {{ ingredient.unitPrice.toFixed(0) || '-' }}원</span>
       </div>
 
@@ -28,16 +28,7 @@
     <q-separator/>
 
     <q-card-section>
-      <NutritionPanel
-        :calories="ingredient.calories"
-        :unitPrice="ingredient.unitPrice"
-        :carbohydrates="ingredient.carbohydrates"
-        :sugar="ingredient.sugar"
-        :protein="ingredient.protein"
-        :caffeine="ingredient.caffeine"
-        :fat="ingredient.fat"
-        :saturatedFat="ingredient.saturatedFat"
-      />
+      <NutritionPanel v-bind="ingredient"/>
     </q-card-section>
 
     <q-card-section>
@@ -52,20 +43,20 @@
 import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {Ingredient} from 'src/types/Ingredient';
+import {Ingredient, labelOfIngredientCategory} from '../../../types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
-import CreateUpdateDate from 'components/CreateUpdateDate.vue';
+
 
 const ingredient = defineProps<Ingredient>();
+console.log('ingredient: ', ingredient)
 
 const ingredientStore = useIngredientStore();
 const ingredientPageStore = useIngredientPageStore();
 
 const onDeleteButtonClick = (id: number) => {
   if (confirm('정말로 삭제 하시겠어요?')) {
-    ingredientStore.delete(id);
+    ingredientStore.remove(id);
   }
 }
-
 
 </script>

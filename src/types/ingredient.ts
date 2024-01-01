@@ -6,46 +6,111 @@ export interface Ingredient {
   unitPrice: number;
   carbohydrates: number;
   sugar: number;
+  fiber: number;
   protein: number;
   caffeine: number;
   fat: number;
   saturatedFat: number;
-  fiber: number;
   memo?: string;
   createdAt?: string;
   updatedAt?: string;
-}
+};
 
+export enum IngredientCategory {
+  fresh = 'fresh',
+  fruits = 'fruits',
+  flour = 'flour',
+  coffee = 'coffee',
+  topping = 'topping',
+  additives = 'additives',
+  packaging = 'packaging',
+};
 
-export const IngredientCategory = {
-  FRESH: {
-    name: 'fresh',
+export type IngredientCategoryOption = {
+  value: IngredientCategory;
+  label: string;
+};
+export const ingredientCategoryOptions: IngredientCategoryOption[] = [
+  {
+    value: IngredientCategory.fresh,
     label: '신선 식품',
   },
-  FRUITS: {
-    name: 'fruits',
+  {
+    value: IngredientCategory.fruits,
     label: '과일 & 채소',
   },
-  FLOUR: {
-    name: 'flour',
+  {
+    value: IngredientCategory.flour,
     label: '가루류 & 곡류',
   },
-  COFFEE: {
-    name: 'coffee',
+  {
+    value: IngredientCategory.coffee,
     label: '커피 원두 & 차',
   },
-  TOPPING: {
-    name: 'topping',
+  {
+    value: IngredientCategory.topping,
     label: '토핑 재료',
   },
-  ADDITIVES: {
-    name: 'additives',
+  {
+    value: IngredientCategory.additives,
     label: '식품 첨가물',
   },
-  PACKAGING: {
-    name: 'packaging',
+  {
+    value: IngredientCategory.packaging,
     label: '포장 용품',
   },
+];
+
+export const labelOfIngredientCategory = (category: IngredientCategory): string => {
+  const option = ingredientCategoryOptions.find(it => it.value === category);
+  if (option) {
+    return option.label;
+  }
+  return '';
 }
 
-export type IngredientCategory = typeof IngredientCategory[keyof typeof IngredientCategory];
+export interface CreateIngredientRequest {
+  name: string,
+  memo?: string,
+  unitPrice: number,
+  calories: number,
+  protein: number,
+  fat: number,
+  carbohydrates: number,
+  sugar: number,
+  fiber: number,
+  caffeine: number,
+  saturatedFat: number,
+  category: IngredientCategory,
+}
+
+export interface UpdateIngredientRequest {
+  name: string,
+  memo?: string,
+  unitPrice: number,
+  calories: number,
+  protein: number,
+  fat: number,
+  carbohydrates: number,
+  sugar: number,
+  fiber: number,
+  caffeine: number,
+  saturatedFat: number,
+  category: IngredientCategory,
+}
+
+
+export const emptyIngredient: Ingredient = {
+  caffeine: 0,
+  calories: 0,
+  carbohydrates: 0,
+  category: IngredientCategory.fresh,
+  fat: 0,
+  fiber: 0,
+  id: 0,
+  name: "",
+  protein: 0,
+  saturatedFat: 0,
+  sugar: 0,
+  unitPrice: 0,
+}

@@ -7,17 +7,7 @@
 
     <div class="row">
       <div class="col-6 q-gutter-md q-px-md">
-        <div class="q-gutter-x-md">
-          <template v-for="(category, index) in Object.values(IngredientCategory)" :key="index">
-            <q-checkbox size="md" v-model="selectedCategories" :val="category.name" :label="category.label"/>
-          </template>
-        </div>
-        <div>
-          <q-btn color="grey"
-                 label="선택 초기화"
-                 @click="resetCheckbox"
-          />
-        </div>
+
       </div>
       <div class="col-6">
         <div class="flex justify-end q-px-lg q-gutter-lg">
@@ -36,7 +26,6 @@
           <q-btn
               color="primary"
               label="원재료 등록하기"
-              padding="10px 15px 10px 10px"
               @click="ingredientPageStore.showCreateIngredientDialog"
           />
         </div>
@@ -48,21 +37,7 @@
     <div class="q-gutter-md flex full-width">
       <IngredientCard
           v-for="ingredient in filteredIngredients" :key="ingredient.id"
-          :id="ingredient.id"
-          :name="ingredient.name"
-          :category="ingredient.category"
-          :unitPrice="ingredient.unitPrice"
-          :calories="ingredient.calories"
-          :carbohydrates="ingredient.carbohydrates"
-          :sugar="ingredient.sugar"
-          :protein="ingredient.protein"
-          :caffeine="ingredient.caffeine"
-          :fat="ingredient.fat"
-          :saturatedFat="ingredient.saturatedFat"
-          :fiber="ingredient.fiber"
-          :memo="ingredient.memo"
-          :createdAt="ingredient.createdAt"
-          :updatedAt="ingredient.updatedAt"
+          v-bind="ingredient"
       />
     </div>
 
@@ -81,26 +56,26 @@ import {computed, onMounted, ref} from 'vue';
 import {useIngredientStore} from 'stores/ingredients';
 import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
 import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
-import {IngredientCategory} from 'src/types/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
 
-/**
- * 필터링
- */
-const selectedCategories = ref([]);
+const selectedCategoryOption = ref([]);
 const searchText = ref('');
 
 const ingredientPageStore = useIngredientPageStore();
 const ingredientStore = useIngredientStore();
 
+onMounted(() => {
+  ingredientStore.fetchAll();
+})
+
 const filteredIngredients = computed(() => {
   let filtered = ingredientStore.ingredients;
 
-  if (selectedCategories.value.length > 0) {
+  if (selectedCategoryOption.value.length > 0) {
     filtered = filtered
       .filter(ingredient =>
-        selectedCategories.value.some(categoryName => ingredient.category.name === categoryName)
+        selectedCategoryOption.value.some(categoryName => ingredient.category === categoryName)
       );
   }
 
@@ -108,17 +83,10 @@ const filteredIngredients = computed(() => {
     filtered = filtered.filter(ingredient => ingredient.name.includes(searchText.value));
   }
 
-  console.log('computed', filtered);
   return filtered;
 })
 
-const resetCheckbox = () => {
-  selectedCategories.value = [];
-}
 
-onMounted(() => {
-  ingredientStore.refresh();
-})
 
 </script>
 
