@@ -67,12 +67,6 @@ import {useIngredientPageStore} from 'stores/pages/ingredients';
 import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
 import {ingredientCategoryOptions} from 'src/model/ingredient';
 
-import {fruit, IngredientCategoryOption} from '../types';
-
-console.log('check: ', fruit);
-import('../types').then(it => {
-  console.log('check2: ', it);
-});
 const selectedCategoryOption = ref([]);
 const searchText = ref('');
 

@@ -71,7 +71,7 @@
             <q-item v-for="(entry, index) in Object.entries(receiptSummaries)" :key="index">
               <q-item-section>
                 <q-item-label>{{entry[1]}}</q-item-label>
-                <q-item-label caption lines="1">{{entry[0]}}</q-item-label>
+                <q-item-label caption lines="1">{{ labelOfReceiptCategory(entry[0]) }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -85,10 +85,10 @@
 <script setup lang="ts">
 import BaseCard from 'components/BaseCard.vue';
 import {useIngredientStore} from 'stores/ingredients';
-import {computed, ref} from 'vue';
+import {computed} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import {useReceiptStore} from 'stores/receipt';
-import {Ingredient} from 'src/model/ingredient';
+import {labelOfReceiptCategory} from "../model/receipt";
 
 
 const ingredientStore = useIngredientStore();
@@ -98,26 +98,37 @@ const receiptStore = useReceiptStore();
 const ingredientSummary = computed(() => {
   return ingredientStore.ingredients.reduce((acc, cur) => {
     // @ts-ignore
-    acc[cur.category.name] = acc[cur.category.name] + 1 || 1;
+    acc[cur.category] = acc[cur.category] + 1 || 1;
     return acc;
-  }, {})
+  }, {
+    fresh: 0,
+    fruit: 0,
+    flour: 0,
+    coffee: 0,
+    topping: 0,
+    additives: 0,
+    packaging: 0,
+  });
 });
-
 
 const receiptSummaries = computed(() => {
   return receiptStore.receipts.reduce((acc, cur) => {
     // @ts-ignore
-    acc[cur.category.label] = acc[cur.category.label] + 1 || 1;
+    acc[cur.category] = acc[cur.category] + 1 || 1;
     return acc;
-  }, {});
+  }, {
+    coffee: 0,
+    tea: 0,
+    bread: 0,
+    beverage: 0,
+    shavedIce: 0,
+    other: 0,
+  });
 });
-
-
-const result = ref<Ingredient[]>([]);
 
 </script>
 
 <route lang="yaml">
 meta:
-layout: default
+  layout: default
 </route>

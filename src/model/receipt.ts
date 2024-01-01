@@ -77,7 +77,7 @@ export const receiptCategoryOptions: ReceiptCategoryOption[] = [
 
 
 
-export const labelOfReceiptCategory = (category: ReceiptCategory) => {
+export const labelOfReceiptCategory = (category: ReceiptCategory | string) => {
   let label = receiptCategoryOptions.find(it => it.value === category);
   if (label) {
     return label.label;
