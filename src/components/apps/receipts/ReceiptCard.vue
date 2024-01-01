@@ -4,7 +4,7 @@
       <div>
         <div class="text-h5">{{ receipt.name }}</div>
         <div class="flex q-gutter-x-md">
-          <div class="text-subtitle2">{{ receipt.category.label }}</div>
+          <div class="text-subtitle2">{{ labelOfReceiptCategory(receipt.category) }}</div>
           <span class="text-subtitle2">중량: {{ Number(summary.getAmount()).toFixed(0) }}g</span>
         </div>
         <div class="flex q-gutter-x-md">
@@ -43,10 +43,10 @@
         <div class="col-6" v-if="secretBases.length > 0">
           <div class="text-subtitle2 q-mb-sm">베이스</div>
           <q-list bordered>
-            <q-item v-for="secretBase in secretBases" :key="secretBase.source.name">
+            <q-item v-for="(receiptComponent, index) in secretBases" :key="index">
               <q-item-section>
-                <q-item-label>{{ secretBase.amount }}</q-item-label>
-                <q-item-label caption lines="1">{{ secretBase.source.name }}</q-item-label>
+                <q-item-label>{{ receiptComponent.amount }}</q-item-label>
+                <q-item-label caption lines="1">{{ receiptComponent.secretBase.name }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -54,10 +54,10 @@
         <div class="col-6" v-if="ingredients.length > 0">
           <div class="text-subtitle2 q-mb-sm">원재료</div>
           <q-list bordered>
-            <q-item v-for="ingredient in ingredients" :key="ingredient.source.name">
+            <q-item v-for="(receiptComponent, index) in ingredients" :key="index">
               <q-item-section>
-                <q-item-label>{{ ingredient.amount }}</q-item-label>
-                <q-item-label caption lines="1">{{ ingredient.source.name }}</q-item-label>
+                <q-item-label>{{ receiptComponent.amount }}</q-item-label>
+                <q-item-label caption lines="1">{{ receiptComponent.ingredient.name }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -66,27 +66,12 @@
     </q-card-section>
 
     <q-card-section>
-      <NutritionPanel
-        :calories="summary.getCalories()"
-        :unitPrice="summary.getUnitPrice()"
-        :carbohydrates="summary.getCarbohydrates()"
-        :sugars="summary.getSugars()"
-        :protein="summary.getProtein()"
-        :caffeine="summary.getCaffeine()"
-        :fat="summary.getFat()"
-        :saturatedFat="summary.getSaturatedFat()"
-      />
+      <NutritionPanel v-bind="summary"/>
     </q-card-section>
 
     <q-card-section>
       <div class="text-caption">메모</div>
       <div style="min-height: 60px;">{{ receipt.memo }}</div>
-    </q-card-section>
-
-    <q-separator/>
-
-    <q-card-section>
-      <CreateUpdateDate :createdAt="receipt.createdAt" :updatedAt="receipt.updatedAt"/>
     </q-card-section>
 
   </BaseCard>
@@ -96,25 +81,25 @@
 
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {ReceiptType} from 'src/types/receipt';
+import {labelOfReceiptCategory, Receipt} from 'src/model/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
-import CreateUpdateDate from 'components/CreateUpdateDate.vue';
 import {computed} from 'vue';
-import {ComponentSummary} from 'src/types/summary';
+import {ComponentSummary} from 'src/model/summary';
 
-const receipt = defineProps<ReceiptType>();
-console.log(receipt);
+
+const receipt = defineProps<Receipt>();
 
 const receiptPageStore = useReceiptPageStore();
 const receiptStore = useReceiptStore();
 
+
 const secretBases = computed(() => {
-  return receipt.components.filter(component => component.sourceType === 'SecretBase');
+  return receipt.components.filter(component => component.type === 'SECRET_BASE');
 });
 
 const ingredients = computed(() => {
-  return receipt.components.filter(component => component.sourceType === 'Ingredient');
+  return receipt.components.filter(component => component.type === 'INGREDIENT');
 });
 
 const summary = computed(() => {
@@ -134,7 +119,7 @@ const salesMargin = computed(() => {
 
 const onDeleteButtonClick = async (id: number) => {
   if (confirm('정말 삭제 하시겠어요?')) {
-    await receiptStore.delete(id);
+    await receiptStore.remove(id);
   }
 }
 

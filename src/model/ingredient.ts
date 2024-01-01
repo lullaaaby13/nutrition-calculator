@@ -14,7 +14,7 @@ export interface Ingredient {
   memo?: string;
   createdAt?: string;
   updatedAt?: string;
-};
+}
 
 export enum IngredientCategory {
   fresh = 'fresh',
@@ -24,12 +24,14 @@ export enum IngredientCategory {
   topping = 'topping',
   additives = 'additives',
   packaging = 'packaging',
-};
+}
+
 
 export type IngredientCategoryOption = {
   value: IngredientCategory;
   label: string;
 };
+
 export const ingredientCategoryOptions: IngredientCategoryOption[] = [
   {
     value: IngredientCategory.fresh,

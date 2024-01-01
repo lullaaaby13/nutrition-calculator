@@ -1,4 +1,4 @@
-import {Ingredient} from 'src/types/ingredient';
+import {Ingredient} from 'src/model/ingredient';
 
 export interface SecretBaseComponent {
     amount: number;

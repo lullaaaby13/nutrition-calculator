@@ -132,7 +132,7 @@ import {
   IngredientCategory,
   IngredientCategoryOption,
   ingredientCategoryOptions
-} from 'src/types/ingredient';
+} from 'src/model/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import BaseCard from 'components/BaseCard.vue';
 

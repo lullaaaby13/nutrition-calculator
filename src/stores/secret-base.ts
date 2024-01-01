@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
-import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/types/secret-base';
+import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/model/secret-base';
 import SecretBaseAPI from 'src/api/secret-base';
-import {ComponentSummary} from 'src/types/summary';
+import {ComponentSummary} from 'src/model/summary';
 import {computed, ref} from "vue";
 
 export const useSecretBaseStore = defineStore('secretBases', () => {
@@ -55,7 +55,7 @@ export const useSecretBaseStore = defineStore('secretBases', () => {
     summaries,
     save,
     remove,
-    refresh: fetchAll,
+    fetchAll,
     update,
   };
 

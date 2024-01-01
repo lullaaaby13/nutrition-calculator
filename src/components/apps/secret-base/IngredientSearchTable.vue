@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import {useIngredientStore} from 'stores/ingredients';
-import {labelOfIngredientCategory} from 'src/types/ingredient';
+import {labelOfIngredientCategory} from 'src/model/ingredient';
 
 const  ingredientStore = useIngredientStore();
 

@@ -88,7 +88,7 @@ import {useIngredientStore} from 'stores/ingredients';
 import {computed, ref} from 'vue';
 import {useSecretBaseStore} from 'stores/secret-base';
 import {useReceiptStore} from 'stores/receipt';
-import {Ingredient} from 'src/types/ingredient';
+import {Ingredient} from 'src/model/ingredient';
 
 
 const ingredientStore = useIngredientStore();

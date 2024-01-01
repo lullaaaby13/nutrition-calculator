@@ -1,6 +1,6 @@
-import {Ingredient} from 'src/types/ingredient';
-import { SecretBaseComponent, SecretBase, totalAmountOfSecretBase} from 'src/types/secret-base';
-import {ReceiptComponentType} from 'src/types/receipt';
+import {Ingredient} from 'src/model/ingredient';
+import { SecretBaseComponent, SecretBase, totalAmountOfSecretBase} from 'src/model/secret-base';
+import {ReceiptComponent} from 'src/model/receipt';
 
 export class ComponentSummary {
   id? = 0;
@@ -51,13 +51,13 @@ export class ComponentSummary {
     });
   }
 
-  public addReceiptComponents(components: ReceiptComponentType[]) {
+  public addReceiptComponents(components: ReceiptComponent[]) {
     components.forEach(it => {
       // console.log(it.amount, it.component.name)
-      if (it.sourceType === 'SecretBase') {
-        this.addSecretBase(it.amount, it.source as SecretBase);
+      if (it.type === 'SECRET_BASE') {
+        this.addSecretBase(it.amount, it.secretBase!);
       } else {
-        this.addIngredient(it.amount, it.source as Ingredient);
+        this.addIngredient(it.amount, it.ingredient!);
       }
     });
   }
@@ -81,14 +81,11 @@ export class ComponentSummary {
   getCarbohydrates(): string {
     return Number(this.carbohydrates).toFixed(2);
   }
-  getSugars(): string {
+  getSugar(): string {
     return Number(this.sugar).toFixed(2);
   }
-  getProtein(): string {
-    return Number(this.protein).toFixed(2);
-  }
-  getCaffeine(): string {
-    return Number(this.caffeine).toFixed(2);
+  getFiber(): string {
+    return Number(this.fiber).toFixed(2);
   }
   getFat(): string {
     return Number(this.fat).toFixed(2);
@@ -96,6 +93,13 @@ export class ComponentSummary {
   getSaturatedFat(): string {
     return Number(this.saturatedFat).toFixed(2);
   }
+  getProtein(): string {
+    return Number(this.protein).toFixed(2);
+  }
+  getCaffeine(): string {
+    return Number(this.caffeine).toFixed(2);
+  }
+
 }
 
 // export function summaryOfSecretBaseComponents(components: SecretBaseComponent[]): ComponentSummary {

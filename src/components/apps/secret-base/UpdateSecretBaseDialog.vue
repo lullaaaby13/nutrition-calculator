@@ -71,11 +71,11 @@
 import {computed, ref} from 'vue';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBaseComponent} from 'src/types/secret-base';
-import {Ingredient} from 'src/types/ingredient';
+import {SecretBaseComponent} from 'src/model/secret-base';
+import {Ingredient} from 'src/model/ingredient';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
-import {ComponentSummary} from 'src/types/summary';
+import {ComponentSummary} from 'src/model/summary';
 import {useSecretBaseStore} from 'stores/secret-base';
 
 let secretBaseStore = useSecretBaseStore();

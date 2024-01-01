@@ -60,7 +60,7 @@ const filteredSecretBases = computed(() => {
 });
 
 onMounted(async () => {
-  await secretBaseStore.refresh();
+  await secretBaseStore.fetchAll();
 });
 
 </script>

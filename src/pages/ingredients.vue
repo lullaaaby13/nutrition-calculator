@@ -6,10 +6,17 @@
     </div>
 
     <div class="row">
-      <div class="col-6 q-gutter-md q-px-md">
-
+      <div class="col-3 q-px-md">
+        <q-select
+          v-model="selectedCategoryOption"
+          multiple
+          :options="ingredientCategoryOptions"
+          label="카테고리"
+          stack-label
+          outlined
+        />
       </div>
-      <div class="col-6">
+      <div class="col-9">
         <div class="flex justify-end q-px-lg q-gutter-lg">
           <q-input
               v-model="searchText"
@@ -58,7 +65,14 @@ import IngredientCard from 'components/apps/ingredients/IngredientCard.vue';
 import CreateIngredientDialog from 'components/apps/ingredients/CreateIngredientDialog.vue';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 import UpdateIngredientDialog from 'components/apps/ingredients/UpdateIngredientDialog.vue';
+import {ingredientCategoryOptions} from 'src/model/ingredient';
 
+import {fruit, IngredientCategoryOption} from '../types';
+
+console.log('check: ', fruit);
+import('../types').then(it => {
+  console.log('check2: ', it);
+});
 const selectedCategoryOption = ref([]);
 const searchText = ref('');
 
@@ -75,7 +89,7 @@ const filteredIngredients = computed(() => {
   if (selectedCategoryOption.value.length > 0) {
     filtered = filtered
       .filter(ingredient =>
-        selectedCategoryOption.value.some(categoryName => ingredient.category === categoryName)
+        selectedCategoryOption.value.some(option => ingredient.category === option.value)
       );
   }
 
@@ -85,8 +99,6 @@ const filteredIngredients = computed(() => {
 
   return filtered;
 })
-
-
 
 </script>
 

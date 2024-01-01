@@ -58,9 +58,9 @@ import {useSecretBaseStore} from 'stores/secret-base';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
 import {useSecretBasePageStore} from 'stores/pages/secret-bases';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase} from 'src/model/secret-base';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
-import {ComponentSummary} from 'src/types/summary';
+import {ComponentSummary} from 'src/model/summary';
 
 const secretBase = defineProps<SecretBase>();
 

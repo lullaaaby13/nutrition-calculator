@@ -1,5 +1,5 @@
 import {api} from 'boot/axios';
-import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/types/secret-base';
+import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/model/secret-base';
 
 export default class SecretBaseAPI {
     static async list(): Promise<SecretBase[]> {

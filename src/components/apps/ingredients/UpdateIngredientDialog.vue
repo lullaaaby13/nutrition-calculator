@@ -131,7 +131,7 @@ import {
   IngredientCategoryOption,
   ingredientCategoryOptions,
   UpdateIngredientRequest
-} from 'src/types/ingredient';
+} from 'src/model/ingredient';
 import {useIngredientStore} from 'stores/ingredients';
 import {ref} from 'vue';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
