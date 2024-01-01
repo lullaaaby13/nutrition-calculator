@@ -1,47 +1,54 @@
 import {defineStore} from 'pinia';
-import { ReceiptType} from 'src/types/receipt';
+import {CreateReceiptRequest, Receipt, UpdateReceiptRequest} from 'src/model/receipt';
 import ReceiptAPI from 'src/api/receipts';
+import {ref} from "vue";
 
 
-export const useReceiptStore = defineStore({
-  id: 'receiptStore',
-  state: (): { receipts: ReceiptType[] } => ({
-    receipts: []
-  }),
+export const useReceiptStore = defineStore('receipts', () => {
 
-  actions: {
-    async save(receipt: ReceiptType) {
+  const receipts = ref<Receipt[]>([]);
 
-      const request = {
-        name: receipt.name,
-        memo: receipt.memo,
-        category: receipt.category,
-        components: receipt.components.map(component => ({
-          amount: component.amount,
-          sourceType: component.sourceType,
-          sourceId: component.source.id
-        })),
-        sellingPrice: receipt.sellingPrice,
-      };
+  const save = async (request: CreateReceiptRequest) => {
+    const receipt = await ReceiptAPI.save(request);
+    receipts.value.push(receipt);
+  };
 
-      await ReceiptAPI.save(request);
-      await this.refresh();
-    },
+  const remove = async (id: number) => {
+    await ReceiptAPI.delete(id);
+    let index = receipts.value.findIndex(it => it.id === id);
+    if (index !== -1) {
+      receipts.value.splice(index, 1);
+    }
+  };
 
-    async delete(id: number) {
-      await ReceiptAPI.delete(id);
-      await this.refresh();
-    },
+  const update = async (id: number, request: UpdateReceiptRequest) => {
+    const receipt = await ReceiptAPI.update(id, request);
+    replace(receipt);
+  };
 
-    async update(id: number, request: any) {
-        await ReceiptAPI.update(id, request);
-        await this.refresh();
-    },
-
-    async refresh() {
-      const receiptTypes = await ReceiptAPI.list();
-      console.log('refresh:' , receiptTypes)
-      this.receipts = receiptTypes;
-    },
+  const replace = (receipt: Receipt) => {
+    const index = receipts.value.findIndex(it => it.id === receipt.id);
+    if (index !== -1) {
+      receipts.value[index] = receipt;
+    }
   }
+
+  const fetchAll = async () => {
+    const responses = await ReceiptAPI.list();
+    clear();
+    responses.forEach(it => receipts.value.push(it));
+  };
+
+  const clear = () => {
+    receipts.value.splice(0, receipts.value.length);
+  }
+
+  return {
+    receipts,
+    save,
+    remove,
+    update,
+    refresh: fetchAll,
+  }
+
 });

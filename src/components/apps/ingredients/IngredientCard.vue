@@ -43,7 +43,7 @@
 import {useIngredientStore} from 'stores/ingredients';
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {Ingredient, labelOfIngredientCategory} from '../../../types/ingredient';
+import {Ingredient, labelOfIngredientCategory} from 'src/model/ingredient';
 import {useIngredientPageStore} from 'stores/pages/ingredients';
 
 

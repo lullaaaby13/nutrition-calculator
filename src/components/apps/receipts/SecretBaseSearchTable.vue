@@ -29,16 +29,18 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="summary in secretBaseStore.summaries" :key="summary.getId()"
-          @click="$emit('onSecretBaseClick', summary)"
+      <tr v-for="({ secretBase, summary}, index) in secretBaseStore.secretBases.map(it => ({ secretBase: it, summary: toSummary(it) }))"
+          :key="index"
+          @click="$emit('onSecretBaseClick', secretBase)"
       >
         <td class="text-center">{{ summary.getName() }}</td>
-        <td class="text-right">{{  summary.getCalories() }}</td>
+        <td class="text-right">{{ summary.getCalories() }}</td>
         <td class="text-right">{{ summary.getCarbohydrates() }}</td>
-        <td class="text-right">{{ summary.getProtein() }}</td>
+        <td class="text-right">{{ summary.getSugar() }}</td>
+        <td class="text-right">{{ summary.getFiber() }}</td>
         <td class="text-right">{{ summary.getFat() }}</td>
         <td class="text-right">{{ summary.getSaturatedFat() }}</td>
-        <td class="text-right">{{ summary.getSugars() }}</td>
+        <td class="text-right">{{ summary.getProtein() }}</td>
         <td class="text-right">{{ summary.getCaffeine() }}</td>
         <td class="text-right">{{ summary.getAmount() }}</td>
         <td class="text-right">{{ summary.getUnitPrice() }}</td>
@@ -50,9 +52,18 @@
 
 <script setup lang="ts">
 import {useSecretBaseStore} from 'stores/secret-base';
+import {computed} from "vue";
+import {ComponentSummary} from "src/model/summary";
+import {SecretBase} from "src/model/secret-base";
 
 const secretBaseStore = useSecretBaseStore();
 
 defineEmits(['onSecretBaseClick']);
+
+const toSummary = (secretBase: SecretBase) => {
+  const summary = new ComponentSummary(secretBase.id, secretBase.name);
+  summary.addSecretBaseComponents(secretBase.components);
+  return summary;
+};
 
 </script>

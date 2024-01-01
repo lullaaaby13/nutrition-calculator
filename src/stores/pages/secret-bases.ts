@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import {SecretBase} from 'src/types/secret-base';
+import {SecretBase} from 'src/model/secret-base';
 
 export const useSecretBasePageStore = defineStore('secretBasePageStore', () => {
 

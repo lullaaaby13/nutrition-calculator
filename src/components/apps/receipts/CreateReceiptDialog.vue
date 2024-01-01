@@ -23,26 +23,26 @@
             <div class="row">
               <div class="col-4 q-pr-md">
                 <q-select v-model="form.category"
-                          :options="Object.values(ReceiptCategory)"
+                          :options="receiptCategoryOptions"
                           label="카테고리"
-                          dense
                           stack-label
+                          outlined
                 />
               </div>
               <div class="col-4 q-pr-md">
                 <q-input v-model="form.name"
                          type="text"
-                         dense
                          label="이름"
                          stack-label
+                         outlined
                 />
               </div>
               <div class="col-4">
                 <q-input v-model="form.sellingPrice"
                          type="number"
-                         dense
                          label="희망 판매가(원)"
                          stack-label
+                         outlined
                 />
               </div>
             </div>
@@ -53,14 +53,14 @@
               <div class="text-subtitle2 q-mb-sm">
                 재료
               </div>
-              <q-list bordered>
-                <q-item v-for="component in selectedComponents" :key="component.source.name">
+              <q-list>
+                <q-item v-for="(component, index) in selectedComponents" :key="index">
                   <q-item-section>
                     <q-input type="number"
-                             :label="component.source.name"
-                             stack-label
                              v-model="component.amount"
-
+                             :label="component.ingredient?.name || component.secretBase?.name || ''"
+                             stack-label
+                             outlined
                     >
                       <q-icon name="close" size="12px" @click="onRemoveSelectedComponentClick(component)"/>
                     </q-input>
@@ -70,16 +70,7 @@
             </q-card-section>
 
             <q-card-section>
-              <NutritionPanel
-                  :calories="summary.getCalories()"
-                  :unitPrice="summary.getUnitPrice()"
-                  :carbohydrates="summary.getCarbohydrates()"
-                  :sugars="summary.getSugars()"
-                  :protein="summary.getProtein()"
-                  :caffeine="summary.getCaffeine()"
-                  :fat="summary.getFat()"
-                  :saturatedFat="summary.getSaturatedFat()"
-              />
+              <NutritionPanel v-bind="summary"/>
             </q-card-section>
 
             <q-card-section>
@@ -98,58 +89,62 @@
 import {computed, ref} from 'vue'
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {SecretBase} from 'src/types/secret-base';
-import {Ingredient} from 'src/types/ingredient';
+import {Ingredient} from 'src/model/ingredient';
 import IngredientSearchTable from 'components/apps/secret-base/IngredientSearchTable.vue';
 import AmountUnitPriceCaption from 'components/AmountUnitPriceCaption.vue';
-import {ComponentSummary} from 'src/types/summary';
+import {ComponentSummary} from 'src/model/summary';
 import SecretBaseSearchTable from 'components/apps/receipts/SecretBaseSearchTable.vue';
-import {isSameReceiptComponent, ReceiptCategory, ReceiptComponentType, ReceiptType} from 'src/types/receipt';
+import {
+  CreateReceiptRequest,
+  isSameReceiptComponent,
+  ReceiptCategory, ReceiptCategoryOption,
+  receiptCategoryOptions,
+  ReceiptComponent
+} from 'src/model/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 import {useSecretBaseStore} from 'stores/secret-base';
+import {SecretBase} from "src/model/secret-base";
 
 
 const receiptPageStore = useReceiptPageStore();
 const receiptStore = useReceiptStore();
-let secretBaseStore = useSecretBaseStore();
 
-const form = ref({
-  name: '',
-  memo: '',
-  category: ReceiptCategory.COFFEE,
-  sellingPrice: 0,
-});
-
-const selectedComponents = ref<ReceiptComponentType[]>([]);
+const createEmptyForm = () => {
+  return {
+    name: '',
+    memo: '',
+    category: receiptCategoryOptions[0],
+    sellingPrice: 0,
+  };
+};
+const form = ref(createEmptyForm());
+const selectedComponents = ref<ReceiptComponent[]>([]);
 
 const onIngredientSearchTableClick = (ingredient: Ingredient) => {
-  const receiptComponent: ReceiptComponentType = {
+  const receiptComponent: ReceiptComponent = {
+    type: 'INGREDIENT',
     amount: 10,
-    sourceType: 'Ingredient',
-    source: ingredient,
+    ingredient: ingredient,
   }
   const exists = selectedComponents.value.some(component => isSameReceiptComponent(component, receiptComponent));
   if (!exists) {
     selectedComponents.value.push(receiptComponent);
   }
 };
-const onSecretBaseSearchTableClick = (componentSummary: ComponentSummary) => {
-  let secretBase = secretBaseStore.findById(componentSummary.getId()!);
-  if (!secretBase) {
-    throw new Error('SecretBase not found');
-  }
-  const receiptComponent: ReceiptComponentType = {
+const onSecretBaseSearchTableClick = (secretBase: SecretBase) => {
+
+  const receiptComponent: ReceiptComponent = {
+    type: 'SECRET_BASE',
     amount: 10,
-    sourceType: 'SecretBase',
-    source: secretBase,
+    secretBase
   }
   const exists = selectedComponents.value.some(component => isSameReceiptComponent(component, receiptComponent));
   if (!exists) {
     selectedComponents.value.push(receiptComponent);
   }
 };
-const onRemoveSelectedComponentClick = (component: ReceiptComponentType) => {
+const onRemoveSelectedComponentClick = (component: ReceiptComponent) => {
   const index = selectedComponents.value.findIndex(it => isSameReceiptComponent(it, component));
   if (index !== -1) {
     selectedComponents.value.splice(index, 1);
@@ -158,36 +153,32 @@ const onRemoveSelectedComponentClick = (component: ReceiptComponentType) => {
 
 const summary = computed(() => {
   const componentSummary = new ComponentSummary();
-  console.log('cacl summary: ', selectedComponents.value)
   componentSummary.addReceiptComponents(selectedComponents.value);
   return componentSummary;
 });
 
-const onCreateButtonClick = () => {
+const onCreateButtonClick = async () => {
 
-  const receipt: ReceiptType = {
+  const request: CreateReceiptRequest = {
     name: form.value.name,
     memo: form.value.memo,
-    category: form.value.category,
+    category: form.value.category.value,
     sellingPrice: form.value.sellingPrice,
-    components: selectedComponents.value,
+    components: selectedComponents.value.map(it => ({
+      type: it.type,
+      amount: it.amount,
+      id: it.secretBase?.id || it.ingredient?.id || -1,
+    })),
   };
 
-  receiptStore.save(receipt);
-
-  while(selectedComponents.value.pop()) {}
+  await receiptStore.save(request);
 
   receiptPageStore.closeCreateReceiptDialog();
 };
 
 const onBeforeHide = () => {
-  form.value = {
-    name: '',
-    memo: '',
-    category: ReceiptCategory.COFFEE,
-    sellingPrice: 0,
-  };
-  while(selectedComponents.value.pop()) {}
+  form.value = createEmptyForm();
+  selectedComponents.value.splice(0, selectedComponents.value.length);
 }
 
 </script>

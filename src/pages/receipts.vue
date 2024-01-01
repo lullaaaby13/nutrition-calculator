@@ -6,20 +6,17 @@
     </div>
 
     <div class="row full-width">
-      <div class="col-6 q-gutter-md q-px-md">
-        <div class="q-gutter-x-md">
-          <template v-for="(category, index) in Object.values(ReceiptCategory)" :key="index">
-            <q-checkbox size="md" v-model="selectedCategories" :val="category.name" :label="category.label"/>
-          </template>
-        </div>
-        <div>
-          <q-btn color="grey"
-                 label="선택 초기화"
-                 @click="resetCheckbox"
-          />
-        </div>
+      <div class="col-3 q-px-md">
+        <q-select
+          v-model="selectedCategories"
+          multiple
+          :options="receiptCategoryOptions"
+          label="카테고리"
+          stack-label
+          outlined
+        />
       </div>
-      <div class="col-6">
+      <div class="col-9">
         <div class="flex justify-end q-px-lg q-gutter-lg">
           <q-input
               v-model="searchText"
@@ -70,14 +67,13 @@ import {useReceiptStore} from 'stores/receipt';
 import ReceiptCard from 'components/apps/receipts/ReceiptCard.vue';
 import CreateReceiptCard from 'components/apps/receipts/CreateReceiptDialog.vue';
 import UpdateReceiptDialog from 'components/apps/receipts/UpdateReceiptDialog.vue';
-import {ReceiptCategory} from 'src/types/receipt';
+import {ReceiptCategoryOption, receiptCategoryOptions} from 'src/model/receipt';
 
 const receiptPageStore = useReceiptPageStore();
 const receiptStore = useReceiptStore();
 const searchText = ref('');
 
-
-const selectedCategories = ref([]);
+const selectedCategories = ref<ReceiptCategoryOption[]>([]);
 
 const filteredReceipts = computed(() => {
   let filtered = receiptStore.receipts;
@@ -85,7 +81,7 @@ const filteredReceipts = computed(() => {
   if (selectedCategories.value.length > 0) {
     filtered = filtered
         .filter(receipt =>
-            selectedCategories.value.some(categoryName => receipt.category.name === categoryName)
+            selectedCategories.value.some(option => receipt.category === option.value)
         );
   }
 
@@ -95,10 +91,6 @@ const filteredReceipts = computed(() => {
 
   return filtered;
 })
-
-const resetCheckbox = () => {
-  selectedCategories.value = [];
-};
 
 onMounted(async () => {
   await receiptStore.refresh();

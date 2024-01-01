@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import IngredientAPI from 'src/api/ingredient';
-import {CreateIngredientRequest, Ingredient, UpdateIngredientRequest} from 'src/types/ingredient';
+import {CreateIngredientRequest, Ingredient, UpdateIngredientRequest} from 'src/model/ingredient';
 import {ref} from "vue";
 
 export const useIngredientStore = defineStore('ingredients', () => {

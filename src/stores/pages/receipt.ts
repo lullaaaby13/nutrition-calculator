@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {ref} from 'vue';
-import {ReceiptCategory, ReceiptType} from 'src/types/receipt';
+import {ReceiptCategory, Receipt} from 'src/model/receipt';
 
 export const useReceiptPageStore = defineStore('receiptPageStore', () => {
 
@@ -14,11 +14,18 @@ export const useReceiptPageStore = defineStore('receiptPageStore', () => {
     createReceiptDialog.value = false;
   }
 
-  const updateReceipt = ref<ReceiptType>({
-    category: ReceiptCategory.COFFEE, components: [], createdAt: '', id: 0, memo: '', name: '', sellingPrice: 0, updatedAt: ''
+  const updateReceipt = ref<Receipt>({
+    id: 0,
+    memo: '',
+    name: '',
+    sellingPrice: 0,
+    category: ReceiptCategory.coffee,
+    components: [],
+    createdAt: '',
+    updatedAt: ''
   });
   const updateReceiptDialog = ref(false);
-  const showUpdateReceiptDialog = (secretBase: ReceiptType) => {
+  const showUpdateReceiptDialog = (secretBase: Receipt) => {
     updateReceipt.value = secretBase;
     updateReceiptDialog.value = true;
 

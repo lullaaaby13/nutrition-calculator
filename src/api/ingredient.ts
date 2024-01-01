@@ -1,5 +1,5 @@
 import {api} from 'boot/axios';
-import {CreateIngredientRequest, Ingredient} from 'src/types/ingredient';
+import {CreateIngredientRequest, Ingredient} from 'src/model/ingredient';
 
 export default class IngredientAPI {
   static async list(): Promise<Ingredient[]> {
