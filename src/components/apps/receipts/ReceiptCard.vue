@@ -10,7 +10,9 @@
         <div class="flex q-gutter-x-md">
           <div class="text-caption">판매가: {{ Number(receipt.sellingPrice).toFixed(0) }}원</div>
           <div class="text-caption">단가: {{ Number(summary.getUnitPrice()).toFixed(0) }}원</div>
-          <div class="text-caption">마진율: {{ salesMargin.toFixed(2) * 100 }}%</div>
+          <div class="text-caption">부가세: {{ vat }}원</div>
+          <div class="text-caption">카드수수료: {{ cardFee }}원</div>
+          <div class="text-caption">마진율: {{ (salesMargin * 100).toFixed(2) }}%</div>
         </div>
       </div>
 
@@ -108,13 +110,29 @@ const summary = computed(() => {
   return componentSummary;
 });
 
+const vat = computed(() => {
+  let sellingPrice = Number(receipt.sellingPrice);
+  if (!sellingPrice || sellingPrice === 0) {
+    return 0;
+  }
+  return sellingPrice * 0.1;
+});
+const cardFee = computed(() => {
+  let sellingPrice = Number(receipt.sellingPrice);
+  if (!sellingPrice || sellingPrice === 0) {
+    return 0;
+  }
+  return sellingPrice * 0.11;
+});
+
 const salesMargin = computed(() => {
   let sellingPrice = Number(receipt.sellingPrice);
   if (!sellingPrice || sellingPrice === 0) {
     return 0;
   }
-
-  return (sellingPrice - Number(summary.value.getUnitPrice())) / sellingPrice;
+  const unitPrice = summary.value.getUnitPrice();
+  const margin = sellingPrice - (Number(unitPrice) + vat.value + cardFee.value);
+  return margin / sellingPrice;
 });
 
 const onDeleteButtonClick = async (id: number) => {
