@@ -3,22 +3,22 @@ import {CreateSecretBaseRequest, SecretBase, UpdateSecretBaseRequest} from 'src/
 
 export default class SecretBaseAPI {
     static async list(): Promise<SecretBase[]> {
-        const {data} = await api.get('secret-bases');
+        const {data} = await api.get('api/secret-bases');
         return data;
     }
 
     static async save(request: CreateSecretBaseRequest): Promise<SecretBase> {
-        const {data} = await api.post('secret-bases', request);
+        const {data} = await api.post('api/secret-bases', request);
         return data;
     }
 
     static async delete(id: number) {
-        const {data} = await api.delete(`secret-bases/${id}`);
+        const {data} = await api.delete(`api/secret-bases/${id}`);
         return data;
     }
 
     static async update(id: number, request: UpdateSecretBaseRequest): Promise<SecretBase> {
-        const {data} = await api.put(`secret-bases/${id}`, request);
+        const {data} = await api.put(`api/secret-bases/${id}`, request);
         return data;
     }
 

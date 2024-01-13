@@ -18,7 +18,15 @@
 
       <q-space/>
 
-      <div class="q-gutter-md">
+      <div class="q-gutter-sm">
+        <q-btn
+          dense
+          outline
+          color="yellow-9"
+          @click="onCopyButtonClick"
+          icon="file_copy"
+          flat
+        />
         <q-btn
           dense
           outline
@@ -83,7 +91,7 @@
 
 import NutritionPanel from 'components/NutritionPanel.vue';
 import BaseCard from 'components/BaseCard.vue';
-import {labelOfReceiptCategory, Receipt} from 'src/model/receipt';
+import {CreateReceiptRequest, labelOfReceiptCategory, Receipt} from 'src/model/receipt';
 import {useReceiptStore} from 'stores/receipt';
 import {useReceiptPageStore} from 'stores/pages/receipt';
 import {computed} from 'vue';
@@ -122,7 +130,7 @@ const cardFee = computed(() => {
   if (!sellingPrice || sellingPrice === 0) {
     return 0;
   }
-  return sellingPrice * 0.11;
+  return sellingPrice * 0.011;
 });
 
 const salesMargin = computed(() => {
@@ -138,6 +146,24 @@ const salesMargin = computed(() => {
 const onDeleteButtonClick = async (id: number) => {
   if (confirm('정말 삭제 하시겠어요?')) {
     await receiptStore.remove(id);
+  }
+}
+
+const onCopyButtonClick = async () => {
+  if (confirm(`[${receipt.name}] 레시피를 복사합니다. 계속 할까요?`)) {
+    const request: CreateReceiptRequest = {
+      name: receipt.name,
+      memo: receipt.memo,
+      category: receipt.category,
+      sellingPrice: receipt.sellingPrice,
+      components: receipt.components.map(it => ({
+        type: it.type,
+        amount: it.amount,
+        id: it.ingredient?.id || it.secretBase?.id!,
+      }))
+    };
+
+    await receiptStore.save(request);
   }
 }
 

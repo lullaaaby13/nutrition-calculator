@@ -68,7 +68,7 @@
           />
         </div>
         <div class="col-6 q-px-sm">
-          <q-input v-model="form.sugar"
+          <q-input v-model="form.fiber"
                    type="number"
                    label="식이섬유(g)"
                    stack-label

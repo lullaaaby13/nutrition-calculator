@@ -4,6 +4,7 @@
     <div class="row justify-end q-mb-lg">
       <div class="col-3">
         <q-input
+          v-model="searchText"
           type="text"
           label="원재료 찾기"
           stack-label
@@ -30,7 +31,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="ingredient in ingredientStore.ingredients" :key="ingredient.name"
+      <tr v-for="ingredient in ingredients" :key="ingredient.name"
           @click="$emit('onIngredientClick', ingredient)"
       >
         <td class="text-center">{{ ingredient.name }}</td>
@@ -53,8 +54,20 @@
 <script setup lang="ts">
 import {useIngredientStore} from 'stores/ingredients';
 import {labelOfIngredientCategory} from 'src/model/ingredient';
+import {computed, ref} from "vue";
 
 const  ingredientStore = useIngredientStore();
 
 defineEmits(['onIngredientClick']);
+
+const searchText = ref('');
+const ingredients = computed(() => {
+  if (searchText.value === '') {
+    return ingredientStore.ingredients;
+  }
+
+  return ingredientStore.ingredients.filter(ingredient => {
+    return ingredient.name.includes(searchText.value);
+  });
+});
 </script>
